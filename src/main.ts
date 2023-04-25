@@ -22,3 +22,42 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 `
 
 setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+
+
+// Based on https://gist.github.com/HipHopHuman/3e9b4a94b30ac9387d9a99ef2d29eb1a
+
+const expectedDelay = 1000 / 60;
+let accumulatedDelay = expectedDelay;
+
+// let _x = window.speechSynthesis;
+
+let prev: number | null = null;
+
+// a safety net in case of a long time spent on another tab, letting delta accumulate a lot in this one
+const safetyMaxDelay = expectedDelay * 5;
+
+function gameLoopTick(curr: number) {
+    if (prev == null) {
+        prev = curr;
+    }
+    console.log("tick", curr)
+    let delta = curr - prev;
+    prev = curr;
+    accumulatedDelay += Math.min(delta, safetyMaxDelay);
+    while (accumulatedDelay >= expectedDelay) {
+        update();
+        accumulatedDelay -= expectedDelay;
+    }
+    render();
+    requestAnimationFrame(gameLoopTick);
+}
+
+requestAnimationFrame(gameLoopTick);
+
+function update() {
+    console.error("UPDATE", performance.now());
+}
+
+function render() {
+    console.warn("RENDER", performance.now());
+}
