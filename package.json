@@ -1,19 +1,26 @@
 {
   "name": "poc--typescript-web-game",
-  "version": "1.0.0",
+  "version": "0.0.0",
+  "author": "Beetroot Paul",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
   "description": "A PoC of a simple low-res game written in TypeScript, meant to be published for web.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "homepage": "https://github.com/beetrootpaul/poc--typescript-web-game#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beetrootpaul/poc--typescript-web-game.git"
   },
-  "author": "Beetroot Paul",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/beetrootpaul/poc--typescript-web-game/issues"
   },
-  "homepage": "https://github.com/beetrootpaul/poc--typescript-web-game#readme"
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
+  }
 }
