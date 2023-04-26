@@ -17,7 +17,7 @@
   "scripts": {
     "prepare": "husky install",
     "start": "npm run dev",
-    "dev": "vite dev --open iframe_tester.html",
+    "dev": "vite dev --open itch_io_simulation.html",
     "prod": "npm run prod:build && npm run prod:preview",
     "prod:build": "tsc && vite build",
     "prod:preview": "vite preview --open",
@@ -39,6 +39,7 @@
     "cross-zip-cli": "1.0.0",
     "eslint": "8.39.0",
     "husky": "8.0.3",
+    "jquery": "3.6.4",
     "lint-staged": "13.2.1",
     "mkdirp": "3.0.1",
     "prettier": "2.8.8",
