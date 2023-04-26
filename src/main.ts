@@ -3,7 +3,9 @@ import typescriptLogo from "./typescript.svg";
 import viteLogo from "/vite.svg";
 import { setupCounter } from "./counter.ts";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+const appEl = document.querySelector<HTMLDivElement>("#app");
+if (appEl) {
+  appEl.innerHTML = `
   <div>
     <a href="https://vitejs.dev" target="_blank">
       <img src="${viteLogo}" class="logo" alt="Vite logo" />
@@ -20,8 +22,12 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </p>
   </div>
 `;
+}
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+const counterEl = document.querySelector<HTMLButtonElement>("#counter");
+if (counterEl) {
+  setupCounter(counterEl);
+}
 
 // Based on https://gist.github.com/HipHopHuman/3e9b4a94b30ac9387d9a99ef2d29eb1a
 
@@ -40,7 +46,7 @@ function gameLoopTick(curr: number) {
     prev = curr;
   }
   console.log("tick", curr);
-  let delta = curr - prev;
+  const delta = curr - prev;
   prev = curr;
   accumulatedDelay += Math.min(delta, safetyMaxDelay);
   while (accumulatedDelay >= expectedDelay) {
