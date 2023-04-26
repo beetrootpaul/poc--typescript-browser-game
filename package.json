@@ -21,11 +21,13 @@
     "prod:preview": "vite preview --open",
     "dist": "npm run dist:build && npm run dist:zip",
     "dist:build": "npm run prod:build",
-    "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip"
+    "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip",
+    "format": "prettier --write src/"
   },
   "devDependencies": {
     "cross-zip-cli": "1.0.0",
     "mkdirp": "3.0.1",
+    "prettier": "2.8.8",
     "rimraf": "5.0.0",
     "typescript": "5.0.4",
     "vite": "4.3.2"

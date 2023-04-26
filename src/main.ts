@@ -1,9 +1,9 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import {setupCounter} from './counter.ts'
+import "./style.css";
+import typescriptLogo from "./typescript.svg";
+import viteLogo from "/vite.svg";
+import { setupCounter } from "./counter.ts";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
     <a href="https://vitejs.dev" target="_blank">
       <img src="${viteLogo}" class="logo" alt="Vite logo" />
@@ -19,10 +19,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       Click on the Vite and TypeScript logos to learn more
     </p>
   </div>
-`
+`;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
-
+setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
 
 // Based on https://gist.github.com/HipHopHuman/3e9b4a94b30ac9387d9a99ef2d29eb1a
 
@@ -37,27 +36,27 @@ let prev: number | null = null;
 const safetyMaxDelay = expectedDelay * 5;
 
 function gameLoopTick(curr: number) {
-    if (prev == null) {
-        prev = curr;
-    }
-    console.log("tick", curr)
-    let delta = curr - prev;
+  if (prev == null) {
     prev = curr;
-    accumulatedDelay += Math.min(delta, safetyMaxDelay);
-    while (accumulatedDelay >= expectedDelay) {
-        update();
-        accumulatedDelay -= expectedDelay;
-    }
-    render();
-    requestAnimationFrame(gameLoopTick);
+  }
+  console.log("tick", curr);
+  let delta = curr - prev;
+  prev = curr;
+  accumulatedDelay += Math.min(delta, safetyMaxDelay);
+  while (accumulatedDelay >= expectedDelay) {
+    update();
+    accumulatedDelay -= expectedDelay;
+  }
+  render();
+  requestAnimationFrame(gameLoopTick);
 }
 
 requestAnimationFrame(gameLoopTick);
 
 function update() {
-    console.error("UPDATE", performance.now());
+  console.error("UPDATE", performance.now());
 }
 
 function render() {
-    console.warn("RENDER", performance.now());
+  console.warn("RENDER", performance.now());
 }
