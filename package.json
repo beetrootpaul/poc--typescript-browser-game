@@ -15,7 +15,7 @@
     "url": "https://github.com/beetrootpaul/poc--typescript-web-game/issues"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite dev --open iframe_tester.html",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
