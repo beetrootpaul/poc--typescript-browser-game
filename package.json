@@ -15,6 +15,7 @@
     "url": "https://github.com/beetrootpaul/poc--typescript-web-game/issues"
   },
   "scripts": {
+    "prepare": "husky install",
     "dev": "vite dev --open iframe_tester.html",
     "prod": "npm run prod:build && npm run prod:preview",
     "prod:build": "tsc && vite build",
@@ -24,8 +25,13 @@
     "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip",
     "format": "prettier --write src/"
   },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
   "devDependencies": {
     "cross-zip-cli": "1.0.0",
+    "husky": "8.0.3",
+    "lint-staged": "13.2.1",
     "mkdirp": "3.0.1",
     "prettier": "2.8.8",
     "rimraf": "5.0.0",
