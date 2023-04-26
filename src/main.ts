@@ -1,68 +1,49 @@
 import "./style.css";
-import typescriptLogo from "./typescript.svg";
-import viteLogo from "/vite.svg";
-import { setupCounter } from "./counter.ts";
+import { startGameLoop } from "./game-loop.ts";
+import { DrawApi } from "./draw-api.ts";
 
-const appEl = document.querySelector<HTMLDivElement>("#app");
-if (appEl) {
-  appEl.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`;
-}
+const W = 16;
+const H = 16;
 
-const counterEl = document.querySelector<HTMLButtonElement>("#counter");
-if (counterEl) {
-  setupCounter(counterEl);
-}
+const canvasEl: HTMLCanvasElement | null =
+  document.querySelector<HTMLCanvasElement>(
+    "#poc--typescript-web-game--canvas"
+  );
+if (canvasEl) {
+  canvasEl.width = canvasEl.getBoundingClientRect().width;
+  canvasEl.height = canvasEl.getBoundingClientRect().height;
 
-// Based on https://gist.github.com/HipHopHuman/3e9b4a94b30ac9387d9a99ef2d29eb1a
+  const offscreenCanvas: OffscreenCanvas = new OffscreenCanvas(W, H);
 
-const expectedDelay = 1000 / 60;
-let accumulatedDelay = expectedDelay;
+  const ctx: CanvasRenderingContext2D | null = canvasEl.getContext("2d");
+  if (ctx) {
+    // ctx.scale(4, 4);
+    ctx.imageSmoothingEnabled = false;
+    // ctx.mozImageSmoothingEnabled = false;
+    // ctx.webkitImageSmoothingEnabled = false;
+    // ctx.msImageSmoothingEnabled = false;
 
-// let _x = window.speechSynthesis;
+    const offCtx: OffscreenCanvasRenderingContext2D | null =
+      offscreenCanvas.getContext("2d");
+    if (offCtx) {
+      offCtx.imageSmoothingEnabled = false;
 
-let prev: number | null = null;
-
-// a safety net in case of a long time spent on another tab, letting delta accumulate a lot in this one
-const safetyMaxDelay = expectedDelay * 5;
-
-function gameLoopTick(curr: number) {
-  if (prev == null) {
-    prev = curr;
+      startGameLoop({
+        ctx,
+        offCtx,
+        offscreenCanvas,
+        update,
+        render,
+      });
+    }
   }
-  console.log("tick", curr);
-  const delta = curr - prev;
-  prev = curr;
-  accumulatedDelay += Math.min(delta, safetyMaxDelay);
-  while (accumulatedDelay >= expectedDelay) {
-    update();
-    accumulatedDelay -= expectedDelay;
-  }
-  render();
-  requestAnimationFrame(gameLoopTick);
 }
-
-requestAnimationFrame(gameLoopTick);
 
 function update() {
-  console.error("UPDATE", performance.now());
+  // console.error("UPDATE", performance.now());
 }
 
-function render() {
-  console.warn("RENDER", performance.now());
+function render(drawApi: DrawApi) {
+  // console.warn("RENDER", performance.now());
+  drawApi.drawSomething();
 }
