@@ -1,19 +1,49 @@
 {
   "name": "poc--typescript-web-game",
-  "version": "1.0.0",
+  "version": "0.0.0",
+  "author": "Beetroot Paul",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
   "description": "A PoC of a simple low-res game written in TypeScript, meant to be published for web.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "homepage": "https://github.com/beetrootpaul/poc--typescript-web-game#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beetrootpaul/poc--typescript-web-game.git"
   },
-  "author": "Beetroot Paul",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/beetrootpaul/poc--typescript-web-game/issues"
   },
-  "homepage": "https://github.com/beetrootpaul/poc--typescript-web-game#readme"
+  "scripts": {
+    "prepare": "husky install",
+    "start": "npm run dev",
+    "dev": "vite dev --open iframe_tester.html",
+    "prod": "npm run prod:build && npm run prod:preview",
+    "prod:build": "tsc && vite build",
+    "prod:preview": "vite preview --open",
+    "dist": "npm run dist:build && npm run dist:zip",
+    "dist:build": "npm run prod:build",
+    "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip",
+    "lint": "eslint src/",
+    "format": "prettier --write src/"
+  },
+  "lint-staged": {
+    "src/**/*": [
+      "eslint",
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "5.59.1",
+    "@typescript-eslint/parser": "5.59.1",
+    "cross-zip-cli": "1.0.0",
+    "eslint": "8.39.0",
+    "husky": "8.0.3",
+    "lint-staged": "13.2.1",
+    "mkdirp": "3.0.1",
+    "prettier": "2.8.8",
+    "rimraf": "5.0.0",
+    "typescript": "5.0.4",
+    "vite": "4.3.2"
+  }
 }

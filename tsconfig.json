@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "types": [
+      /* Required by Vite (see: https://vitejs.dev/guide/features.html#client-types) */
+      "vite/client"
+    ],
+    "target": "ES2020",
+    /* Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields) */
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    /* Required by Vite (see: https://vitejs.dev/guide/features.html#isolatedmodules) */
+    "isolatedModules": true,
+    "noEmit": true,
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "./src"
+  ]
+}
