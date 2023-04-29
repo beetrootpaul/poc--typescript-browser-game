@@ -39,11 +39,23 @@ if (canvasEl) {
   }
 }
 
+// TODO: move tick to update's params
+let tick = 0;
+
+let pos = 0;
+
 function update() {
   // console.error("UPDATE", performance.now());
+  tick++;
+  if (tick % 2 == 0) {
+    pos++;
+    if (pos > W * H) {
+      pos = 0;
+    }
+  }
 }
 
 function render(drawApi: DrawApi) {
   // console.warn("RENDER", performance.now());
-  drawApi.drawSomething();
+  drawApi.drawSomething(pos);
 }
