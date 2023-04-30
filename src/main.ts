@@ -13,6 +13,38 @@ if (canvasEl) {
   canvasEl.width = canvasEl.getBoundingClientRect().width;
   canvasEl.height = canvasEl.getBoundingClientRect().height;
 
+  // TODO: google and read whether this approach is recommended or flawed. Also: is it cross-browser OK?
+  document.addEventListener("keydown", (event) => {
+    console.log(event.key);
+    console.log(event.repeat);
+    let handled = false;
+    switch (event.key) {
+      case "ArrowRight": {
+        pos++;
+        handled = true;
+        break;
+      }
+      case "ArrowLeft": {
+        pos--;
+        handled = true;
+        break;
+      }
+      case "ArrowDown": {
+        pos += W;
+        handled = true;
+        break;
+      }
+      case "ArrowUp": {
+        pos -= W;
+        handled = true;
+        break;
+      }
+    }
+    if (handled) {
+      event.preventDefault();
+    }
+  });
+
   const offscreenCanvas: OffscreenCanvas = new OffscreenCanvas(W, H);
 
   const ctx: CanvasRenderingContext2D | null = canvasEl.getContext("2d");
@@ -47,12 +79,12 @@ let pos = 0;
 function update() {
   // console.error("UPDATE", performance.now());
   tick++;
-  if (tick % 2 == 0) {
-    pos++;
-    if (pos > W * H) {
-      pos = 0;
-    }
-  }
+  // if (tick % 2 == 0) {
+  //   pos++;
+  //   if (pos > W * H) {
+  //     pos = 0;
+  //   }
+  // }
 }
 
 function render(drawApi: DrawApi) {
