@@ -1,12 +1,49 @@
 import { DrawApi } from "./draw-api.ts";
 
+export type GameInputEvent = null | "right" | "left" | "down" | "up";
+
+let lastGameInputEvent: GameInputEvent = null;
+
 export function startGameLoop(params: {
   ctx: CanvasRenderingContext2D;
   offCtx: OffscreenCanvasRenderingContext2D;
   offscreenCanvas: OffscreenCanvas;
-  update: () => void;
+  update: (gameInputEvent: GameInputEvent) => void;
   render: (drawApi: DrawApi) => void;
 }) {
+  // TODO: encapsulate
+  // TODO: google and read whether this approach is recommended or flawed. Also: is it cross-browser OK?
+  document.addEventListener("keydown", (event) => {
+    console.log(event.key);
+    console.log(event.repeat);
+    let handled = false;
+    switch (event.key) {
+      case "ArrowRight": {
+        lastGameInputEvent = "right";
+        handled = true;
+        break;
+      }
+      case "ArrowLeft": {
+        lastGameInputEvent = "left";
+        handled = true;
+        break;
+      }
+      case "ArrowDown": {
+        lastGameInputEvent = "down";
+        handled = true;
+        break;
+      }
+      case "ArrowUp": {
+        lastGameInputEvent = "up";
+        handled = true;
+        break;
+      }
+    }
+    if (handled) {
+      event.preventDefault();
+    }
+  });
+
   // Based on https://gist.github.com/HipHopHuman/3e9b4a94b30ac9387d9a99ef2d29eb1a
 
   const expectedDelay = 1000 / 60;
@@ -28,7 +65,9 @@ export function startGameLoop(params: {
     prev = curr;
     accumulatedDelay += Math.min(delta, safetyMaxDelay);
     while (accumulatedDelay >= expectedDelay) {
-      params.update();
+      // TODO: won't this input approach miss some events?
+      params.update(lastGameInputEvent);
+      lastGameInputEvent = null;
       accumulatedDelay -= expectedDelay;
     }
 

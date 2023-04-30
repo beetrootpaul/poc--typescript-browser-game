@@ -1,5 +1,5 @@
 import "./style.css";
-import { startGameLoop } from "./game-loop.ts";
+import { GameInputEvent, startGameLoop } from "./game-loop.ts";
 import { DrawApi } from "./draw-api.ts";
 
 const W = 16;
@@ -12,38 +12,6 @@ const canvasEl: HTMLCanvasElement | null =
 if (canvasEl) {
   canvasEl.width = canvasEl.getBoundingClientRect().width;
   canvasEl.height = canvasEl.getBoundingClientRect().height;
-
-  // TODO: google and read whether this approach is recommended or flawed. Also: is it cross-browser OK?
-  document.addEventListener("keydown", (event) => {
-    console.log(event.key);
-    console.log(event.repeat);
-    let handled = false;
-    switch (event.key) {
-      case "ArrowRight": {
-        pos++;
-        handled = true;
-        break;
-      }
-      case "ArrowLeft": {
-        pos--;
-        handled = true;
-        break;
-      }
-      case "ArrowDown": {
-        pos += W;
-        handled = true;
-        break;
-      }
-      case "ArrowUp": {
-        pos -= W;
-        handled = true;
-        break;
-      }
-    }
-    if (handled) {
-      event.preventDefault();
-    }
-  });
 
   const offscreenCanvas: OffscreenCanvas = new OffscreenCanvas(W, H);
 
@@ -76,7 +44,7 @@ let tick = 0;
 
 let pos = 0;
 
-function update() {
+function update(gameInputEvent: GameInputEvent) {
   // console.error("UPDATE", performance.now());
   tick++;
   // if (tick % 2 == 0) {
@@ -85,6 +53,24 @@ function update() {
   //     pos = 0;
   //   }
   // }
+  switch (gameInputEvent) {
+    case "right": {
+      pos++;
+      break;
+    }
+    case "left": {
+      pos--;
+      break;
+    }
+    case "down": {
+      pos += W;
+      break;
+    }
+    case "up": {
+      pos -= W;
+      break;
+    }
+  }
 }
 
 function render(drawApi: DrawApi) {
