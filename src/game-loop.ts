@@ -3,12 +3,13 @@ import { DrawApi } from "./draw-api.ts";
 export type GameInputEvent = null | "right" | "left" | "down" | "up";
 
 let lastGameInputEvent: GameInputEvent = null;
+let frameNumber = 0;
 
 export function startGameLoop(params: {
   ctx: CanvasRenderingContext2D;
   offCtx: OffscreenCanvasRenderingContext2D;
   offscreenCanvas: OffscreenCanvas;
-  update: (gameInputEvent: GameInputEvent) => void;
+  update: (frameNumber: number, gameInputEvent: GameInputEvent) => void;
   render: (drawApi: DrawApi) => void;
 }) {
   // TODO: encapsulate
@@ -66,9 +67,11 @@ export function startGameLoop(params: {
     accumulatedDelay += Math.min(delta, safetyMaxDelay);
     while (accumulatedDelay >= expectedDelay) {
       // TODO: won't this input approach miss some events?
-      params.update(lastGameInputEvent);
+      params.update(frameNumber, lastGameInputEvent);
       lastGameInputEvent = null;
       accumulatedDelay -= expectedDelay;
+      frameNumber =
+        frameNumber == Number.MAX_SAFE_INTEGER ? 0 : frameNumber + 1;
     }
 
     const imageData = params.offCtx.getImageData(

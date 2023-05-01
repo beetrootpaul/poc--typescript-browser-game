@@ -39,14 +39,10 @@ if (canvasEl) {
   }
 }
 
-// TODO: move tick to update's params
-let tick = 0;
-
 let pos = 0;
 
-function update(gameInputEvent: GameInputEvent) {
+function update(_frameNumber: number, gameInputEvent: GameInputEvent) {
   // console.error("UPDATE", performance.now());
-  tick++;
   // if (tick % 2 == 0) {
   //   pos++;
   //   if (pos > W * H) {
