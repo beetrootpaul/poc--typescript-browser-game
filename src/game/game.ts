@@ -11,7 +11,7 @@ type GameOptions = {
 };
 
 export class Game {
-  readonly #desiredFps: number = 60;
+  readonly #desiredFps: number = 30;
   readonly #gameCanvasSize: Xy = new Xy(16, 16);
 
   readonly #framework: Framework;
@@ -36,24 +36,18 @@ export class Game {
   }
 
   // TODO: rewrite this temporary implementation
-  #update({ gameInputEvent }: GameUpdateContext): void {
-    switch (gameInputEvent) {
-      case "right": {
-        this.#position++;
-        break;
-      }
-      case "left": {
-        this.#position--;
-        break;
-      }
-      case "down": {
-        this.#position += this.#gameCanvasSize.x;
-        break;
-      }
-      case "up": {
-        this.#position -= this.#gameCanvasSize.x;
-        break;
-      }
+  #update({ gameInputEvents }: GameUpdateContext): void {
+    if (gameInputEvents.has("right")) {
+      this.#position++;
+    }
+    if (gameInputEvents.has("left")) {
+      this.#position--;
+    }
+    if (gameInputEvents.has("down")) {
+      this.#position += this.#gameCanvasSize.x;
+    }
+    if (gameInputEvents.has("up")) {
+      this.#position -= this.#gameCanvasSize.x;
     }
   }
 

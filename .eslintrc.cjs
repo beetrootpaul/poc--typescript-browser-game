@@ -28,6 +28,7 @@ module.exports = {
     // https://typescript-eslint.io/rules/no-unused-vars/
     // https://eslint.org/docs/latest/rules/no-unused-vars#argsignorepattern
     "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/restrict-template-expressions": ["warn", { allowBoolean: true }],
     "curly": "warn"
   }
 };
