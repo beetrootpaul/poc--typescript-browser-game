@@ -16,6 +16,7 @@
   },
   "scripts": {
     "prepare": "husky install",
+    "test": "vitest run",
     "start": "npm run dev",
     "dev": "vite dev --open itch_io_simulation.html",
     "prod": "npm run prod:build && npm run prod:preview",
@@ -44,6 +45,7 @@
     "prettier": "2.8.8",
     "rimraf": "5.0.0",
     "typescript": "5.0.4",
-    "vite": "4.3.2"
+    "vite": "4.3.2",
+    "vitest": "0.30.1"
   }
 }

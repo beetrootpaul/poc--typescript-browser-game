@@ -2,7 +2,9 @@
   "compilerOptions": {
     "types": [
       /* Required by Vite (see: https://vitejs.dev/guide/features.html#client-types) */
-      "vite/client"
+      "vite/client",
+      /* Required by Vitests (see: https://vitest.dev/guide/in-source.html#typescript) */
+      "vitest/importMeta"
     ],
     "target": "ES2020",
     /* Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields) */
