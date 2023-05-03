@@ -4,7 +4,7 @@ import {
   GameUpdateContext,
 } from "../framework/framework.ts";
 import { Xy } from "../framework/xy.ts";
-import { Color } from "../framework/color.ts";
+import { Pico8Color } from "./pico8Color.ts";
 
 type GameOptions = {
   htmlCanvasSelector: string;
@@ -21,7 +21,7 @@ export class Game {
   constructor(options: GameOptions) {
     this.#framework = new Framework({
       htmlCanvasSelector: options.htmlCanvasSelector,
-      htmlCanvasBackground: new Color(0, 0, 0),
+      htmlCanvasBackground: Pico8Color.Black,
       gameCanvasSize: this.#gameCanvasSize,
       desiredFps: this.#desiredFps,
     });
@@ -50,8 +50,7 @@ export class Game {
   }
 
   #draw({ drawApi }: GameDrawContext): void {
-    // TODO: define PICO-8 colors and extract to a separate file
-    drawApi.clear(new Color(34, 45, 100));
+    drawApi.clear(Pico8Color.DarkBlue);
     drawApi.drawSomething(this.#position);
   }
 }

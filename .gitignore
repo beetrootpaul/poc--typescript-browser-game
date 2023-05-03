@@ -3,3 +3,6 @@
 
 # Vite build output
 /build/
+
+# local playground etc.
+/tmp/
