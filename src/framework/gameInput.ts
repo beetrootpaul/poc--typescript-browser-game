@@ -36,34 +36,38 @@ export class GameInput {
     [301, "down"],
   ]);
 
-  #cachedKeyboardEvents: Set<GameInputEvent> = new Set<GameInputEvent>();
+  #currentKeyboardEvents: Set<GameInputEvent> = new Set<GameInputEvent>();
 
   startListening() {
     this.#startCollectingKeyboardEvents();
   }
 
   detectRecentEvent(): Set<GameInputEvent> {
-    const detectedEvents = new Set<GameInputEvent>(this.#cachedKeyboardEvents);
-    this.#cachedKeyboardEvents.clear();
-
-    const gamepadEvents = this.#retrieveCurrentGamepadEvents();
-    for (const ge of gamepadEvents) {
-      detectedEvents.add(ge);
+    const detectedEvents = this.#retrieveCurrentGamepadEvents();
+    for (const ke of this.#currentKeyboardEvents) {
+      detectedEvents.add(ke);
     }
-
     return detectedEvents;
   }
 
   #startCollectingKeyboardEvents() {
     // TODO: is it possible to remove initial press delay before repeat?
-    // TODO: make keyboard input work same as gamepad one: make object move for the entire time maybe?
     document.addEventListener("keydown", (keyboardEvent) => {
       const gameInputEvent = this.#keyboardKeyToGameInputEvent.get(
         keyboardEvent.key
       );
       if (gameInputEvent) {
-        this.#cachedKeyboardEvents.add(gameInputEvent);
         keyboardEvent.preventDefault();
+        this.#currentKeyboardEvents.add(gameInputEvent);
+      }
+    });
+    document.addEventListener("keyup", (keyboardEvent) => {
+      const gameInputEvent = this.#keyboardKeyToGameInputEvent.get(
+        keyboardEvent.key
+      );
+      if (gameInputEvent) {
+        keyboardEvent.preventDefault();
+        this.#currentKeyboardEvents.delete(gameInputEvent);
       }
     });
   }
