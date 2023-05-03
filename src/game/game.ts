@@ -16,7 +16,6 @@ export class Game {
 
   readonly #framework: Framework;
 
-  // TODO: remove this temporary variable
   #position: number = 0;
 
   constructor(options: GameOptions) {
@@ -35,7 +34,6 @@ export class Game {
     this.#framework.startGame();
   }
 
-  // TODO: rewrite this temporary implementation
   #update({ gameInputEvents }: GameUpdateContext): void {
     if (gameInputEvents.has("right")) {
       this.#position++;

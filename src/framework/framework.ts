@@ -1,7 +1,7 @@
 import { DrawApi } from "./drawApi.ts";
 import { Xy } from "./xy.ts";
 import { GameLoop } from "./gameLoop.ts";
-import { GameInput, GameInputEvent } from "./gameInput.ts";
+import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
 import { Color } from "./color.ts";
 
 export type GameUpdateContext = {
@@ -105,7 +105,7 @@ export class Framework {
       updateFn: (frameNumber) => {
         this.#onUpdate?.({
           frameNumber,
-          gameInputEvents: this.#gameInput.detectRecentEvent(),
+          gameInputEvents: this.#gameInput.getCurrentEvents(),
         });
       },
       renderFn: () => {
