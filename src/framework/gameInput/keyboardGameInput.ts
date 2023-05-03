@@ -1,6 +1,6 @@
 export type GameInputEvent = null | "right" | "left" | "down" | "up";
 
-export class GameInput {
+export class KeyboardGameInput {
   readonly #keyMapping: Map<string, GameInputEvent> = new Map<
     string,
     GameInputEvent
@@ -11,26 +11,26 @@ export class GameInput {
     ["ArrowDown", "down"],
   ]);
 
-  // TODO: is there a chance we are losing events due to lack of a buffer?
-  #collectedEvent: GameInputEvent = null;
+  #currentEvents: Set<GameInputEvent> = new Set<GameInputEvent>();
 
   startListening() {
-    // TODO: is it possible to remove initial press delay before repeat?
     document.addEventListener("keydown", (keyboardEvent) => {
-      console.log(keyboardEvent);
       const gameInputEvent = this.#keyMapping.get(keyboardEvent.key);
       if (gameInputEvent) {
-        this.#collectedEvent = gameInputEvent;
         keyboardEvent.preventDefault();
-      } else {
-        this.#collectedEvent = null;
+        this.#currentEvents.add(gameInputEvent);
+      }
+    });
+    document.addEventListener("keyup", (keyboardEvent) => {
+      const gameInputEvent = this.#keyMapping.get(keyboardEvent.key);
+      if (gameInputEvent) {
+        keyboardEvent.preventDefault();
+        this.#currentEvents.delete(gameInputEvent);
       }
     });
   }
 
-  consumeEvent(): GameInputEvent {
-    const event = this.#collectedEvent;
-    this.#collectedEvent = null;
-    return event;
+  getCurrentEvents(): Set<GameInputEvent> {
+    return this.#currentEvents;
   }
 }

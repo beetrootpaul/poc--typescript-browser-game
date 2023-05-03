@@ -1,12 +1,12 @@
 import { DrawApi } from "./drawApi.ts";
 import { Xy } from "./xy.ts";
-import { GameLoop } from "./gameLoop.ts";
-import { GameInput, GameInputEvent } from "./gameInput.ts";
+import { GameLoop } from "./gameLoop/gameLoop.ts";
+import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
 import { Color } from "./color.ts";
 
 export type GameUpdateContext = {
   frameNumber: number;
-  gameInputEvent: GameInputEvent;
+  gameInputEvents: Set<GameInputEvent>;
 };
 export type GameDrawContext = {
   drawApi: DrawApi;
@@ -20,6 +20,7 @@ type FrameworkOptions = {
   htmlCanvasBackground: Color;
   gameCanvasSize: Xy;
   desiredFps: number;
+  logActualFps?: boolean;
 };
 
 export class Framework {
@@ -82,7 +83,10 @@ export class Framework {
 
     this.#gameInput = new GameInput();
 
-    this.#gameLoop = new GameLoop(options.desiredFps);
+    this.#gameLoop = new GameLoop({
+      desiredFps: options.desiredFps,
+      logActualFps: options.logActualFps ?? false,
+    });
   }
 
   setOnUpdate(onUpdate: GameOnUpdate) {
@@ -105,7 +109,7 @@ export class Framework {
       updateFn: (frameNumber) => {
         this.#onUpdate?.({
           frameNumber,
-          gameInputEvent: this.#gameInput.consumeEvent(),
+          gameInputEvents: this.#gameInput.getCurrentEvents(),
         });
       },
       renderFn: () => {

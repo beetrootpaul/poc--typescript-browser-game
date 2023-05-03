@@ -4,27 +4,28 @@ import {
   GameUpdateContext,
 } from "../framework/framework.ts";
 import { Xy } from "../framework/xy.ts";
-import { Color } from "../framework/color.ts";
+import { Pico8Color } from "./pico8Color.ts";
 
 type GameOptions = {
   htmlCanvasSelector: string;
 };
 
 export class Game {
-  readonly #desiredFps: number = 60;
+  readonly #desiredFps: number = 30;
   readonly #gameCanvasSize: Xy = new Xy(16, 16);
 
   readonly #framework: Framework;
 
-  // TODO: remove this temporary variable
   #position: number = 0;
 
   constructor(options: GameOptions) {
     this.#framework = new Framework({
       htmlCanvasSelector: options.htmlCanvasSelector,
-      htmlCanvasBackground: new Color(0, 0, 0),
+      htmlCanvasBackground: Pico8Color.Black,
       gameCanvasSize: this.#gameCanvasSize,
       desiredFps: this.#desiredFps,
+      // TODO: consider disabling these logs in production build
+      logActualFps: true,
     });
   }
 
@@ -35,31 +36,23 @@ export class Game {
     this.#framework.startGame();
   }
 
-  // TODO: rewrite this temporary implementation
-  #update({ gameInputEvent }: GameUpdateContext): void {
-    switch (gameInputEvent) {
-      case "right": {
-        this.#position++;
-        break;
-      }
-      case "left": {
-        this.#position--;
-        break;
-      }
-      case "down": {
-        this.#position += this.#gameCanvasSize.x;
-        break;
-      }
-      case "up": {
-        this.#position -= this.#gameCanvasSize.x;
-        break;
-      }
+  #update({ gameInputEvents }: GameUpdateContext): void {
+    if (gameInputEvents.has("right")) {
+      this.#position++;
+    }
+    if (gameInputEvents.has("left")) {
+      this.#position--;
+    }
+    if (gameInputEvents.has("down")) {
+      this.#position += this.#gameCanvasSize.x;
+    }
+    if (gameInputEvents.has("up")) {
+      this.#position -= this.#gameCanvasSize.x;
     }
   }
 
   #draw({ drawApi }: GameDrawContext): void {
-    // TODO: define PICO-8 colors and extract to a separate file
-    drawApi.clear(new Color(34, 45, 100));
+    drawApi.clear(Pico8Color.DarkBlue);
     drawApi.drawSomething(this.#position);
   }
 }
