@@ -24,6 +24,8 @@ export class Game {
       htmlCanvasBackground: Pico8Color.Black,
       gameCanvasSize: this.#gameCanvasSize,
       desiredFps: this.#desiredFps,
+      // TODO: consider disabling these logs in production build
+      logActualFps: true,
     });
   }
 
