@@ -1,4 +1,4 @@
-export type GameInputEvent = null | "right" | "left" | "down" | "up";
+import { GameInputEvent } from "./gameInput.ts";
 
 export class GamepadGameInput {
   readonly buttonMapping: Map<number, GameInputEvent> = new Map<
@@ -28,7 +28,7 @@ export class GamepadGameInput {
     [301, "down"],
   ]);
 
-  getCurrentEvents(): Set<GameInputEvent> {
+  getCurrentContinuousEvents(): Set<GameInputEvent> {
     const events = new Set<GameInputEvent>();
 
     navigator.getGamepads().forEach((gamepad) => {

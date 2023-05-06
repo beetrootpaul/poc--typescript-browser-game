@@ -108,9 +108,14 @@ export class Framework {
 
     this.#gameLoop.start({
       updateFn: (frameNumber) => {
+        const fireOnceEvents = this.#gameInput.consumeFireOnceEvents();
+        if (fireOnceEvents.has("full_screen")) {
+          this.#toggleFullScreen();
+        }
+        const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
         this.#onUpdate?.({
           frameNumber,
-          gameInputEvents: this.#gameInput.getCurrentEvents(),
+          gameInputEvents: continuousEvents,
         });
       },
       renderFn: () => {
@@ -167,5 +172,20 @@ export class Framework {
       scaleToFill * this.#gameCanvasSize.x,
       scaleToFill * this.#gameCanvasSize.y
     );
+  }
+
+  #toggleFullScreen(): void {
+    if (!document.fullscreenEnabled) {
+      return;
+    }
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch((err) => {
+        console.error(err);
+      });
+    } else {
+      this.#htmlCanvasContext.canvas.requestFullscreen().catch((err) => {
+        console.error(err);
+      });
+    }
   }
 }
