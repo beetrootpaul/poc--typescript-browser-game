@@ -7,6 +7,10 @@ import { Xy } from "../framework/xy.ts";
 import { Pico8Color } from "./pico8Color.ts";
 import { Color } from "../framework/color.ts";
 
+type GameStoredState = {
+  pos: number;
+};
+
 type GameOptions = {
   htmlCanvasSelector: string;
 };
@@ -15,7 +19,7 @@ export class Game {
   readonly #desiredFps: number = 15;
   readonly #gameCanvasSize: Xy = new Xy(16, 16);
 
-  readonly #framework: Framework;
+  readonly #framework: Framework<GameStoredState>;
 
   #position: number = 0;
 
@@ -33,7 +37,7 @@ export class Game {
   #color: Color = Pico8Color.Red;
 
   constructor(options: GameOptions) {
-    this.#framework = new Framework({
+    this.#framework = new Framework<GameStoredState>({
       htmlCanvasSelector: options.htmlCanvasSelector,
       htmlCanvasBackground: Pico8Color.Black,
       gameCanvasSize: this.#gameCanvasSize,
@@ -47,26 +51,49 @@ export class Game {
     this.#framework.setOnUpdate(this.#update.bind(this));
     this.#framework.setOnDraw(this.#draw.bind(this));
 
-    this.#framework.startGame();
+    this.#framework.startGame(({ storageApi }) => {
+      let restoredPosition: number = 0;
+      try {
+        restoredPosition = storageApi.load()?.pos ?? 0;
+      } catch (err) {
+        // TODO: use zod and validate value's shape in the framework itself, instead on the game side here
+        console.warn(`Stored game state doesn't seem to match expected shape.`);
+        storageApi.clear();
+      }
+      this.#position = restoredPosition;
+      if (this.#position < 0) this.#position = 0;
+      if (this.#position > 221) this.#position = 221;
+    });
   }
 
-  #update({ gameInputEvents }: GameUpdateContext): void {
+  #update({
+    gameInputEvents,
+    storageApi,
+  }: GameUpdateContext<GameStoredState>): void {
     this.#color =
       this.#colorSequence[
         (this.#colorSequence.indexOf(this.#color) + 1) %
           this.#colorSequence.length
       ];
+    let hasPositionChanged = false;
     if (gameInputEvents.has("right")) {
       this.#position++;
+      hasPositionChanged = true;
     }
     if (gameInputEvents.has("left")) {
       this.#position--;
+      hasPositionChanged = true;
     }
     if (gameInputEvents.has("down")) {
       this.#position += this.#gameCanvasSize.x;
+      hasPositionChanged = true;
     }
     if (gameInputEvents.has("up")) {
       this.#position -= this.#gameCanvasSize.x;
+      hasPositionChanged = true;
+    }
+    if (hasPositionChanged) {
+      storageApi.store({ pos: this.#position });
     }
   }
 

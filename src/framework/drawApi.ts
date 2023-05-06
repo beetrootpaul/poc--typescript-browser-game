@@ -1,5 +1,3 @@
-// TODO: CONTINUE REFACTORING ON THIS FILE
-
 import { Xy } from "./xy.ts";
 import { Color } from "./color.ts";
 

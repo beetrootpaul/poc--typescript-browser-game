@@ -4,16 +4,30 @@ import { GameLoop } from "./gameLoop/gameLoop.ts";
 import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
 import { Color } from "./color.ts";
 import { FullScreen } from "./fullScreen.ts";
+import { StorageApi, StorageApiValueConstraint } from "./storageApi.ts";
 
-export type GameUpdateContext = {
+export type GameStartContext<
+  StorageApiValue extends StorageApiValueConstraint
+> = {
+  storageApi: StorageApi<StorageApiValue>;
+};
+export type GameUpdateContext<
+  StorageApiValue extends StorageApiValueConstraint
+> = {
   frameNumber: number;
   gameInputEvents: Set<GameInputEvent>;
+  storageApi: StorageApi<StorageApiValue>;
 };
 export type GameDrawContext = {
   drawApi: DrawApi;
 };
 
-type GameOnUpdate = (updateContext: GameUpdateContext) => void;
+type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
+  startContext: GameStartContext<StorageApiValue>
+) => void;
+type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
+  updateContext: GameUpdateContext<StorageApiValue>
+) => void;
 type GameOnDraw = (drawContext: GameDrawContext) => void;
 
 type FrameworkOptions = {
@@ -24,7 +38,7 @@ type FrameworkOptions = {
   logActualFps?: boolean;
 };
 
-export class Framework {
+export class Framework<StorageApiValue extends StorageApiValueConstraint> {
   readonly #gameCanvasSize: Xy;
   readonly #htmlCanvasBackground: Color;
 
@@ -34,12 +48,14 @@ export class Framework {
     | CanvasRenderingContext2D;
   readonly #offscreenImageData: ImageData;
 
-  readonly #drawApi: DrawApi;
   readonly #gameInput: GameInput;
   readonly #gameLoop: GameLoop;
   readonly #fullScreen: FullScreen;
 
-  #onUpdate?: GameOnUpdate;
+  readonly #drawApi: DrawApi;
+  readonly #storageApi: StorageApi<StorageApiValue>;
+
+  #onUpdate?: GameOnUpdate<StorageApiValue>;
   #onDraw?: GameOnDraw;
 
   constructor(options: FrameworkOptions) {
@@ -70,10 +86,12 @@ export class Framework {
       );
       const htmlOffscreenCanvasFallback =
         document.querySelector<HTMLCanvasElement>(
+          // TODO: externalize this selector
           "#poc--typescript-web-game--offscreen-canvas-fallback"
         );
       if (!htmlOffscreenCanvasFallback) {
         throw Error(
+          // TODO: externalize this selector
           `Was unable to find a fallback offscreen <canvas> by selector '${"TODO TODO TODO TODO TODO"}'`
         );
       }
@@ -107,6 +125,15 @@ export class Framework {
       this.#offscreenContext = offscreenContext;
     }
 
+    this.#gameInput = new GameInput();
+
+    this.#gameLoop = new GameLoop({
+      desiredFps: options.desiredFps,
+      logActualFps: options.logActualFps ?? false,
+    });
+
+    this.#fullScreen = FullScreen.newFor(this.#htmlCanvasContext.canvas);
+
     this.#offscreenImageData = this.#offscreenContext.createImageData(
       this.#offscreenContext.canvas.width,
       this.#offscreenContext.canvas.height
@@ -116,17 +143,10 @@ export class Framework {
       this.#offscreenImageData.data
     );
 
-    this.#gameInput = new GameInput();
-
-    this.#gameLoop = new GameLoop({
-      desiredFps: options.desiredFps,
-      logActualFps: options.logActualFps ?? false,
-    });
-
-    this.#fullScreen = FullScreen.newFor(this.#htmlCanvasContext.canvas);
+    this.#storageApi = new StorageApi<StorageApiValue>();
   }
 
-  setOnUpdate(onUpdate: GameOnUpdate) {
+  setOnUpdate(onUpdate: GameOnUpdate<StorageApiValue>) {
     this.#onUpdate = onUpdate;
   }
 
@@ -134,10 +154,14 @@ export class Framework {
     this.#onDraw = onDraw;
   }
 
-  startGame(): void {
+  startGame(onStart?: GameOnStart<StorageApiValue>): void {
     this.#setupHtmlCanvas();
     window.addEventListener("resize", (_event) => {
       this.#setupHtmlCanvas();
+    });
+
+    onStart?.({
+      storageApi: this.#storageApi,
     });
 
     this.#gameInput.startListening();
@@ -152,6 +176,7 @@ export class Framework {
         this.#onUpdate?.({
           frameNumber,
           gameInputEvents: continuousEvents,
+          storageApi: this.#storageApi,
         });
       },
       renderFn: () => {
