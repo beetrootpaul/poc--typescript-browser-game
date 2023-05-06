@@ -3,6 +3,7 @@ import { Xy } from "./xy.ts";
 import { GameLoop } from "./gameLoop/gameLoop.ts";
 import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
 import { Color } from "./color.ts";
+import { FullScreen } from "./fullScreen.ts";
 
 export type GameUpdateContext = {
   frameNumber: number;
@@ -36,6 +37,7 @@ export class Framework {
   readonly #drawApi: DrawApi;
   readonly #gameInput: GameInput;
   readonly #gameLoop: GameLoop;
+  readonly #fullScreen: FullScreen;
 
   #onUpdate?: GameOnUpdate;
   #onDraw?: GameOnDraw;
@@ -120,6 +122,8 @@ export class Framework {
       desiredFps: options.desiredFps,
       logActualFps: options.logActualFps ?? false,
     });
+
+    this.#fullScreen = FullScreen.newFor(this.#htmlCanvasContext.canvas);
   }
 
   setOnUpdate(onUpdate: GameOnUpdate) {
@@ -142,7 +146,7 @@ export class Framework {
       updateFn: (frameNumber) => {
         const fireOnceEvents = this.#gameInput.consumeFireOnceEvents();
         if (fireOnceEvents.has("full_screen")) {
-          this.#toggleFullScreen();
+          this.#fullScreen.toggle();
         }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
         this.#onUpdate?.({
@@ -204,22 +208,5 @@ export class Framework {
       scaleToFill * this.#gameCanvasSize.x,
       scaleToFill * this.#gameCanvasSize.y
     );
-  }
-
-  #toggleFullScreen(): void {
-    // TODO: implement for Safari 16.4 as well, but only after testing everything else on the older Safari 16.3,
-    //       because Safari downgrade might be difficult to achieve (it updates together with macOS update).
-    if (!document.fullscreenEnabled) {
-      return;
-    }
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch((err) => {
-        console.error(err);
-      });
-    } else {
-      this.#htmlCanvasContext.canvas.requestFullscreen().catch((err) => {
-        console.error(err);
-      });
-    }
   }
 }
