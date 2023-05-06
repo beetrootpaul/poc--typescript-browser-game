@@ -32,6 +32,7 @@ type GameOnDraw = (drawContext: GameDrawContext) => void;
 
 type FrameworkOptions = {
   htmlCanvasSelector: string;
+  htmlOffscreenCanvasFallbackSelector: string;
   htmlCanvasBackground: Color;
   gameCanvasSize: Xy;
   desiredFps: number;
@@ -86,13 +87,12 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
       );
       const htmlOffscreenCanvasFallback =
         document.querySelector<HTMLCanvasElement>(
-          // TODO: externalize this selector
-          "#poc--typescript-web-game--offscreen-canvas-fallback"
+          options.htmlOffscreenCanvasFallbackSelector
         );
       if (!htmlOffscreenCanvasFallback) {
         throw Error(
           // TODO: externalize this selector
-          `Was unable to find a fallback offscreen <canvas> by selector '${"TODO TODO TODO TODO TODO"}'`
+          `Was unable to find a fallback offscreen <canvas> by selector '${options.htmlOffscreenCanvasFallbackSelector}'`
         );
       }
       htmlOffscreenCanvasFallback.width = options.gameCanvasSize.x;

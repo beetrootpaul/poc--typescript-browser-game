@@ -13,6 +13,7 @@ type GameStoredState = {
 
 type GameOptions = {
   htmlCanvasSelector: string;
+  htmlOffscreenCanvasFallbackSelector: string;
 };
 
 export class Game {
@@ -39,6 +40,8 @@ export class Game {
   constructor(options: GameOptions) {
     this.#framework = new Framework<GameStoredState>({
       htmlCanvasSelector: options.htmlCanvasSelector,
+      htmlOffscreenCanvasFallbackSelector:
+        options.htmlOffscreenCanvasFallbackSelector,
       htmlCanvasBackground: Pico8Color.Black,
       gameCanvasSize: this.#gameCanvasSize,
       desiredFps: this.#desiredFps,
