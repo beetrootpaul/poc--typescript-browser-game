@@ -1,3 +1,15 @@
+declare global {
+  interface Document {
+    webkitFullscreenEnabled?: boolean;
+    webkitFullscreenElement?: () => Element;
+    webkitExitFullscreen?: () => void;
+  }
+
+  interface Element {
+    webkitRequestFullscreen?: () => void;
+  }
+}
+
 export abstract class FullScreen {
   static newFor(
     fullScreenSubjectSelector: string,
@@ -5,7 +17,7 @@ export abstract class FullScreen {
   ): FullScreen {
     // TODO: implement for Safari 16.4 as well, but only after testing everything else on the older Safari 16.3,
     //       because Safari downgrade might be difficult to achieve (it updates together with macOS update).
-    return document.fullscreenEnabled
+    return document.fullscreenEnabled || document.webkitFullscreenEnabled
       ? new FullScreenSupported(fullScreenSubjectSelector, buttonsSelector)
       : new FullScreenNoop(buttonsSelector);
   }
@@ -25,8 +37,12 @@ class FullScreenNoop implements FullScreen {
   toggle(): void {}
 }
 
+// noinspection SuspiciousTypeOfGuard
 class FullScreenSupported implements FullScreen {
   readonly #fullScreenSubject: Element;
+
+  readonly #nativeRequestFullscreen: () => void | Promise<void>;
+  readonly #nativeExitFullscreen: () => void | Promise<void>;
 
   constructor(fullScreenSubjectSelector: string, buttonsSelector: string) {
     const fullScreenSubject = document.querySelector(fullScreenSubjectSelector);
@@ -36,6 +52,20 @@ class FullScreenSupported implements FullScreen {
       );
     }
     this.#fullScreenSubject = fullScreenSubject;
+
+    const nativeRequestFullscreen =
+      // eslint-disable-next-line @typescript-eslint/unbound-method,@typescript-eslint/no-unnecessary-condition
+      this.#fullScreenSubject.requestFullscreen ??
+      this.#fullScreenSubject.webkitRequestFullscreen ??
+      (() => {});
+    this.#nativeRequestFullscreen = nativeRequestFullscreen.bind(
+      this.#fullScreenSubject
+    );
+
+    const nativeExitFullscreen =
+      // eslint-disable-next-line @typescript-eslint/unbound-method,@typescript-eslint/no-unnecessary-condition
+      document.exitFullscreen ?? document.webkitExitFullscreen ?? (() => {});
+    this.#nativeExitFullscreen = nativeExitFullscreen.bind(document);
 
     document
       .querySelectorAll<HTMLElement>(buttonsSelector)
@@ -47,12 +77,26 @@ class FullScreenSupported implements FullScreen {
   }
 
   toggle(): void {
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch((err) => {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      this.#fullScreenOff();
+    } else {
+      this.#fullScreenOn();
+    }
+  }
+
+  #fullScreenOn(): void {
+    const result = this.#nativeRequestFullscreen();
+    if (result instanceof Promise) {
+      result.catch((err) => {
         console.error(err);
       });
-    } else {
-      this.#fullScreenSubject.requestFullscreen().catch((err) => {
+    }
+  }
+
+  #fullScreenOff(): void {
+    const result = this.#nativeExitFullscreen();
+    if (result instanceof Promise) {
+      result.catch((err) => {
         console.error(err);
       });
     }
