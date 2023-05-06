@@ -5,6 +5,7 @@ import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
 import { Color } from "./color.ts";
 import { FullScreen } from "./fullScreen.ts";
 import { StorageApi, StorageApiValueConstraint } from "./storageApi.ts";
+import { Loading } from "./loading.ts";
 
 export type GameStartContext<
   StorageApiValue extends StorageApiValueConstraint
@@ -51,6 +52,7 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
     | CanvasRenderingContext2D;
   readonly #offscreenImageData: ImageData;
 
+  readonly #loading: Loading;
   readonly #gameInput: GameInput;
   readonly #gameLoop: GameLoop;
   readonly #fullScreen: FullScreen;
@@ -62,6 +64,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
   #onDraw?: GameOnDraw;
 
   constructor(options: FrameworkOptions) {
+    this.#loading = new Loading(options.htmlDisplaySelector);
+
     this.#gameCanvasSize = options.gameCanvasSize.floor();
     this.#htmlCanvasBackground = options.htmlCanvasBackground;
 
@@ -190,6 +194,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
         this.#render();
       },
     });
+
+    this.#loading.showApp();
   }
 
   // This function assumes that <canvas> has width and height set to 100% by CSS.
