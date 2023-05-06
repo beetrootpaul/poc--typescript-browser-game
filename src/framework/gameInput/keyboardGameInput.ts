@@ -29,7 +29,6 @@ export class KeyboardGameInput {
       const gameInputEvent = this.#keyMapping.get(keyboardEvent.key);
       if (gameInputEvent) {
         keyboardEvent.preventDefault();
-        console.log(gameInputEvent);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!gameInputEventBehavior[gameInputEvent]?.fireOnce) {
           this.#currentContinuousEvents.add(gameInputEvent);

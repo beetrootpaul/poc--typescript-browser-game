@@ -28,7 +28,9 @@ export class Framework {
   readonly #htmlCanvasBackground: Color;
 
   readonly #htmlCanvasContext: CanvasRenderingContext2D;
-  readonly #offscreenContext: OffscreenCanvasRenderingContext2D;
+  readonly #offscreenContext:
+    | OffscreenCanvasRenderingContext2D
+    | CanvasRenderingContext2D;
   readonly #offscreenImageData: ImageData;
 
   readonly #drawApi: DrawApi;
@@ -60,18 +62,48 @@ export class Framework {
     }
     this.#htmlCanvasContext = htmlCanvasContext;
 
-    const offscreenCanvas = new OffscreenCanvas(
-      options.gameCanvasSize.x,
-      options.gameCanvasSize.y
-    );
-    const offscreenContext = offscreenCanvas.getContext("2d", {
-      // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
-      alpha: false,
-    });
-    if (!offscreenContext) {
-      throw Error("Was unable to obtain OffscreenCanvas' 2D context");
+    if (typeof OffscreenCanvas == "undefined") {
+      console.warn(
+        "No OffscreenCanvas support. Falling back to a regular <canvas>."
+      );
+      const htmlOffscreenCanvasFallback =
+        document.querySelector<HTMLCanvasElement>(
+          "#poc--typescript-web-game--offscreen-canvas-fallback"
+        );
+      if (!htmlOffscreenCanvasFallback) {
+        throw Error(
+          `Was unable to find a fallback offscreen <canvas> by selector '${"TODO TODO TODO TODO TODO"}'`
+        );
+      }
+      htmlOffscreenCanvasFallback.width = options.gameCanvasSize.x;
+      htmlOffscreenCanvasFallback.height = options.gameCanvasSize.y;
+      const fallbackOffscreenContext = htmlOffscreenCanvasFallback.getContext(
+        "2d",
+        {
+          // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
+          alpha: false,
+        }
+      );
+      if (!fallbackOffscreenContext) {
+        throw Error(
+          "Was unable to obtain fallback offscreen canvas' 2D context"
+        );
+      }
+      this.#offscreenContext = fallbackOffscreenContext;
+    } else {
+      const offscreenCanvas = new OffscreenCanvas(
+        options.gameCanvasSize.x,
+        options.gameCanvasSize.y
+      );
+      const offscreenContext = offscreenCanvas.getContext("2d", {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
+        alpha: false,
+      });
+      if (!offscreenContext) {
+        throw Error("Was unable to obtain OffscreenCanvas' 2D context");
+      }
+      this.#offscreenContext = offscreenContext;
     }
-    this.#offscreenContext = offscreenContext;
 
     this.#offscreenImageData = this.#offscreenContext.createImageData(
       this.#offscreenContext.canvas.width,
@@ -175,6 +207,8 @@ export class Framework {
   }
 
   #toggleFullScreen(): void {
+    // TODO: implement for Safari 16.4 as well, but only after testing everything else on the older Safari 16.3,
+    //       because Safari downgrade might be difficult to achieve (it updates together with macOS update).
     if (!document.fullscreenEnabled) {
       return;
     }
