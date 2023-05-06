@@ -6,7 +6,6 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- TODO: change favicon, remove vite.svg for public/ -->
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
 
   <!--
@@ -15,19 +14,27 @@
   <title>itch.io simulation</title>
 
   <style>
+
+      /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v
+         CHANGE THESE values to match what you have set on your game's itch.io page:
+      */
       :root {
-          /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v
-             CHANGE THESE values to match what you have set on your game's itch.io page:
-          */
-          --canvas-width: 512px;
-          --canvas-height: 512px;
-          /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v
-             CHANGE THESE values to whatever you looks good for you:
-          */
+          --game-width: 600px;
+          --game-height: 480px;
+      }
+
+      /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v
+         CHANGE THESE values to whatever you looks good for you:
+      */
+      :root {
           --theme-bg-body: #6a5050;
           --theme-bg-column: #b6a6a6;
           --theme-bg-game-frame: #a49494;
           --theme-bg-button: #fa5c5c;
+      }
+
+      :root {
+          --canvas-width-ratio: 0.8;
       }
 
       body {
@@ -73,8 +80,8 @@
 
       .game_frame {
           margin: 0 auto;
-          width: var(--canvas-width);
-          height: var(--canvas-height);
+          width: var(--game-width);
+          height: var(--game-height);
           background-color: var(--theme-bg-game-frame);
       }
 

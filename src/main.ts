@@ -1,6 +1,11 @@
 import "./style.css";
 import { Game } from "./game/game.ts";
 
-new Game({
-  htmlCanvasSelector: "#poc--typescript-web-game--canvas",
-}).start();
+setTimeout(() => {
+  new Game({
+    htmlDisplaySelector: "#display",
+    htmlCanvasSelector: "#canvas",
+    htmlOffscreenCanvasFallbackSelector: "#fallback_offscreen_canvas",
+    htmlControlsFullscreenSelector: ".controls_fullscreen",
+  }).start();
+}, 3000);

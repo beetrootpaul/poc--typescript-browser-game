@@ -1,5 +1,3 @@
-// TODO: CONTINUE REFACTORING ON THIS FILE
-
 import { Xy } from "./xy.ts";
 import { Color } from "./color.ts";
 
@@ -23,7 +21,7 @@ export class DrawApi {
   }
 
   // TODO: remove this temporary method
-  drawSomething(pos = 0) {
+  drawSomething(pos = 0, color: Color) {
     const pxLen = this.#canvasRgbaBytes.length / 4;
 
     this.#canvasRgbaBytes[0] = 0;
@@ -47,9 +45,9 @@ export class DrawApi {
       pos + 2 * this.#canvasSize.x + 2,
     ].map((i) => i * 4);
     ii.forEach((i) => {
-      this.#canvasRgbaBytes[i] = 255;
-      this.#canvasRgbaBytes[i + 1] = 0;
-      this.#canvasRgbaBytes[i + 2] = 0;
+      this.#canvasRgbaBytes[i] = color.r;
+      this.#canvasRgbaBytes[i + 1] = color.g;
+      this.#canvasRgbaBytes[i + 2] = color.b;
       this.#canvasRgbaBytes[i + 3] = 255;
     });
   }

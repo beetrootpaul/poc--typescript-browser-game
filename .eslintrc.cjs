@@ -20,7 +20,7 @@ module.exports = {
   },
   rules: {
     // https://typescript-eslint.io/rules/consistent-type-definitions/
-    "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
+    "@typescript-eslint/consistent-type-definitions": "off",
     // https://typescript-eslint.io/rules/no-empty-function/
     "@typescript-eslint/no-empty-function": "off",
     // https://typescript-eslint.io/rules/no-extraneous-class/
