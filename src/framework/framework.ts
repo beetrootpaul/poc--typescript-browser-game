@@ -31,8 +31,10 @@ type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
 type GameOnDraw = (drawContext: GameDrawContext) => void;
 
 type FrameworkOptions = {
+  htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlOffscreenCanvasFallbackSelector: string;
+  htmlControlsFullscreenSelector: string;
   htmlCanvasBackground: Color;
   gameCanvasSize: Xy;
   desiredFps: number;
@@ -91,7 +93,6 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
         );
       if (!htmlOffscreenCanvasFallback) {
         throw Error(
-          // TODO: externalize this selector
           `Was unable to find a fallback offscreen <canvas> by selector '${options.htmlOffscreenCanvasFallbackSelector}'`
         );
       }
@@ -132,7 +133,10 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
       logActualFps: options.logActualFps ?? false,
     });
 
-    this.#fullScreen = FullScreen.newFor(this.#htmlCanvasContext.canvas);
+    this.#fullScreen = FullScreen.newFor(
+      options.htmlDisplaySelector,
+      options.htmlControlsFullscreenSelector
+    );
 
     this.#offscreenImageData = this.#offscreenContext.createImageData(
       this.#offscreenContext.canvas.width,

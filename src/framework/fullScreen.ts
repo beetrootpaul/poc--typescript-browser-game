@@ -1,24 +1,49 @@
 export abstract class FullScreen {
-  static newFor(element: Element): FullScreen {
+  static newFor(
+    fullScreenSubjectSelector: string,
+    buttonsSelector: string
+  ): FullScreen {
     // TODO: implement for Safari 16.4 as well, but only after testing everything else on the older Safari 16.3,
     //       because Safari downgrade might be difficult to achieve (it updates together with macOS update).
     return document.fullscreenEnabled
-      ? new FullScreenSupported(element)
-      : new FullScreenNoop();
+      ? new FullScreenSupported(fullScreenSubjectSelector, buttonsSelector)
+      : new FullScreenNoop(buttonsSelector);
   }
 
   abstract toggle(): void;
 }
 
 class FullScreenNoop implements FullScreen {
+  constructor(buttonsSelector: string) {
+    document
+      .querySelectorAll<HTMLElement>(buttonsSelector)
+      .forEach((button) => {
+        button.style.display = "none";
+      });
+  }
+
   toggle(): void {}
 }
 
 class FullScreenSupported implements FullScreen {
-  readonly #element: Element;
+  readonly #fullScreenSubject: Element;
 
-  constructor(element: Element) {
-    this.#element = element;
+  constructor(fullScreenSubjectSelector: string, buttonsSelector: string) {
+    const fullScreenSubject = document.querySelector(fullScreenSubjectSelector);
+    if (!fullScreenSubject) {
+      throw Error(
+        `Was unable to find a full screen subject by selector '${fullScreenSubjectSelector}'`
+      );
+    }
+    this.#fullScreenSubject = fullScreenSubject;
+
+    document
+      .querySelectorAll<HTMLElement>(buttonsSelector)
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          this.toggle();
+        });
+      });
   }
 
   toggle(): void {
@@ -27,7 +52,7 @@ class FullScreenSupported implements FullScreen {
         console.error(err);
       });
     } else {
-      this.#element.requestFullscreen().catch((err) => {
+      this.#fullScreenSubject.requestFullscreen().catch((err) => {
         console.error(err);
       });
     }

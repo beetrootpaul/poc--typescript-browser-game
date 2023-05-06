@@ -12,8 +12,10 @@ type GameStoredState = {
 };
 
 type GameOptions = {
+  htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlOffscreenCanvasFallbackSelector: string;
+  htmlControlsFullscreenSelector: string;
 };
 
 export class Game {
@@ -39,9 +41,11 @@ export class Game {
 
   constructor(options: GameOptions) {
     this.#framework = new Framework<GameStoredState>({
+      htmlDisplaySelector: options.htmlDisplaySelector,
       htmlCanvasSelector: options.htmlCanvasSelector,
       htmlOffscreenCanvasFallbackSelector:
         options.htmlOffscreenCanvasFallbackSelector,
+      htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
       htmlCanvasBackground: Pico8Color.Black,
       gameCanvasSize: this.#gameCanvasSize,
       desiredFps: this.#desiredFps,

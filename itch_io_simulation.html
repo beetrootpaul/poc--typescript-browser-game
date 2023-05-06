@@ -18,8 +18,8 @@
           /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v
              CHANGE THESE values to match what you have set on your game's itch.io page:
           */
-          --canvas-width: 512px;
-          --canvas-height: 512px;
+          --canvas-width: 480px;
+          --canvas-height: 480px;
           /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v
              CHANGE THESE values to whatever you looks good for you:
           */
@@ -27,6 +27,10 @@
           --theme-bg-column: #b6a6a6;
           --theme-bg-game-frame: #a49494;
           --theme-bg-button: #fa5c5c;
+      }
+
+      :root {
+          --canvas-width-ratio: 0.8;
       }
 
       body {
@@ -72,7 +76,7 @@
 
       .game_frame {
           margin: 0 auto;
-          width: var(--canvas-width);
+          width: calc(var(--canvas-width) / var(--canvas-width-ratio));
           height: var(--canvas-height);
           background-color: var(--theme-bg-game-frame);
       }
