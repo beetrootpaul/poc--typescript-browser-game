@@ -20,22 +20,15 @@ export class Game {
   #position: number = 0;
 
   readonly #colorSequence: Color[] = [
-    Pico8Color.Black,
-    Pico8Color.DarkBlue,
-    Pico8Color.DarkPurple,
-    Pico8Color.DarkGreen,
-    Pico8Color.Brown,
-    Pico8Color.DarkGrey,
-    Pico8Color.LightGrey,
-    Pico8Color.White,
     Pico8Color.Red,
     Pico8Color.Orange,
     Pico8Color.Yellow,
-    Pico8Color.Green,
-    Pico8Color.Blue,
-    Pico8Color.Lavender,
-    Pico8Color.Pink,
+    Pico8Color.White,
     Pico8Color.LightPeach,
+    Pico8Color.LightGrey,
+    Pico8Color.Lavender,
+    Pico8Color.DarkGrey,
+    Pico8Color.DarkPurple,
   ];
   #color: Color = Pico8Color.Red;
 
