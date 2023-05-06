@@ -5,18 +5,39 @@ import {
 } from "../framework/framework.ts";
 import { Xy } from "../framework/xy.ts";
 import { Pico8Color } from "./pico8Color.ts";
+import { Color } from "../framework/color.ts";
 
 type GameOptions = {
   htmlCanvasSelector: string;
 };
 
 export class Game {
-  readonly #desiredFps: number = 30;
+  readonly #desiredFps: number = 15;
   readonly #gameCanvasSize: Xy = new Xy(16, 16);
 
   readonly #framework: Framework;
 
   #position: number = 0;
+
+  readonly #colorSequence: Color[] = [
+    Pico8Color.Black,
+    Pico8Color.DarkBlue,
+    Pico8Color.DarkPurple,
+    Pico8Color.DarkGreen,
+    Pico8Color.Brown,
+    Pico8Color.DarkGrey,
+    Pico8Color.LightGrey,
+    Pico8Color.White,
+    Pico8Color.Red,
+    Pico8Color.Orange,
+    Pico8Color.Yellow,
+    Pico8Color.Green,
+    Pico8Color.Blue,
+    Pico8Color.Lavender,
+    Pico8Color.Pink,
+    Pico8Color.LightPeach,
+  ];
+  #color: Color = Pico8Color.Red;
 
   constructor(options: GameOptions) {
     this.#framework = new Framework({
@@ -37,6 +58,11 @@ export class Game {
   }
 
   #update({ gameInputEvents }: GameUpdateContext): void {
+    this.#color =
+      this.#colorSequence[
+        (this.#colorSequence.indexOf(this.#color) + 1) %
+          this.#colorSequence.length
+      ];
     if (gameInputEvents.has("right")) {
       this.#position++;
     }
@@ -53,6 +79,6 @@ export class Game {
 
   #draw({ drawApi }: GameDrawContext): void {
     drawApi.clear(Pico8Color.DarkBlue);
-    drawApi.drawSomething(this.#position);
+    drawApi.drawSomething(this.#position, this.#color);
   }
 }
