@@ -50,6 +50,7 @@ export class Framework {
         `Was unable to find <canvas> by selector '${options.htmlCanvasSelector}'`
       );
     }
+
     const htmlCanvasContext = htmlCanvas.getContext("2d", {
       // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
       alpha: false,

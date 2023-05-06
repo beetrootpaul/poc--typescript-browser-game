@@ -9,12 +9,21 @@ export class KeyboardGameInput {
     ["ArrowRight", "right"],
     ["ArrowUp", "up"],
     ["ArrowDown", "down"],
+    ["a", "left"],
+    ["d", "right"],
+    ["w", "up"],
+    ["s", "down"],
+    ["A", "left"],
+    ["D", "right"],
+    ["W", "up"],
+    ["S", "down"],
   ]);
 
   #currentEvents: Set<GameInputEvent> = new Set<GameInputEvent>();
 
   startListening() {
     document.addEventListener("keydown", (keyboardEvent) => {
+      console.log(keyboardEvent.key);
       const gameInputEvent = this.#keyMapping.get(keyboardEvent.key);
       if (gameInputEvent) {
         keyboardEvent.preventDefault();
