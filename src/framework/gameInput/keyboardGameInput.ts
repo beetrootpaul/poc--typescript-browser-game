@@ -21,8 +21,10 @@ export class KeyboardGameInput {
     ["F", "full_screen"],
   ]);
 
-  #currentContinuousEvents: Set<GameInputEvent> = new Set<GameInputEvent>();
-  #recentFireOnceEvents: Set<GameInputEvent> = new Set<GameInputEvent>();
+  readonly #currentContinuousEvents: Set<GameInputEvent> =
+    new Set<GameInputEvent>();
+  readonly #recentFireOnceEvents: Set<GameInputEvent> =
+    new Set<GameInputEvent>();
 
   startListening() {
     document.addEventListener("keydown", (keyboardEvent) => {

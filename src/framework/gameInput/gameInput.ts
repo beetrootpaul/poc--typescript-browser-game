@@ -1,5 +1,6 @@
 import { KeyboardGameInput } from "./keyboardGameInput.ts";
 import { GamepadGameInput } from "./gamepadGameInput.ts";
+import { TouchGameInput } from "./touchGameInput.ts";
 
 export type GameInputEvent =
   | null
@@ -9,22 +10,29 @@ export type GameInputEvent =
   | "down"
   | "full_screen";
 
-export const gameInputEventBehavior: {
-  [event: string]: { fireOnce?: boolean };
-} = {
+export const gameInputEventBehavior: Record<string, { fireOnce?: boolean }> = {
+  // TODO: move full_screen out of this set OR move its handling to TouchGameInput and similar ones
   full_screen: { fireOnce: true },
 };
 
 export class GameInput {
   readonly #keyboardGameInput = new KeyboardGameInput();
+  readonly #touchGameInput = new TouchGameInput();
   readonly #gamepadGameInput = new GamepadGameInput();
 
   startListening() {
     this.#keyboardGameInput.startListening();
+    this.#touchGameInput.startListening();
   }
 
   getCurrentContinuousEvents(): Set<GameInputEvent> {
-    const detectedEvents = this.#keyboardGameInput.getCurrentContinuousEvents();
+    const detectedEvents = new Set<GameInputEvent>();
+    for (const event of this.#keyboardGameInput.getCurrentContinuousEvents()) {
+      detectedEvents.add(event);
+    }
+    for (const event of this.#touchGameInput.getCurrentContinuousEvents()) {
+      detectedEvents.add(event);
+    }
     for (const event of this.#gamepadGameInput.getCurrentContinuousEvents()) {
       detectedEvents.add(event);
     }
@@ -32,6 +40,10 @@ export class GameInput {
   }
 
   consumeFireOnceEvents(): Set<GameInputEvent> {
-    return this.#keyboardGameInput.consumeFireOnceEvents();
+    const detectedEvents = new Set<GameInputEvent>();
+    for (const event of this.#keyboardGameInput.consumeFireOnceEvents()) {
+      detectedEvents.add(event);
+    }
+    return detectedEvents;
   }
 }

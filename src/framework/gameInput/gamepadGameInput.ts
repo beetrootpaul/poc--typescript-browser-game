@@ -1,5 +1,7 @@
 import { GameInputEvent } from "./gameInput.ts";
 
+// TODO: implement support for gameInputEventBehavior[gameInputEvent]?.fireOnce
+
 export class GamepadGameInput {
   readonly buttonMapping: Map<number, GameInputEvent> = new Map<
     number,

@@ -68,8 +68,12 @@ export class Game {
         storageApi.clear();
       }
       this.#position = restoredPosition;
-      if (this.#position < 0) this.#position = 0;
-      if (this.#position > 221) this.#position = 221;
+      if (this.#position < 0) {
+        this.#position = 0;
+      }
+      if (this.#position > 221) {
+        this.#position = 221;
+      }
     });
   }
 

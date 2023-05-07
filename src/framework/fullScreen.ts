@@ -70,6 +70,7 @@ class FullScreenSupported implements FullScreen {
     document
       .querySelectorAll<HTMLElement>(buttonsSelector)
       .forEach((button) => {
+        // TODO: consider handling it through full_screen game input event :thinking:
         button.addEventListener("click", () => {
           this.toggle();
         });

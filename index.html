@@ -46,6 +46,18 @@
           visibility: hidden;
       }
 
+      .touch_controls_area_left {
+          display: none;
+      }
+
+      .touch_controls_area_right {
+          display: none;
+      }
+
+      .touch_controls_area_bottom {
+          display: none;
+      }
+
       #loading {
           position: absolute;
           width: 100vw;
@@ -54,7 +66,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          font-size: 2rem;
+          font-size: 8vh;
           font-family: monospace;
           color: var(--loading-fg-color);
       }
@@ -70,10 +82,31 @@
 <div id="loading">loading…</div>
 
 <main id="display">
-  <div class="controls_area_left"></div>
+  <div class="mouse_controls_area_left"></div>
+  <div class="touch_controls touch_controls_area_left">
+    <div class="touch_button controls_up">W</div>
+    <div class="touch_buttons_row">
+      <div class="touch_button controls_left">A</div>
+      <div class="touch_button controls_right">D</div>
+    </div>
+    <div class="touch_button controls_down">S</div>
+  </div>
   <canvas id="canvas"></canvas>
-  <div class="controls_area_right">
+  <div class="mouse_controls_area_right">
     <button class="controls_fullscreen">FS</button>
+  </div>
+  <div class="touch_controls_area_right">
+    <div class="touch_button controls_fullscreen">FS</div>
+  </div>
+  <div class="touch_controls touch_controls_area_bottom">
+    <div class="touch_button controls_up">W</div>
+    <div class="touch_buttons_row">
+      <div class="touch_button controls_left">A</div>
+      <div class="touch_button controls_right">D</div>
+    </div>
+    <div class="touch_button controls_down">S</div>
+    <div class="spacer">S</div>
+    <div class="touch_button controls_fullscreen">FS</div>
   </div>
 </main>
 
