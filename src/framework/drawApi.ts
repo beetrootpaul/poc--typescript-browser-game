@@ -21,7 +21,7 @@ export class DrawApi {
   }
 
   // TODO: remove this temporary method
-  drawSomething(pos = 0, color: Color) {
+  drawSomething(pos = 0, color: Color, imgBytes: Uint8Array, imgW: number) {
     const pxLen = this.#canvasRgbaBytes.length / 4;
 
     this.#canvasRgbaBytes[0] = 0;
@@ -50,5 +50,18 @@ export class DrawApi {
       this.#canvasRgbaBytes[i + 2] = color.b;
       this.#canvasRgbaBytes[i + 3] = 255;
     });
+
+    // TODO: refactor
+    for (let px = 0; px < imgBytes.length / 4; px++) {
+      const offset = pos * 4 + Math.floor(px / imgW) * this.#canvasSize.x * 4;
+      const target = offset + (px % imgW) * 4;
+      const idx = px * 4;
+      if (imgBytes[idx + 3] > 127) {
+        this.#canvasRgbaBytes[target] = imgBytes[idx];
+        this.#canvasRgbaBytes[target + 1] = imgBytes[idx + 1];
+        this.#canvasRgbaBytes[target + 2] = imgBytes[idx + 2];
+        this.#canvasRgbaBytes[target + 3] = 255;
+      }
+    }
   }
 }
