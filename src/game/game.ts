@@ -6,6 +6,7 @@ import {
 import { Xy } from "../framework/xy.ts";
 import { Pico8Color } from "./pico8Color.ts";
 import { Color } from "../framework/color.ts";
+import * as UPNG from "upng-js";
 
 type GameStoredState = {
   pos: number;
@@ -25,6 +26,9 @@ export class Game {
   readonly #framework: Framework<GameStoredState>;
 
   #position: number = 0;
+  #imgW = 0;
+  #imgH = 0;
+  #imgBytes: Uint8Array = new Uint8Array(0);
 
   readonly #colorSequence: Color[] = [
     Pico8Color.Red,
@@ -58,6 +62,54 @@ export class Game {
     this.#framework.setOnUpdate(this.#update.bind(this));
     this.#framework.setOnDraw(this.#draw.bind(this));
 
+    // TODO: refactor
+    fetch("test-image.png")
+      .then((response) => response.blob())
+      .then((blob) => blob.arrayBuffer())
+      // docs: https://github.com/photopea/UPNG.js/#upngdecodebuffer
+      .then((rawArrayBuffer) => UPNG.decode(rawArrayBuffer))
+      .then(({ width, height, depth, ctype, frames, tabs, data }) => {
+        this.#imgW = width;
+        this.#imgH = height;
+        if (depth != 8) {
+          throw Error(`Unexpected img depth of ${depth}. Expected: 8`);
+        }
+        if (ctype != 6) {
+          throw Error(
+            `Unexpected img ctype of ${depth}. Expected: 6 (RGB + alpha)`
+          );
+        }
+        if (frames.length > 0) {
+          throw Error(
+            `Unexpected img frames in length of ${frames.length}. Expected length: 0`
+          );
+        }
+        if (tabs.sRGB != 0) {
+          throw Error(`Unexpected img tabs.sRGB value other than 0`);
+        }
+        if (
+          tabs.acTL ||
+          tabs.bKGD ||
+          tabs.cHRM ||
+          tabs.gAMA ||
+          tabs.hIST ||
+          tabs.iTXt ||
+          tabs.PLTE ||
+          tabs.pHYs ||
+          tabs.tEXt ||
+          tabs.tRNS
+        ) {
+          throw Error(`Unexpected img tabs other than sRGB`);
+        }
+        return new Uint8Array(data);
+      })
+      .then((uint8Array) => {
+        this.#imgBytes = uint8Array.slice(0, this.#imgW * this.#imgH * 4);
+      })
+      .catch((e) => {
+        console.error("FETCH:", e);
+      });
+
     this.#framework.startGame(({ storageApi }) => {
       let restoredPosition: number = 0;
       try {
@@ -68,8 +120,12 @@ export class Game {
         storageApi.clear();
       }
       this.#position = restoredPosition;
-      if (this.#position < 0) this.#position = 0;
-      if (this.#position > 221) this.#position = 221;
+      if (this.#position < 0) {
+        this.#position = 0;
+      }
+      if (this.#position > 221) {
+        this.#position = 221;
+      }
     });
   }
 
@@ -106,6 +162,12 @@ export class Game {
 
   #draw({ drawApi }: GameDrawContext): void {
     drawApi.clear(Pico8Color.DarkBlue);
-    drawApi.drawSomething(this.#position, this.#color);
+    // TODO: refactor
+    drawApi.drawSomething(
+      this.#position,
+      this.#color,
+      this.#imgBytes,
+      this.#imgW
+    );
   }
 }

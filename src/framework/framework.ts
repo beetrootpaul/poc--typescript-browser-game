@@ -181,6 +181,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
           this.#fullScreen.toggle();
         }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
+        // console.log("eee");
+        // console.log(continuousEvents);
         this.#onUpdate?.({
           frameNumber,
           gameInputEvents: continuousEvents,
