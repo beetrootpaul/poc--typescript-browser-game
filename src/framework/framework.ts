@@ -1,11 +1,11 @@
+import { Color } from "../../../poc--typescript-web-game-framework/src/color.ts";
 import { DrawApi } from "./drawApi.ts";
-import { Xy } from "./xy.ts";
-import { GameLoop } from "./gameLoop/gameLoop.ts";
-import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
-import { Color } from "./color.ts";
 import { FullScreen } from "./fullScreen.ts";
-import { StorageApi, StorageApiValueConstraint } from "./storageApi.ts";
+import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
+import { GameLoop } from "./gameLoop/gameLoop.ts";
 import { Loading } from "./loading.ts";
+import { StorageApi, StorageApiValueConstraint } from "./storageApi.ts";
+import { Xy } from "./xy.ts";
 
 export type GameStartContext<
   StorageApiValue extends StorageApiValueConstraint

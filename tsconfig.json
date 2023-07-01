@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "types": [
-      /* Required by Vite (see: https://vitejs.dev/guide/features.html#client-types) */
+      // Required by Vite (see: https://vitejs.dev/guide/features.html#client-types)
       "vite/client",
-      /* Required by Vitests (see: https://vitest.dev/guide/in-source.html#typescript) */
+      // Required by Vitests (see: https://vitest.dev/guide/in-source.html#typescript)
       "vitest/importMeta"
     ],
     "target": "ES2020",
-    /* Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields) */
+    // Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields)
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": [
@@ -16,18 +16,21 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    /* Required by Vite (see: https://vitejs.dev/guide/features.html#isolatedmodules) */
+    // Required by Vite (see: https://vitejs.dev/guide/features.html#isolatedmodules)
     "isolatedModules": true,
     "noEmit": true,
-    /* Linting */
     "strict": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": [
     "./src"
+  ],
+  "references": [
+    {
+      "path": "../poc--typescript-web-game-framework/"
+    }
   ]
 }

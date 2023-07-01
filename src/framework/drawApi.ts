@@ -1,5 +1,5 @@
+import { Color } from "../../../poc--typescript-web-game-framework/src/color.ts";
 import { Xy } from "./xy.ts";
-import { Color } from "./color.ts";
 
 export class DrawApi {
   readonly #canvasSize: Xy;

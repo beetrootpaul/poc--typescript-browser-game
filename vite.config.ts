@@ -20,5 +20,6 @@ export default defineConfig({
     include: [],
     // docs: https://vitest.dev/guide/in-source.html#setup
     includeSource: ["src/**/*.ts"],
+    passWithNoTests: true,
   },
 });
