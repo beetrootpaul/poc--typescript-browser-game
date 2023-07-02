@@ -27,11 +27,11 @@
     "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip",
     "compile": "tsc --build",
     "compile:watch": "tsc --build --watch",
-    "format": "prettier --write src/"
+    "format": "prettier --ignore-path .gitignore --write src/"
   },
   "lint-staged": {
     "src/**/*": [
-      "prettier --write --ignore-unknown"
+      "prettier --ignore-unknown --ignore-path .gitignore --write"
     ]
   },
   "devDependencies": {
