@@ -12,14 +12,20 @@ export default defineConfig({
     },
     outDir: "build",
   },
-  define: {
-    // docs: https://vitest.dev/guide/in-source.html#production-build
-    "import.meta.vitest": "undefined",
+  resolve: {
+    // Keep these in sync with "compilerOptions.paths" in tsconfig.json
+    alias: {
+      "@poc--typescript-web-game-framework": "../../../poc--typescript-web-game-framework/src",
+    }
   },
   test: {
     include: [],
     // docs: https://vitest.dev/guide/in-source.html#setup
     includeSource: ["src/**/*.ts"],
     passWithNoTests: true,
+  },
+  define: {
+    // docs: https://vitest.dev/guide/in-source.html#production-build
+    "import.meta.vitest": "undefined",
   },
 });

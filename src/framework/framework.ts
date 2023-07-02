@@ -1,4 +1,4 @@
-import { Color } from "../../../poc--typescript-web-game-framework/src/color.ts";
+import { Color } from "@poc--typescript-web-game-framework";
 import { DrawApi } from "./drawApi.ts";
 import { FullScreen } from "./fullScreen.ts";
 import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";

@@ -1,5 +1,5 @@
+import { Color } from "@poc--typescript-web-game-framework";
 import * as UPNG from "upng-js";
-import { Color } from "../../../poc--typescript-web-game-framework/src/color.ts";
 import {
   Framework,
   GameDrawContext,

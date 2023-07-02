@@ -23,7 +23,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "strict": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    // Keep these in sync with "resolve.alias" in vite.config.ts
+    "paths": {
+      "@poc--typescript-web-game-framework": ["../poc--typescript-web-game-framework/src"]
+    }
   },
   "include": [
     "./src"
@@ -32,5 +36,5 @@
     {
       "path": "../poc--typescript-web-game-framework/"
     }
-  ]
+  ],
 }

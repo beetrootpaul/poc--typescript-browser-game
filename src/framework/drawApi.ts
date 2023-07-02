@@ -1,4 +1,4 @@
-import { Color } from "../../../poc--typescript-web-game-framework/src/color.ts";
+import { Color } from "@poc--typescript-web-game-framework";
 import { Xy } from "./xy.ts";
 
 export class DrawApi {
