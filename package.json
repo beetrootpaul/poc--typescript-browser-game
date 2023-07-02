@@ -26,6 +26,7 @@
     "dist:build": "npm run prod:build",
     "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip",
     "compile": "tsc --build",
+    "compile:watch": "tsc --build --watch",
     "format": "prettier --write src/"
   },
   "lint-staged": {

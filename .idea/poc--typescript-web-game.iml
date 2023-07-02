@@ -9,6 +9,9 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
     </content>
+    <content url="file://$MODULE_DIR$/../poc--typescript-web-game-framework">
+      <excludeFolder url="file://$MODULE_DIR$/../poc--typescript-web-game-framework/.husky" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
