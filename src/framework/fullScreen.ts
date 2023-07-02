@@ -54,7 +54,6 @@ class FullScreenSupported implements FullScreen {
     this.#fullScreenSubject = fullScreenSubject;
 
     const nativeRequestFullscreen =
-      // eslint-disable-next-line @typescript-eslint/unbound-method,@typescript-eslint/no-unnecessary-condition
       this.#fullScreenSubject.requestFullscreen ??
       this.#fullScreenSubject.webkitRequestFullscreen ??
       (() => {});
@@ -63,7 +62,6 @@ class FullScreenSupported implements FullScreen {
     );
 
     const nativeExitFullscreen =
-      // eslint-disable-next-line @typescript-eslint/unbound-method,@typescript-eslint/no-unnecessary-condition
       document.exitFullscreen ?? document.webkitExitFullscreen ?? (() => {});
     this.#nativeExitFullscreen = nativeExitFullscreen.bind(document);
 

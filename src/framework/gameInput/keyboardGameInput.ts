@@ -31,7 +31,6 @@ export class KeyboardGameInput {
       const gameInputEvent = this.#keyMapping.get(keyboardEvent.key);
       if (gameInputEvent) {
         keyboardEvent.preventDefault();
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!gameInputEventBehavior[gameInputEvent]?.fireOnce) {
           this.#currentContinuousEvents.add(gameInputEvent);
         }
@@ -41,7 +40,6 @@ export class KeyboardGameInput {
       const gameInputEvent = this.#keyMapping.get(keyboardEvent.key);
       if (gameInputEvent) {
         keyboardEvent.preventDefault();
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (gameInputEventBehavior[gameInputEvent]?.fireOnce) {
           this.#recentFireOnceEvents.add(gameInputEvent);
         } else {

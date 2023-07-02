@@ -111,6 +111,9 @@ export class Game {
       });
 
     this.#framework.startGame(({ storageApi }) => {
+      const a: Color = Color.fromCssHex("#112233");
+      console.log(a);
+      console.log(Color.abc());
       let restoredPosition: number = 0;
       try {
         restoredPosition = storageApi.load()?.pos ?? 0;
