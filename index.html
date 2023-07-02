@@ -2,79 +2,79 @@
 <html lang="en">
 <head>
 
-  <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
 
-  <title>poc--typescript-web-game</title>
+    <title>poc--typescript-web-game</title>
 
-  <!-- Keep these particular styles embedded in HTML here, because external
-       CSS file is loaded by Vite in a way which makes GUI flicker. -->
-  <style>
+    <!-- Keep these particular styles embedded in HTML here, because external
+         CSS file is loaded by Vite in a way which makes GUI flicker. -->
+    <style>
 
-      /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v
-         CHANGE THESE values to whatever you looks good for you:
-      */
-      :root {
-          --loading-bg-color: #1d2b53;
-          --loading-fg-color: #ffccaa;
-      }
+        /* v v v v v v v v v v v v v v v v v v v v v v v v v v v v
+           CHANGE THESE values to whatever you looks good for you:
+        */
+        :root {
+            --loading-bg-color: #1d2b53;
+            --loading-fg-color: #ffccaa;
+        }
 
-      * {
-          margin: 0;
-          box-sizing: border-box;
-      }
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
 
-      html {
-          width: 100vw;
-          height: 100vh;
-      }
+        html {
+            width: 100vw;
+            height: 100vh;
+        }
 
-      body {
-          width: 100vw;
-          height: 100vh;
-          overflow: hidden;
-      }
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-      #display {
-          visibility: hidden;
-      }
+        #display {
+            visibility: hidden;
+        }
 
-      #fallback_offscreen_canvas {
-          visibility: hidden;
-      }
+        #fallback_offscreen_canvas {
+            visibility: hidden;
+        }
 
-      .touch_controls_area_left {
-          display: none;
-      }
+        .touch_controls_area_left {
+            display: none;
+        }
 
-      .touch_controls_area_right {
-          display: none;
-      }
+        .touch_controls_area_right {
+            display: none;
+        }
 
-      .touch_controls_area_bottom {
-          display: none;
-      }
+        .touch_controls_area_bottom {
+            display: none;
+        }
 
-      #loading {
-          position: absolute;
-          width: 100vw;
-          height: 100vh;
-          background-color: var(--loading-bg-color);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 8vh;
-          font-family: monospace;
-          color: var(--loading-fg-color);
-      }
+        #loading {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--loading-bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8vh;
+            font-family: monospace;
+            color: var(--loading-fg-color);
+        }
 
-      .app_loaded #loading {
-          display: none;
-      }
-  </style>
+        .app_loaded #loading {
+            display: none;
+        }
+    </style>
 
 </head>
 <body>
@@ -82,32 +82,32 @@
 <div id="loading">loading…</div>
 
 <main id="display">
-  <div class="mouse_controls_area_left"></div>
-  <div class="touch_controls touch_controls_area_left">
-    <div class="touch_button controls_up">W</div>
-    <div class="touch_buttons_row">
-      <div class="touch_button controls_left">A</div>
-      <div class="touch_button controls_right">D</div>
+    <div class="mouse_controls_area_left"></div>
+    <div class="touch_controls touch_controls_area_left">
+        <div class="touch_button controls_up">W</div>
+        <div class="touch_buttons_row">
+            <div class="touch_button controls_left">A</div>
+            <div class="touch_button controls_right">D</div>
+        </div>
+        <div class="touch_button controls_down">S</div>
     </div>
-    <div class="touch_button controls_down">S</div>
-  </div>
-  <canvas id="canvas"></canvas>
-  <div class="mouse_controls_area_right">
-    <button class="controls_fullscreen">FS</button>
-  </div>
-  <div class="touch_controls_area_right">
-    <div class="touch_button controls_fullscreen">FS</div>
-  </div>
-  <div class="touch_controls touch_controls_area_bottom">
-    <div class="touch_button controls_up">W</div>
-    <div class="touch_buttons_row">
-      <div class="touch_button controls_left">A</div>
-      <div class="touch_button controls_right">D</div>
+    <canvas id="canvas"></canvas>
+    <div class="mouse_controls_area_right">
+        <button class="controls_fullscreen">FS</button>
     </div>
-    <div class="touch_button controls_down">S</div>
-    <div class="spacer">S</div>
-    <div class="touch_button controls_fullscreen">FS</div>
-  </div>
+    <div class="touch_controls_area_right">
+        <div class="touch_button controls_fullscreen">FS</div>
+    </div>
+    <div class="touch_controls touch_controls_area_bottom">
+        <div class="touch_button controls_up">W</div>
+        <div class="touch_buttons_row">
+            <div class="touch_button controls_left">A</div>
+            <div class="touch_button controls_right">D</div>
+        </div>
+        <div class="touch_button controls_down">S</div>
+        <div class="spacer">S</div>
+        <div class="touch_button controls_fullscreen">FS</div>
+    </div>
 </main>
 
 <!-- Keep this element hidden with use of inline styles, because external

@@ -1,5 +1,5 @@
-import "./style.css";
 import { Game } from "./game/game.ts";
+import "./style.css";
 
 setTimeout(() => {
   new Game({

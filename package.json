@@ -20,12 +20,13 @@
     "start": "npm run dev",
     "dev": "vite dev --open itch_io_simulation.html",
     "prod": "npm run prod:build && npm run prod:preview",
-    "prod:build": "tsc && vite build",
+    "prod:build": "npm run compile && vite build",
     "prod:preview": "vite preview --open",
     "dist": "npm run dist:build && npm run dist:zip",
     "dist:build": "npm run prod:build",
     "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip",
-    "lint": "eslint src/",
+    "compile": "tsc --build",
+    "lint": "npm run compile && eslint src/",
     "format": "prettier --write src/"
   },
   "lint-staged": {

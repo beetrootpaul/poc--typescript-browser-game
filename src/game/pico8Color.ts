@@ -1,4 +1,4 @@
-import { Color } from "../framework/color.ts";
+import { Color } from "../../../poc--typescript-web-game-framework/src/color.ts";
 
 export class Pico8Color {
   // hex values taken from https://pico-8.fandom.com/wiki/Palette#The_system_palette
