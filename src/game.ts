@@ -1,10 +1,8 @@
-import {
-  Color,
-  Framework,
+import type {
   GameDrawContext,
   GameUpdateContext,
-  Xy,
 } from "@poc--typescript-web-game-framework";
+import { Color, Framework, Xy } from "@poc--typescript-web-game-framework";
 import * as UPNG from "upng-js";
 import { Pico8Color } from "./pico8Color.ts";
 
