@@ -1,4 +1,4 @@
-import { Game } from "./game/game.ts";
+import { Game } from "./game.ts";
 import "./style.css";
 
 setTimeout(() => {

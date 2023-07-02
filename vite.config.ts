@@ -15,7 +15,7 @@ export default defineConfig({
   resolve: {
     // Keep these in sync with "compilerOptions.paths" in tsconfig.json
     alias: {
-      "@poc--typescript-web-game-framework": "../../../poc--typescript-web-game-framework/src",
+      "@poc--typescript-web-game-framework": "../poc--typescript-web-game-framework/src",
     }
   },
   test: {
