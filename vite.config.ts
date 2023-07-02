@@ -1,6 +1,7 @@
 import { resolve } from "path";
 import { defineConfig } from "vitest/config";
 
+// noinspection JSUnusedGlobalSymbols
 export default defineConfig({
   base: "./",
   build: {
@@ -15,8 +16,11 @@ export default defineConfig({
   resolve: {
     // Keep these in sync with "compilerOptions.paths" in tsconfig.json
     alias: {
-      "@poc--typescript-web-game-framework": "../poc--typescript-web-game-framework/src",
-    }
+      "@poc--typescript-web-game-framework": resolve(
+        __dirname,
+        "../poc--typescript-web-game-framework/src"
+      ),
+    },
   },
   test: {
     include: [],
