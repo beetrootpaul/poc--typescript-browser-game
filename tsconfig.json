@@ -6,24 +6,31 @@
       // Required by Vitests (see: https://vitest.dev/guide/in-source.html#typescript)
       "vitest/importMeta"
     ],
-    "target": "ES2020",
-    // Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields)
-    "useDefineForClassFields": true,
-    "module": "ESNext",
+    //
     "lib": [
       "ES2020",
       "DOM",
       "DOM.Iterable"
     ],
-    "skipLibCheck": true,
+    //
+    "module": "ES2020",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     // Required by Vite (see: https://vitejs.dev/guide/features.html#isolatedmodules)
     "isolatedModules": true,
+    //
+    "target": "ES2020",
     "noEmit": true,
+    //
     "strict": true,
-    "noFallthroughCasesInSwitch": true
+    // Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields)
+    "useDefineForClassFields": true,
+    "noFallthroughCasesInSwitch": true,
+    // Keep these in sync with "resolve.alias" in vite.config.ts
+    "paths": {
+      "@poc--typescript-web-game-framework": ["../poc--typescript-web-game-framework/src"]
+    }
   },
   "include": [
     "./src"
@@ -32,5 +39,5 @@
     {
       "path": "../poc--typescript-web-game-framework/"
     }
-  ]
+  ],
 }

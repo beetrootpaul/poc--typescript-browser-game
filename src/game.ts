@@ -1,11 +1,9 @@
-import * as UPNG from "upng-js";
-import { Color } from "../../../poc--typescript-web-game-framework/src/color.ts";
-import {
-  Framework,
+import type {
   GameDrawContext,
   GameUpdateContext,
-} from "../framework/framework.ts";
-import { Xy } from "../framework/xy.ts";
+} from "@poc--typescript-web-game-framework";
+import { Color, Framework, Xy } from "@poc--typescript-web-game-framework";
+import * as UPNG from "upng-js";
 import { Pico8Color } from "./pico8Color.ts";
 
 type GameStoredState = {
