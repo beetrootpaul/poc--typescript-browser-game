@@ -1,4 +1,7 @@
+import type { GameDrawContext } from "@framework";
+
 export interface GameState {
   update(): GameState;
-  draw(): void;
+
+  draw(context: GameDrawContext): void;
 }

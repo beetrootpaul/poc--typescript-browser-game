@@ -1,4 +1,4 @@
-import { Framework, Xy } from "@framework";
+import { Framework, Xy, xy_ } from "@framework";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
 import { Pico8Colors } from "./Pico8Color.ts";
@@ -17,6 +17,9 @@ export class Game {
   readonly #gameCanvasSize: Xy = new Xy(128, 128);
 
   readonly #framework: Framework<GameStoredState>;
+
+  // TODO: make it disabled for prod and toggleable for dev
+  readonly #debug: boolean = true;
 
   #gameState: GameState;
 
@@ -48,7 +51,18 @@ export class Game {
       // TODO: migrate from Lua
       // camera(a.camera_x, a.camera_y)
 
-      this.#gameState.draw();
+      this.#gameState.draw({ drawApi });
+
+      if (this.#debug) {
+        // TODO: create a helper to iterate over 4 corners of rect defined by 2 points
+        drawApi.setPixel(xy_(0, 0), Pico8Colors.Red);
+        drawApi.setPixel(xy_(0, this.#gameCanvasSize.y - 1), Pico8Colors.Red);
+        drawApi.setPixel(xy_(this.#gameCanvasSize.x - 1, 0), Pico8Colors.Red);
+        drawApi.setPixel(
+          xy_(this.#gameCanvasSize.x - 1, this.#gameCanvasSize.y - 1),
+          Pico8Colors.Red
+        );
+      }
     });
 
     this.#framework.startGame(({}) => {});

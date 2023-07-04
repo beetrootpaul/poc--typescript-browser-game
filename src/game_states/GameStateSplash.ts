@@ -1,3 +1,6 @@
+import type { GameDrawContext } from "@framework";
+import { xy_ } from "@framework";
+import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 
 export class GameStateSplash implements GameState {
@@ -47,17 +50,17 @@ export class GameStateSplash implements GameState {
     return this;
   }
 
-  draw(): void {
+  draw({ drawApi }: GameDrawContext): void {
+    drawApi.drawRectFilled(
+      // TODO: migrate from Lua: a.camera_x, a.camera_y
+      xy_(0, -16),
+      // TODO: migrate from Lua: a.camera_x + u.screen_px, a.camera_y + u.screen_px
+      xy_(128, 128 - 16),
+      // TODO: migrate from Lua: a.bg_color_mode_normal
+      Pico8Colors.DarkBlue
+    );
+
     // TODO: migrate from Lua
-    /*
-        rectfill(
-            a.camera_x,
-            a.camera_y,
-            a.camera_x + u.screen_px - 1,
-            a.camera_y + u.screen_px - 1,
-            a.bg_color_mode_normal
-        )
-        sash.draw()
-     */
+    // sash.draw()
   }
 }
