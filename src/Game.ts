@@ -1,6 +1,7 @@
 import { Framework, Xy } from "@framework";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
+import { g } from "./globals.ts";
 import { Pico8Colors } from "./Pico8Color.ts";
 
 type GameOptions = {
@@ -13,9 +14,6 @@ type GameOptions = {
 type GameStoredState = {};
 
 export class Game {
-  readonly #desiredFps: number = 30;
-  readonly #gameCanvasSize: Xy = new Xy(128, 128);
-
   readonly #framework: Framework<GameStoredState>;
 
   #gameState: GameState;
@@ -28,8 +26,8 @@ export class Game {
         options.htmlOffscreenCanvasFallbackSelector,
       htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
       htmlCanvasBackground: Pico8Colors.Black,
-      gameCanvasSize: this.#gameCanvasSize,
-      desiredFps: this.#desiredFps,
+      gameCanvasSize: g.screenSize,
+      desiredFps: g.fps,
       // TODO: consider disabling these logs in the production build
       logActualFps: true,
       // TODO: make it disabled for prod and toggleable for dev
@@ -47,8 +45,7 @@ export class Game {
     this.#framework.setOnDraw(({ drawApi }) => {
       drawApi.clear(Pico8Colors.Black);
 
-      // TODO: migrate from Lua
-      // camera(a.camera_x, a.camera_y)
+      drawApi.setCameraOffset(g.cameraOffset);
 
       this.#gameState.draw({ drawApi });
     });
