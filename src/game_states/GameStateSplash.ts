@@ -1,9 +1,6 @@
-import { StorageApiValueConstraint } from "@framework";
 import type { GameDrawContext, GameUpdateContext } from "@framework";
-import { g } from "../globals.ts";
-import { Sash } from "../gui/Sash.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
-import { GameState } from "./GameState.ts";
+import { StorageApiValueConstraint } from "@framework";
+import { GameStateStart } from "./GameStateStart.ts";
 
 export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
   implements GameState<StorageApiValue>
@@ -43,12 +40,9 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
   update({
     gameInputEvents,
   }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
-    // TODO: migrate from Lua
-    /*
-        if sash.has_collapsed() then
-            return new_game_state_start()
-        end
-     */
+    if (this.#sash.has_collapsed()) {
+      return new GameStateStart();
+    }
 
     if (
       gameInputEvents.has("left") ||

@@ -28,12 +28,10 @@ export class Sash {
     this.#ttl = this.#ttlMax;
   }
 
-  // TODO: migrate from Lua
-  /*
-      function s.has_collapsed()
-        return ttl <= 0
-    end
-   */
+  has_collapsed(): boolean {
+    return this.#ttl <= 0;
+  }
+
   // TODO: migrate from Lua
   /*
     function s.has_expanded()
