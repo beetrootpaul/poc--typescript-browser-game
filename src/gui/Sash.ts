@@ -2,23 +2,31 @@ import { GameDrawContext, xy_ } from "@framework";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 
+type SashOptions = {
+  duration: number;
+};
+
 export class Sash {
+  readonly #ttlMax: number;
   // TODO: migrate from Lua
   /*
-  function new_sash(params)
-    local ttl_max = params.duration
     local should_expand = params.expand
     local draw_text = params.draw_text
 
     local ttl_expansion_start = should_expand and (ttl_max - a.music_beat_frames) or ttl_max
     local ttl_expansion_end = should_expand and (ttl_expansion_start - a.music_beat_frames / 4) or ttl_max
-    local ttl_collapse_start = a.music_beat_frames / 4
-    local ttl = ttl_max
    */
+  readonly #ttlCollapseStart: number = g.musicBeatFrames / 4;
+  #ttl: number;
 
   readonly #center = g.cameraOffset.add(g.screenSize.div(2));
 
   readonly #hMax = 30;
+
+  constructor(options: SashOptions) {
+    this.#ttlMax = options.duration;
+    this.#ttl = this.#ttlMax;
+  }
 
   // TODO: migrate from Lua
   /*
@@ -38,40 +46,36 @@ export class Sash {
         ttl = ttl_collapse_start
     end
    */
-  // TODO: migrate from Lua
-  /*
-    function s.advance_1_frame()
-        ttl = ttl - 1
-    end
-   */
+
+  advance1Frame() {
+    this.#ttl -= 1;
+  }
 
   draw({ drawApi }: GameDrawContext): void {
     // TODO: migrate from Lua
-    const h = this.#hMax;
+    let h: number;
     /*
-      function s.draw()
-          local h
           if ttl > ttl_expansion_start then
               h = 0
           elseif ttl > ttl_expansion_end then
               h = h_max * (ttl_expansion_start - ttl) / (ttl_expansion_start - ttl_expansion_end)
-          elseif ttl > ttl_collapse_start then
-              h = h_max
-          else
-              h = h_max * ttl / ttl_collapse_start
-          end
-
-          if h > 0 then
           */
-    drawApi.drawRectFilled(
-      xy_(0, this.#center.y - h / 2),
-      xy_(g.screenSize.x, this.#center.y + h / 2),
-      Pico8Colors.DarkGreen
-    );
+    if (this.#ttl > this.#ttlCollapseStart) {
+      h = this.#hMax;
+    } else {
+      h = (this.#hMax * this.#ttl) / this.#ttlCollapseStart;
+    }
+
+    if (h > 0) {
+      drawApi.drawRectFilled(
+        xy_(0, this.#center.y - h / 2),
+        xy_(g.screenSize.x, this.#center.y + h / 2),
+        Pico8Colors.DarkGreen
+      );
+    }
+
     // TODO: migrate from Lua
     /*
-          end
-
           if h >= h_max then
               draw_text(center_x, center_y)
           end

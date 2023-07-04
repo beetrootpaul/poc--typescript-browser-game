@@ -6,10 +6,12 @@ import { GameState } from "./GameState.ts";
 
 export class GameStateSplash implements GameState {
   // TODO: migrate from Lua
-  readonly #sash: Sash = new Sash();
+  readonly #sash: Sash = new Sash({
+    duration: 10 * g.musicBeatFrames,
+  });
+
   /*
       local sash = new_sash({
-        duration = 10 * a.music_beat_frames,
         expand = false,
         draw_text = function(sash_center_x, sash_center_y)
             local title = "avoid your past"
@@ -46,8 +48,9 @@ export class GameStateSplash implements GameState {
             sash.collapse()
         end
 
-        sash.advance_1_frame()
      */
+
+    this.#sash.advance1Frame();
 
     return this;
   }
