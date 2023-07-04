@@ -40,14 +40,12 @@ export class Sash {
         return ttl <= ttl_expansion_end
     end
    */
-  // TODO: migrate from Lua
-  /*
-    function s.collapse()
-        ttl = ttl_collapse_start
-    end
-   */
 
-  advance1Frame() {
+  collapse(): void {
+    this.#ttl = this.#ttlCollapseStart;
+  }
+
+  advance1Frame(): void {
     this.#ttl -= 1;
   }
 

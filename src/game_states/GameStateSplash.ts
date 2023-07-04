@@ -1,10 +1,13 @@
-import type { GameDrawContext } from "@framework";
+import { StorageApiValueConstraint } from "@framework";
+import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 
-export class GameStateSplash implements GameState {
+export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
+  implements GameState<StorageApiValue>
+{
   // TODO: migrate from Lua
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
@@ -37,18 +40,24 @@ export class GameStateSplash implements GameState {
     audio.enable_music_layers { false, false, false }
    */
 
-  update(): GameState {
+  update({
+    gameInputEvents,
+  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
     // TODO: migrate from Lua
     /*
         if sash.has_collapsed() then
             return new_game_state_start()
         end
-
-        if btnp(u.buttons.l) or btnp(u.buttons.r) or btnp(u.buttons.u) or btnp(u.buttons.d) then
-            sash.collapse()
-        end
-
      */
+
+    if (
+      gameInputEvents.has("left") ||
+      gameInputEvents.has("right") ||
+      gameInputEvents.has("up") ||
+      gameInputEvents.has("down")
+    ) {
+      this.#sash.collapse();
+    }
 
     this.#sash.advance1Frame();
 

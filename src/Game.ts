@@ -1,4 +1,4 @@
-import { Framework, Xy } from "@framework";
+import { Framework } from "@framework";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
 import { g } from "./globals.ts";
@@ -16,7 +16,7 @@ type GameStoredState = {};
 export class Game {
   readonly #framework: Framework<GameStoredState>;
 
-  #gameState: GameState;
+  #gameState: GameState<GameStoredState>;
 
   constructor(options: GameOptions) {
     this.#framework = new Framework<GameStoredState>({
@@ -38,16 +38,14 @@ export class Game {
   }
 
   start(): void {
-    this.#framework.setOnUpdate(() => {
-      this.#gameState = this.#gameState.update();
+    this.#framework.setOnUpdate((context) => {
+      this.#gameState = this.#gameState.update(context);
     });
 
-    this.#framework.setOnDraw(({ drawApi }) => {
-      drawApi.clear(Pico8Colors.Black);
-
-      drawApi.setCameraOffset(g.cameraOffset);
-
-      this.#gameState.draw({ drawApi });
+    this.#framework.setOnDraw((context) => {
+      context.drawApi.clear(Pico8Colors.Black);
+      context.drawApi.setCameraOffset(g.cameraOffset);
+      this.#gameState.draw(context);
     });
 
     this.#framework.startGame(({}) => {});
