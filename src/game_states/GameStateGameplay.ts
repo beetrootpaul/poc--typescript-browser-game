@@ -2,6 +2,7 @@ import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { GameState } from "./GameState.ts";
+import { GameStateOver } from "./GameStateOver.ts";
 
 type GameStateGameplayParams = {
   level: Level;
@@ -103,14 +104,19 @@ export class GameStateGameplay<
 
         if not mode.is_no_memories() then
             if memories.has_player_collided_with_memory() then
-                return new_game_state_over {
-                    score = score,
-                    level = level,
-                    player = player,
-                }
-            end
-        end
-     */
+            */
+    return new GameStateOver({
+      // TODO: migrate from Lua
+      // score = score,
+      level: this.#level,
+      // TODO: migrate from Lua
+      // player = player,
+    });
+    // TODO: migrate from Lua
+    /*
+end
+end
+*/
 
     return this;
   }
