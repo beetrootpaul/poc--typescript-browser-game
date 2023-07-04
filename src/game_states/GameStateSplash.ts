@@ -1,10 +1,12 @@
 import type { GameDrawContext } from "@framework";
 import { g } from "../globals.ts";
+import { Sash } from "../gui/Sash.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 
 export class GameStateSplash implements GameState {
   // TODO: migrate from Lua
+  readonly #sash: Sash = new Sash();
   /*
       local sash = new_sash({
         duration = 10 * a.music_beat_frames,
@@ -58,7 +60,7 @@ export class GameStateSplash implements GameState {
       Pico8Colors.DarkBlue
     );
 
-    // TODO: migrate from Lua
-    // sash.draw()
+    // TODO: move API access to some globals, so it will be as easy as in PICO-8 to just draw stuff, play music, etc.
+    this.#sash.draw({ drawApi });
   }
 }
