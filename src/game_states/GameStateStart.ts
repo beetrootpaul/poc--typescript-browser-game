@@ -2,6 +2,7 @@ import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { GameState } from "./GameState.ts";
+import { GameStateGameplay } from "./GameStateGameplay.ts";
 
 export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
   implements GameState<StorageApiValue>
@@ -31,38 +32,40 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
     level.spawn_items()
    */
 
-  update({}: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
-    // TODO: migrate from Lua
-    /*
-          local has_started = false
-        if btnp(u.buttons.l) then
-            player.direct_left()
-            has_started = true
-        elseif btnp(u.buttons.r) then
-            player.direct_right()
-            has_started = true
-        elseif btnp(u.buttons.u) then
-            player.direct_up()
-            has_started = true
-        elseif btnp(u.buttons.d) then
-            player.direct_down()
-            has_started = true
-        end
+  update({
+    gameInputEvents,
+  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+    let hasStarted = false;
+    // TODO: implement one directional input clear another, like left+right = nothing
+    if (gameInputEvents.has("left")) {
+      // TODO: migrate from Lua
+      // player.direct_left()
+      hasStarted = true;
+    } else if (gameInputEvents.has("right")) {
+      // TODO: migrate from Lua
+      // player.direct_right()
+      hasStarted = true;
+    } else if (gameInputEvents.has("up")) {
+      // TODO: migrate from Lua
+      // player.direct_up()
+      hasStarted = true;
+    } else if (gameInputEvents.has("down")) {
+      // TODO: migrate from Lua
+      // player.direct_down()
+      hasStarted = true;
+    }
 
-        level.animate()
-
-        if has_started then
-            return new_game_state_gameplay {
-                mode = mode,
-                topbar = topbar,
-                score = score,
-                level = level,
-                player = player,
-            }
-        end
-
-        return gs
-     */
+    if (hasStarted) {
+      return new GameStateGameplay({
+        // TODO: migrate from Lua
+        // mode = mode,
+        // topbar = topbar,
+        // score = score,
+        level: this.#level,
+        // TODO: migrate from Lua
+        // player = player,
+      });
+    }
 
     return this;
   }
