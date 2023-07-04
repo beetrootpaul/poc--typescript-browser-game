@@ -1,6 +1,7 @@
 import { Color } from "@framework";
 
-export class Pico8Color {
+// noinspection JSUnusedGlobalSymbols
+export class Pico8Colors {
   // hex values taken from https://pico-8.fandom.com/wiki/Palette#The_system_palette
   static Black = Color.fromCssHex("#000000");
   static DarkBlue = Color.fromCssHex("#1d2b53");
