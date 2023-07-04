@@ -18,11 +18,11 @@ export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
 
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
+    expand: true,
   });
   // TODO: migrate from Lua
   /*
     local sash = new_sash({
-        expand = true,
         draw_text = function(sash_center_x, sash_center_y)
             local heading = "your score"
             local heading_w = u.measure_text_width(heading)
@@ -63,14 +63,16 @@ export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
       return new GameStateStart();
     }
 
-    // TODO: migrate from Lua
-    /*
-        if sash.has_expanded() then
-            if btnp(u.buttons.l) or btnp(u.buttons.r) or btnp(u.buttons.u) or btnp(u.buttons.d) then
-                sash.collapse()
-            end
-        end
-     */
+    if (this.#sash.hasExpanded()) {
+      if (
+        gameInputEvents.has("left") ||
+        gameInputEvents.has("right") ||
+        gameInputEvents.has("up") ||
+        gameInputEvents.has("down")
+      ) {
+        this.#sash.collapse();
+      }
+    }
 
     this.#sash.advance1Frame();
 

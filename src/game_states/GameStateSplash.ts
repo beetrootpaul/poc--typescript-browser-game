@@ -8,11 +8,11 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
   // TODO: migrate from Lua
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
+    expand: false,
   });
 
   /*
       local sash = new_sash({
-        expand = false,
         draw_text = function(sash_center_x, sash_center_y)
             local title = "avoid your past"
             local title_w = u.measure_text_width(title)

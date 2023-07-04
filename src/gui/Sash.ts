@@ -4,18 +4,19 @@ import { Pico8Colors } from "../Pico8Color.ts";
 
 type SashOptions = {
   duration: number;
+  expand: boolean;
 };
 
 export class Sash {
   readonly #ttlMax: number;
-  // TODO: migrate from Lua
-  /*
-    local should_expand = params.expand
-    local draw_text = params.draw_text
 
-    local ttl_expansion_start = should_expand and (ttl_max - a.music_beat_frames) or ttl_max
-    local ttl_expansion_end = should_expand and (ttl_expansion_start - a.music_beat_frames / 4) or ttl_max
-   */
+  readonly #shouldExpand: boolean;
+
+  // TODO: migrate from Lua
+  // local draw_text = params.draw_text
+
+  readonly #ttlExpansionStart: number;
+  readonly #ttlExpansionEnd: number;
   readonly #ttlCollapseStart: number = g.musicBeatFrames / 4;
   #ttl: number;
 
@@ -26,18 +27,24 @@ export class Sash {
   constructor(options: SashOptions) {
     this.#ttlMax = options.duration;
     this.#ttl = this.#ttlMax;
+
+    this.#shouldExpand = options.expand;
+
+    this.#ttlExpansionStart = this.#shouldExpand
+      ? this.#ttlMax - g.musicBeatFrames
+      : this.#ttlMax;
+    this.#ttlExpansionEnd = this.#shouldExpand
+      ? this.#ttlExpansionStart - g.musicBeatFrames / 4
+      : this.#ttlMax;
   }
 
   has_collapsed(): boolean {
     return this.#ttl <= 0;
   }
 
-  // TODO: migrate from Lua
-  /*
-    function s.has_expanded()
-        return ttl <= ttl_expansion_end
-    end
-   */
+  hasExpanded(): boolean {
+    return this.#ttl <= this.#ttlExpansionEnd;
+  }
 
   collapse(): void {
     this.#ttl = this.#ttlCollapseStart;
@@ -48,15 +55,14 @@ export class Sash {
   }
 
   draw({ drawApi }: GameDrawContext): void {
-    // TODO: migrate from Lua
     let h: number;
-    /*
-          if ttl > ttl_expansion_start then
-              h = 0
-          elseif ttl > ttl_expansion_end then
-              h = h_max * (ttl_expansion_start - ttl) / (ttl_expansion_start - ttl_expansion_end)
-          */
-    if (this.#ttl > this.#ttlCollapseStart) {
+    if (this.#ttl > this.#ttlExpansionStart) {
+      h = 0;
+    } else if (this.#ttl > this.#ttlExpansionEnd) {
+      h =
+        (this.#hMax * (this.#ttlExpansionStart - this.#ttl)) /
+        (this.#ttlExpansionStart - this.#ttlExpansionEnd);
+    } else if (this.#ttl > this.#ttlCollapseStart) {
       h = this.#hMax;
     } else {
       h = (this.#hMax * this.#ttl) / this.#ttlCollapseStart;
