@@ -1,6 +1,7 @@
 import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
+import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
 
@@ -8,15 +9,14 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
   implements GameState<StorageApiValue>
 {
   // TODO: migrate from Lua
-  /*
-      local score = new_score()
-    local mode = new_mode()
-    local topbar = new_topbar {
-        score = score,
-        mode = mode,
-    }
-    local player = new_player()
-    */
+  //     local score = new_score()
+  //   local mode = new_mode()
+  // TODO: migrate from Lua
+  readonly #topbar = new Topbar();
+  // score = score,
+  // mode = mode,
+  // TODO: migrate from Lua
+  //   local player = new_player()
 
   // TODO: migrate from Lua
   readonly #level = new Level();
@@ -59,7 +59,8 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
       return new GameStateGameplay({
         // TODO: migrate from Lua
         // mode = mode,
-        // topbar = topbar,
+        topbar: this.#topbar,
+        // TODO: migrate from Lua
         // score = score,
         level: this.#level,
         // TODO: migrate from Lua
@@ -74,11 +75,13 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
     this.#level.drawBg({ drawApi });
 
     // TODO: migrate from Lua
-    /*
-        level.draw_items()
-        player.draw()
-        topbar.draw()
+    //     level.draw_items()
+    //     player.draw()
 
+    this.#topbar.draw({ drawApi });
+
+    // TODO: migrate from Lua
+    /*
         local margin = 6
         local prompt1 = "press an arrow"
         local prompt2 = "to choose direction"
