@@ -18,8 +18,10 @@
            CHANGE THESE values to whatever you looks good for you:
         */
         :root {
-            --loading-bg-color: #1d2b53;
-            --loading-fg-color: #ffccaa;
+            --loading-bg-color: #000000;
+            /* TODO: we do not need any fancy loading screen yet, since it is super fast. We will need it once we implement loading of assets from the internet. */
+            /*--loading-bg-color: #1d2b53;*/
+            /*--loading-fg-color: #ffccaa;*/
         }
 
         * {
@@ -63,12 +65,13 @@
             width: 100vw;
             height: 100vh;
             background-color: var(--loading-bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 8vh;
-            font-family: monospace;
-            color: var(--loading-fg-color);
+            /* TODO: we do not need any fancy loading screen yet, since it is super fast. We will need it once we implement loading of assets from the internet. */
+            /*display: flex;*/
+            /*justify-content: center;*/
+            /*align-items: center;*/
+            /*font-size: 8vh;*/
+            /*font-family: monospace;*/
+            /*color: var(--loading-fg-color);*/
         }
 
         .app_loaded #loading {
@@ -79,7 +82,9 @@
 </head>
 <body>
 
-<div id="loading">loading…</div>
+<!-- TODO: we do not need any fancy loading screen yet, since it is super fast. We will need it once we implement loading of assets from the internet. -->
+<div id="loading"></div>
+<!--<div id="loading">loading…</div>-->
 
 <main id="display">
     <div class="mouse_controls_area_left"></div>
