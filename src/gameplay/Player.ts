@@ -1,4 +1,4 @@
-import { GameDrawContext, Xy } from "@framework";
+import { Color, GameDrawContext, Xy } from "@framework";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 
@@ -89,11 +89,12 @@ export class Player {
    */
 
   draw({ drawApi }: GameDrawContext) {
-    // TODO: migrate from Lua
+    // TODO: REMOVE this temporary logic and migrate from Lua the proper code below
+    drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Lavender);
     // palt(u.colors.black, false)
     // palt(u.colors.dark_blue, true)
 
-    // TODO: REMOVE this temporary rect migrate from Lua
+    // TODO: REMOVE this temporary rect migrate from Lua the proper code below
     drawApi.drawRectFilled(
       this.#xy.sub(this.#r),
       this.#xy.add(this.#r),
