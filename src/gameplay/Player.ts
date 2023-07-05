@@ -1,4 +1,4 @@
-import { Color, GameDrawContext, Xy } from "@framework";
+import { GameDrawContext, transparent, Xy } from "@framework";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 
@@ -89,10 +89,9 @@ export class Player {
    */
 
   draw({ drawApi }: GameDrawContext) {
-    // TODO: REMOVE this temporary logic and migrate from Lua the proper code below
-    drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Lavender);
-    // palt(u.colors.black, false)
-    // palt(u.colors.dark_blue, true)
+    // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
+    drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Black);
+    drawApi.mapSpriteColor(Pico8Colors.DarkBlue, transparent);
 
     // TODO: REMOVE this temporary rect migrate from Lua the proper code below
     drawApi.drawRectFilled(
@@ -108,8 +107,10 @@ export class Player {
         )
         */
 
+    // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
+    drawApi.mapSpriteColor(Pico8Colors.DarkBlue, Pico8Colors.DarkBlue);
+
     // TODO: migrate from Lua
-    //     palt()
     //     if __debug__ then
     //         circfill(x, y, r, u.colors.red)
     //     end

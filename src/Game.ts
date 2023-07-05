@@ -1,4 +1,4 @@
-import { Framework } from "@framework";
+import { Framework, transparent } from "@framework";
 import * as UPNG from "upng-js";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
@@ -99,11 +99,23 @@ export class Game {
 
       // TODO: REWORK THIS
       if (this.#imgBytes) {
+        context.drawApi.mapSpriteColor(Pico8Colors.DarkBlue, transparent);
+        context.drawApi.mapSpriteColor(Pico8Colors.Black, transparent);
+        context.drawApi.mapSpriteColor(Pico8Colors.Orange, transparent);
+        context.drawApi.mapSpriteColor(Pico8Colors.Red, Pico8Colors.Blue);
         context.drawApi.drawSomething(
           this.#imgBytes,
           this.#imgW,
           this.#imgType
         );
+        // TODO: API to reset all mappings?
+        context.drawApi.mapSpriteColor(
+          Pico8Colors.DarkBlue,
+          Pico8Colors.DarkBlue
+        );
+        context.drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Black);
+        context.drawApi.mapSpriteColor(Pico8Colors.Orange, Pico8Colors.Orange);
+        context.drawApi.mapSpriteColor(Pico8Colors.Red, Pico8Colors.Red);
       }
     });
 
