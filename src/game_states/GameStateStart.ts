@@ -1,6 +1,7 @@
 import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
+import { Player } from "../gameplay/Player.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
@@ -15,8 +16,7 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
   readonly #topbar = new Topbar();
   // score = score,
   // mode = mode,
-  // TODO: migrate from Lua
-  //   local player = new_player()
+  readonly #player = new Player();
 
   // TODO: migrate from Lua
   readonly #level = new Level();
@@ -76,7 +76,8 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
 
     // TODO: migrate from Lua
     //     level.draw_items()
-    //     player.draw()
+
+    this.#player.draw({ drawApi });
 
     this.#topbar.draw({ drawApi });
 
