@@ -1,10 +1,13 @@
 import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
+import { Memories } from "../gameplay/Memories.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
+import { Trail } from "../gameplay/Trail.ts";
 import { Topbar } from "../gui/Topbar.ts";
+import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateOver } from "./GameStateOver.ts";
 
@@ -26,15 +29,8 @@ export class GameStateGameplay<
   readonly #score: Score;
   readonly #level: Level;
   readonly #player: Player;
-
-  // TODO: migrate from Lua
-  // local memories = new_memories {
-  // player = player,
-  // }
-  // local player_trail = new_trail {
-  //   origin = player,
-  //     color = u.colors.dark_green,
-  // }
+  readonly #memories: Memories;
+  readonly #playerTrail: Trail;
 
   constructor(params: GameStateGameplayParams) {
     this.#mode = params.mode;
@@ -42,6 +38,13 @@ export class GameStateGameplay<
     this.#score = params.score;
     this.#level = params.level;
     this.#player = params.player;
+    this.#memories = new Memories({
+      player: this.#player,
+    });
+    this.#playerTrail = new Trail({
+      origin: this.#player,
+      color: Pico8Colors.DarkGreen,
+    });
   }
 
   // TODO: migrate from Lua
@@ -99,23 +102,28 @@ export class GameStateGameplay<
         mode.update {
             on_back_to_regular_mode = on_back_to_regular_mode
         }
+        */
 
-        level.check_collisions {
-            on_coin = on_coin_collision,
-            on_droplet_no_coins = on_droplet_no_coins_collision,
-            on_droplet_no_memories = on_droplet_no_memories_collision,
-        }
+    this.#level.checkCollisions();
+    // TODO: migrate from Lua these params to checkCollisions()
+    // {
+    //         on_coin = on_coin_collision,
+    //         on_droplet_no_coins = on_droplet_no_coins_collision,
+    //         on_droplet_no_memories = on_droplet_no_memories_collision,
+    //     }
 
-        level.animate()
+    // TODO: migrate from Lua
+    /*
+    level.animate()
 
-        player_trail.update()
-        player.move()
+    player_trail.update()
+    player.move()
 
-        memories.move()
+    memories.move()
 
-        if not mode.is_no_memories() then
-            if memories.has_player_collided_with_memory() then
-            */
+    if not mode.is_no_memories() then
+        if memories.has_player_collided_with_memory() then
+        */
     return new GameStateOver({
       score: this.#score,
       level: this.#level,
@@ -134,16 +142,14 @@ end
     this.#level.drawBg({ drawApi });
 
     // TODO: migrate from Lua
-    /*
-        level.draw_items()
+    //     level.draw_items()
 
-        player_trail.draw()
-        player.draw()
+    this.#playerTrail.draw({ drawApi });
+    this.#player.draw({ drawApi });
 
-        if not mode.is_no_memories() then
-            memories.draw()
-        end
-     */
+    if (!this.#mode.isNoMemories()) {
+      this.#memories.draw({ drawApi });
+    }
 
     this.#topbar.draw({ drawApi });
   }

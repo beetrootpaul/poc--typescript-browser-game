@@ -13,10 +13,10 @@ export class Mode {
     function m.is_no_coins()
         return current == "no_coins"
     end
-    function m.is_no_memories()
-        return current == "no_memories"
-    end
    */
+  isNoMemories(): boolean {
+    return this.#current === "no_memories";
+  }
 
   // TODO: migrate from Lua
   /*

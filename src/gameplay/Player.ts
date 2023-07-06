@@ -1,4 +1,5 @@
 import { GameDrawContext, transparent, Xy, xy_ } from "@framework";
+import { type CollisionCircle } from "../Collisions.ts";
 import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
@@ -50,12 +51,13 @@ export class Player {
     end
    */
 
-  // TODO: migrate from Lua
-  /*
-    function p.collision_circle()
-        return { x = x, y = y, r = r }
-    end
-   */
+  collisionCircle(): CollisionCircle {
+    return {
+      // TODO: migrate from Lua
+      // x = x, y = y, r = r
+    };
+  }
+
   // TODO: migrate from Lua
   /*
   function p.direct_left()
