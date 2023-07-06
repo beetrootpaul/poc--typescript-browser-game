@@ -29,7 +29,7 @@
     "noFallthroughCasesInSwitch": true,
     // Keep these in sync with "resolve.alias" in vite.config.ts
     "paths": {
-      "@poc--typescript-web-game-framework": ["../poc--typescript-web-game-framework/src"]
+      "@framework": ["../poc--typescript-browser-game-framework/src"]
     }
   },
   "include": [
@@ -37,7 +37,7 @@
   ],
   "references": [
     {
-      "path": "../poc--typescript-web-game-framework/"
+      "path": "../poc--typescript-browser-game-framework/"
     }
   ],
 }

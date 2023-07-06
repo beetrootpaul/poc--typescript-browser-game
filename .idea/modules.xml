@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/poc--typescript-web-game.iml" filepath="$PROJECT_DIR$/.idea/poc--typescript-web-game.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/poc--typescript-browser-game.iml" filepath="$PROJECT_DIR$/.idea/poc--typescript-browser-game.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../poc--typescript-browser-game-framework/.idea/poc--typescript-browser-game-framework.iml" filepath="$PROJECT_DIR$/../poc--typescript-browser-game-framework/.idea/poc--typescript-browser-game-framework.iml" />
     </modules>
   </component>
 </project>

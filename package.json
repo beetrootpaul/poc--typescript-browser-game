@@ -1,18 +1,18 @@
 {
-  "name": "poc--typescript-web-game",
+  "name": "poc--typescript-browser-game",
   "version": "0.0.0",
   "author": "Beetroot Paul",
   "license": "MIT",
   "private": true,
   "type": "module",
-  "description": "A PoC of a simple low-res game written in TypeScript, meant to be published for web.",
-  "homepage": "https://github.com/beetrootpaul/poc--typescript-web-game#readme",
+  "description": "A PoC of a simple low-res game written in TypeScript, meant to be played in web browsers.",
+  "homepage": "https://github.com/beetrootpaul/poc--typescript-browser-game#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beetrootpaul/poc--typescript-web-game.git"
+    "url": "git+https://github.com/beetrootpaul/poc--typescript-browser-game.git"
   },
   "bugs": {
-    "url": "https://github.com/beetrootpaul/poc--typescript-web-game/issues"
+    "url": "https://github.com/beetrootpaul/poc--typescript-browser-game/issues"
   },
   "scripts": {
     "prepare": "husky install",
@@ -24,7 +24,7 @@
     "prod:preview": "vite preview --open",
     "dist": "npm run dist:build && npm run dist:zip",
     "dist:build": "npm run prod:build",
-    "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_web_game__itch_io.zip",
+    "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_browser_game__itch_io.zip",
     "compile": "tsc --build",
     "compile:watch": "tsc --build --watch",
     "format": "prettier --ignore-path .gitignore --write src/"
