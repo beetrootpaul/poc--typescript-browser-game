@@ -1,13 +1,19 @@
 import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
+import { Mode } from "../gameplay/Mode.ts";
+import { Player } from "../gameplay/Player.ts";
+import { Score } from "../gameplay/Score.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateOver } from "./GameStateOver.ts";
 
 type GameStateGameplayParams = {
+  mode: Mode;
   topbar: Topbar;
+  score: Score;
   level: Level;
+  player: Player;
 };
 
 // TODO: make it not needed to pass <StorageApiValueConstraint> by maybe decoupling what goes into `update`
@@ -15,8 +21,11 @@ export class GameStateGameplay<
   StorageApiValue extends StorageApiValueConstraint
 > implements GameState<StorageApiValue>
 {
+  readonly #mode: Mode;
   readonly #topbar: Topbar;
+  readonly #score: Score;
   readonly #level: Level;
+  readonly #player: Player;
 
   // TODO: migrate from Lua
   // local memories = new_memories {
@@ -28,14 +37,11 @@ export class GameStateGameplay<
   // }
 
   constructor(params: GameStateGameplayParams) {
-    // TODO: migrate from Lua
-    // local mode = params.mode
+    this.#mode = params.mode;
     this.#topbar = params.topbar;
-    // TODO: migrate from Lua
-    // local score = params.score
+    this.#score = params.score;
     this.#level = params.level;
-    // TODO: migrate from Lua
-    // local player = params.player
+    this.#player = params.player;
   }
 
   // TODO: migrate from Lua
@@ -111,11 +117,9 @@ export class GameStateGameplay<
             if memories.has_player_collided_with_memory() then
             */
     return new GameStateOver({
-      // TODO: migrate from Lua
-      // score = score,
+      score: this.#score,
       level: this.#level,
-      // TODO: migrate from Lua
-      // player = player,
+      player: this.#player,
     });
     // TODO: migrate from Lua
     /*

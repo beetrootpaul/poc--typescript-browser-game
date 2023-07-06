@@ -1,13 +1,25 @@
 import { GameDrawContext, Xy } from "@framework";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
+import { Mode } from "./Mode.ts";
+import { Player } from "./Player.ts";
+
+type LevelParams = {
+  mode: Mode;
+  player: Player;
+};
 
 export class Level {
+  readonly #mode: Mode;
+  readonly #player: Player;
+
+  constructor(params: LevelParams) {
+    this.#mode = params.mode;
+    this.#player = params.player;
+  }
+
   // TODO: migrate from Lua
   /*
-      local mode = params.mode
-    local player = params.player
-
     local coin
     local droplet_no_coins
     local droplet_no_memories

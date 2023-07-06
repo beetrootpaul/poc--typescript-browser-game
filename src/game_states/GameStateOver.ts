@@ -1,20 +1,25 @@
 import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
+import { Player } from "../gameplay/Player.ts";
+import { Score } from "../gameplay/Score.ts";
 import { g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
 
 type GameStateOverParams = {
+  score: Score;
   level: Level;
+  player: Player;
 };
 
 export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
   implements GameState<StorageApiValue>
 {
-  // TODO: migrate from Lua
-  readonly #level = new Level();
+  readonly #score: Score;
+  readonly #level: Level;
+  readonly #player: Player;
 
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
@@ -49,11 +54,9 @@ export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
   // audio.enable_music_layers { false, false, false }
 
   constructor(params: GameStateOverParams) {
-    // TODO: migrate from Lua
-    // local score = params.score
+    this.#score = params.score;
     this.#level = params.level;
-    // TODO: migrate from Lua
-    // local player = params.player
+    this.#player = params.player;
   }
 
   update({

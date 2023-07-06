@@ -1,7 +1,9 @@
 import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
+import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
+import { Score } from "../gameplay/Score.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
@@ -9,24 +11,20 @@ import { GameStateGameplay } from "./GameStateGameplay.ts";
 export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
   implements GameState<StorageApiValue>
 {
-  // TODO: migrate from Lua
-  //     local score = new_score()
-  //   local mode = new_mode()
-  // TODO: migrate from Lua
-  readonly #topbar = new Topbar();
-  // score = score,
-  // mode = mode,
+  readonly #score = new Score();
+  readonly #mode = new Mode();
+  readonly #topbar = new Topbar({
+    score: this.#score,
+    mode: this.#mode,
+  });
   readonly #player = new Player();
+  readonly #level = new Level({
+    mode: this.#mode,
+    player: this.#player,
+  });
 
   // TODO: migrate from Lua
-  readonly #level = new Level();
-
   /*
-    local level = new_level {
-        mode = mode,
-        player = player,
-    }
-
     audio.enable_music_layers { false, false, false }
 
     level.spawn_items()
@@ -57,14 +55,11 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
 
     if (hasStarted) {
       return new GameStateGameplay({
-        // TODO: migrate from Lua
-        // mode = mode,
+        mode: this.#mode,
         topbar: this.#topbar,
-        // TODO: migrate from Lua
-        // score = score,
+        score: this.#score,
         level: this.#level,
-        // TODO: migrate from Lua
-        // player = player,
+        player: this.#player,
       });
     }
 
