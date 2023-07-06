@@ -1,6 +1,6 @@
-# poc--typescript-web-game
+# poc--typescript-browser-game
 
-A PoC of a simple low-res game written in TypeScript, meant to be published for web.
+A PoC of a simple low-res game written in TypeScript, meant to be played in web browsers.
 
 ## Setup
 
