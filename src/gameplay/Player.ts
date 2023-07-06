@@ -14,16 +14,13 @@ export class Player {
     local dy = 0
    */
 
-  // TODO: migrate from Lua
-  /*
-    local direction = "r"
-    local sprite_for_direction = {
-        u = 39,
-        r = 40,
-        d = 41,
-        l = 42,
-    }
-   */
+  readonly #direction: "l" | "r" | "u" | "d" = "r";
+  readonly #spriteForDirection = {
+    u: { spriteSheetCell: xy_(7, 2) },
+    r: { spriteSheetCell: xy_(8, 2) },
+    d: { spriteSheetCell: xy_(9, 2) },
+    l: { spriteSheetCell: xy_(10, 2) },
+  };
 
   // TODO: migrate from Lua
   /*
@@ -96,20 +93,17 @@ export class Player {
 
     // TODO: REWORK THIS
     if (s_imgBytes) {
-      // TODO: migrate from Lua
-      // sprite_for_direction[direction]
       drawApi.drawSomething(
         s_imgBytes,
         s_imgW,
         s_imgType,
-        xy_(7 * 8, 2 * 8),
-        xy_(7 * 8 + 8, 2 * 8 + 8),
+        this.#spriteForDirection[this.#direction].spriteSheetCell.mul(8),
+        this.#spriteForDirection[this.#direction].spriteSheetCell.mul(8).add(8),
         this.#xy.sub(this.#r)
       );
-      // TODO: API to reset all mappings?
-      drawApi.mapSpriteColor(Pico8Colors.DarkBlue, Pico8Colors.DarkBlue);
     }
 
+    // TODO: API to reset all mappings?
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
     drawApi.mapSpriteColor(Pico8Colors.DarkBlue, Pico8Colors.DarkBlue);
 
