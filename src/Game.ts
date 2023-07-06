@@ -14,16 +14,16 @@ type GameOptions = {
 
 type GameStoredState = {};
 
+// TODO: REWORK THIS
+export let s_imgW = 0;
+export let s_imgH = 0;
+export let s_imgType: "rgba" | "rgb" = "rgba";
+export let s_imgBytes: Uint8Array | undefined;
+
 export class Game {
   readonly #framework: Framework<GameStoredState>;
 
   #gameState: GameState<GameStoredState>;
-
-  // TODO: REWORK THIS
-  #imgW = 0;
-  #imgH = 0;
-  #imgType: "rgba" | "rgb" = "rgba";
-  #imgBytes?: Uint8Array;
 
   constructor(options: GameOptions) {
     this.#framework = new Framework<GameStoredState>({
@@ -54,8 +54,8 @@ export class Game {
       // docs: https://github.com/photopea/UPNG.js/#upngdecodebuffer
       .then((rawArrayBuffer) => UPNG.decode(rawArrayBuffer))
       .then(({ width, height, depth, ctype, frames, tabs, data }) => {
-        this.#imgW = width;
-        this.#imgH = height;
+        s_imgW = width;
+        s_imgH = height;
         if (depth != 8) {
           throw Error(`Unexpected img depth of ${depth}. Expected: 8`);
         }
@@ -66,10 +66,10 @@ export class Game {
           );
         }
         if (ctype === 2) {
-          this.#imgType = "rgb";
+          s_imgType = "rgb";
         }
         if (ctype === 6) {
-          this.#imgType = "rgba";
+          s_imgType = "rgba";
         }
         if (frames.length > 0) {
           throw Error(
@@ -79,9 +79,9 @@ export class Game {
         return new Uint8Array(data);
       })
       .then((uint8Array) => {
-        this.#imgBytes = uint8Array.slice(
+        s_imgBytes = uint8Array.slice(
           0,
-          this.#imgW * this.#imgH * (this.#imgType === "rgb" ? 3 : 4)
+          s_imgW * s_imgH * (s_imgType === "rgb" ? 3 : 4)
         );
       })
       .catch((e) => {
@@ -96,27 +96,6 @@ export class Game {
       context.drawApi.clear(Pico8Colors.Black);
       context.drawApi.setCameraOffset(g.cameraOffset);
       this.#gameState.draw(context);
-
-      // TODO: REWORK THIS
-      if (this.#imgBytes) {
-        context.drawApi.mapSpriteColor(Pico8Colors.DarkBlue, transparent);
-        context.drawApi.mapSpriteColor(Pico8Colors.Black, transparent);
-        context.drawApi.mapSpriteColor(Pico8Colors.Orange, transparent);
-        context.drawApi.mapSpriteColor(Pico8Colors.Red, Pico8Colors.Blue);
-        context.drawApi.drawSomething(
-          this.#imgBytes,
-          this.#imgW,
-          this.#imgType
-        );
-        // TODO: API to reset all mappings?
-        context.drawApi.mapSpriteColor(
-          Pico8Colors.DarkBlue,
-          Pico8Colors.DarkBlue
-        );
-        context.drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Black);
-        context.drawApi.mapSpriteColor(Pico8Colors.Orange, Pico8Colors.Orange);
-        context.drawApi.mapSpriteColor(Pico8Colors.Red, Pico8Colors.Red);
-      }
     });
 
     this.#framework.startGame(({}) => {});

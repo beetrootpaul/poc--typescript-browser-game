@@ -1,4 +1,5 @@
-import { GameDrawContext, transparent, Xy } from "@framework";
+import { GameDrawContext, transparent, Xy, xy_ } from "@framework";
+import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 
@@ -93,19 +94,21 @@ export class Player {
     drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Black);
     drawApi.mapSpriteColor(Pico8Colors.DarkBlue, transparent);
 
-    // TODO: REMOVE this temporary rect migrate from Lua the proper code below
-    drawApi.drawRectFilled(
-      this.#xy.sub(this.#r),
-      this.#xy.add(this.#r),
-      Pico8Colors.Green
-    );
-    /*
-        spr(
-            sprite_for_direction[direction],
-            x - r,
-            y - r
-        )
-        */
+    // TODO: REWORK THIS
+    if (s_imgBytes) {
+      // TODO: migrate from Lua
+      // sprite_for_direction[direction]
+      drawApi.drawSomething(
+        s_imgBytes,
+        s_imgW,
+        s_imgType,
+        xy_(7 * 8, 2 * 8),
+        xy_(7 * 8 + 8, 2 * 8 + 8),
+        this.#xy.sub(this.#r)
+      );
+      // TODO: API to reset all mappings?
+      drawApi.mapSpriteColor(Pico8Colors.DarkBlue, Pico8Colors.DarkBlue);
+    }
 
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
     drawApi.mapSpriteColor(Pico8Colors.DarkBlue, Pico8Colors.DarkBlue);
