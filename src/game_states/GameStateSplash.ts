@@ -1,5 +1,9 @@
 import type { GameDrawContext, GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
+import { g } from "../globals.ts";
+import { Sash } from "../gui/Sash.ts";
+import { Pico8Colors } from "../Pico8Color.ts";
+import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
 
 export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
