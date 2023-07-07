@@ -12,7 +12,13 @@ type GameOptions = {
   htmlControlsFullscreenSelector: string;
 };
 
-type GameStoredState = {};
+type GameStoredState = {
+  // TODO: Is it possible to enforce optionality of every field in the framework itself?
+  // TODO: This field is used only to drive a proper framework implementation,
+  //       but it's not really used in the game itself.
+  //       Update it to something meaningful in a context of the game.
+  mostRecentFameNumber?: number;
+};
 
 // TODO: REWORK THIS
 export let s_imgW = 0;
@@ -89,6 +95,9 @@ export class Game {
       });
 
     this.#framework.setOnUpdate((context) => {
+      context.storageApi.store({
+        mostRecentFameNumber: f.frameNumber,
+      });
       this.#gameState = this.#gameState.update(context);
     });
 
@@ -98,6 +107,21 @@ export class Game {
       this.#gameState.draw();
     });
 
-    this.#framework.startGame(({}) => {});
+    this.#framework.startGame(({ storageApi }) => {
+      let restoredState: GameStoredState | null = null;
+      try {
+        restoredState = storageApi.load();
+      } catch (err) {
+        // TODO: move this error to the framework itself, because there we can explicitly tell it's about `JSON.parse(…)` error
+        console.warn("Failed to stored state.");
+        storageApi.clear();
+      }
+      restoredState = restoredState ?? {
+        mostRecentFameNumber: 0,
+      };
+      console.info(
+        `Restored most recent frame number: ${restoredState.mostRecentFameNumber}`
+      );
+    });
   }
 }
