@@ -1,7 +1,5 @@
-import { GameUpdateContext } from "@framework";
-
 export interface GameState {
-  update(context: GameUpdateContext): GameState;
+  update(): GameState;
 
   draw(): void;
 }

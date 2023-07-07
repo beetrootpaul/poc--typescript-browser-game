@@ -59,7 +59,7 @@ export class Game {
       .then((blob) => blob.arrayBuffer())
       // docs: https://github.com/photopea/UPNG.js/#upngdecodebuffer
       .then((rawArrayBuffer) => UPNG.decode(rawArrayBuffer))
-      .then(({ width, height, depth, ctype, frames, tabs, data }) => {
+      .then(({ width, height, depth, ctype, frames, data }) => {
         s_imgW = width;
         s_imgH = height;
         if (depth != 8) {
@@ -94,11 +94,11 @@ export class Game {
         console.error("FETCH:", e);
       });
 
-    this.#framework.setOnUpdate((context) => {
+    this.#framework.setOnUpdate(() => {
       f.storageApi.store<GameStoredState>({
         mostRecentFameNumber: f.frameNumber,
       });
-      this.#gameState = this.#gameState.update(context);
+      this.#gameState = this.#gameState.update();
     });
 
     this.#framework.setOnDraw(() => {
@@ -107,14 +107,14 @@ export class Game {
       this.#gameState.draw();
     });
 
-    this.#framework.startGame(({ storageApi }) => {
+    this.#framework.startGame(() => {
       let restoredState: GameStoredState | null = null;
       try {
         restoredState = f.storageApi.load<GameStoredState>();
       } catch (err) {
         // TODO: move this error to the framework itself, because there we can explicitly tell it's about `JSON.parse(…)` error
         console.warn("Failed to stored state.");
-        storageApi.clear();
+        f.storageApi.clear();
       }
       restoredState = restoredState ?? {
         mostRecentFameNumber: 0,
