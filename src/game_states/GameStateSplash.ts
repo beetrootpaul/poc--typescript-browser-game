@@ -41,18 +41,16 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
     // audio.enable_music_layers { false, false, false }
   }
 
-  update({
-    gameInputEvents,
-  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+  update(): GameState<StorageApiValue> {
     if (this.#sash.has_collapsed()) {
       return new GameStateStart();
     }
 
     if (
-      gameInputEvents.has("left") ||
-      gameInputEvents.has("right") ||
-      gameInputEvents.has("up") ||
-      gameInputEvents.has("down")
+      f.gameInputEvents.has("left") ||
+      f.gameInputEvents.has("right") ||
+      f.gameInputEvents.has("up") ||
+      f.gameInputEvents.has("down")
     ) {
       this.#sash.collapse();
     }

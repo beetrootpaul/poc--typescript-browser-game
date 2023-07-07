@@ -4,6 +4,7 @@ import { Level } from "../gameplay/Level.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
+import { f } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { u } from "../utils.ts";
 import { GameState } from "./GameState.ts";
@@ -33,24 +34,22 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
     this.#level.spawnItems();
   }
 
-  update({
-    gameInputEvents,
-  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+  update(): GameState<StorageApiValue> {
     let hasStarted = false;
     // TODO: implement one directional input clear another, like left+right = nothing
-    if (gameInputEvents.has("left")) {
+    if (f.gameInputEvents.has("left")) {
       // TODO: migrate from Lua
       // player.direct_left()
       hasStarted = true;
-    } else if (gameInputEvents.has("right")) {
+    } else if (f.gameInputEvents.has("right")) {
       // TODO: migrate from Lua
       // player.direct_right()
       hasStarted = true;
-    } else if (gameInputEvents.has("up")) {
+    } else if (f.gameInputEvents.has("up")) {
       // TODO: migrate from Lua
       // player.direct_up()
       hasStarted = true;
-    } else if (gameInputEvents.has("down")) {
+    } else if (f.gameInputEvents.has("down")) {
       // TODO: migrate from Lua
       // player.direct_down()
       hasStarted = true;

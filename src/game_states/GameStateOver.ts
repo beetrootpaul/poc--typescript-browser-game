@@ -3,7 +3,7 @@ import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
-import { g } from "../globals.ts";
+import { f, g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
@@ -59,19 +59,17 @@ export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
     this.#player = params.player;
   }
 
-  update({
-    gameInputEvents,
-  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+  update(): GameState<StorageApiValue> {
     if (this.#sash.has_collapsed()) {
       return new GameStateStart();
     }
 
     if (this.#sash.hasExpanded()) {
       if (
-        gameInputEvents.has("left") ||
-        gameInputEvents.has("right") ||
-        gameInputEvents.has("up") ||
-        gameInputEvents.has("down")
+        f.gameInputEvents.has("left") ||
+        f.gameInputEvents.has("right") ||
+        f.gameInputEvents.has("up") ||
+        f.gameInputEvents.has("down")
       ) {
         this.#sash.collapse();
       }
