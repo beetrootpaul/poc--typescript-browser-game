@@ -64,7 +64,6 @@ export class GameStateSplash implements GameState {
       Pico8Colors.DarkBlue
     );
 
-    // TODO: move API access to some globals, so it will be as easy as in PICO-8 to just draw stuff, play music, etc.
     this.#sash.draw();
   }
 }

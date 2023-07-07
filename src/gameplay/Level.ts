@@ -184,7 +184,6 @@ export class Level {
 
    */
 
-  // TODO: move API access to some globals, so it will be as easy as in PICO-8 to just draw stuff, play music, etc.
   drawBg(): void {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())

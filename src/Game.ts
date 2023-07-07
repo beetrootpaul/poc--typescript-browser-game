@@ -1,4 +1,3 @@
-import { Framework } from "@framework";
 import * as UPNG from "upng-js";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
@@ -27,12 +26,10 @@ export let s_imgType: "rgba" | "rgb" = "rgba";
 export let s_imgBytes: Uint8Array | undefined;
 
 export class Game {
-  readonly #framework: Framework;
-
   #gameState: GameState;
 
   constructor(options: GameOptions) {
-    this.#framework = new Framework({
+    f.init({
       htmlDisplaySelector: options.htmlDisplaySelector,
       htmlCanvasSelector: options.htmlCanvasSelector,
       htmlOffscreenCanvasFallbackSelector:
@@ -94,20 +91,20 @@ export class Game {
         console.error("FETCH:", e);
       });
 
-    this.#framework.setOnUpdate(() => {
+    f.setOnUpdate(() => {
       f.storageApi.store<GameStoredState>({
         mostRecentFameNumber: f.frameNumber,
       });
       this.#gameState = this.#gameState.update();
     });
 
-    this.#framework.setOnDraw(() => {
+    f.setOnDraw(() => {
       f.drawApi.clear(Pico8Colors.Black);
       f.drawApi.setCameraOffset(g.cameraOffset);
       this.#gameState.draw();
     });
 
-    this.#framework.startGame(() => {
+    f.startGame(() => {
       let restoredState: GameStoredState | null = null;
       try {
         restoredState = f.storageApi.load<GameStoredState>();
