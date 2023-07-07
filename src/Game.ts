@@ -1,8 +1,8 @@
-import { Framework, GlobalApi } from "@framework";
+import { Framework } from "@framework";
 import * as UPNG from "upng-js";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
-import { g } from "./globals.ts";
+import { f, g } from "./globals.ts";
 import { Pico8Colors } from "./Pico8Color.ts";
 
 type GameOptions = {
@@ -93,8 +93,8 @@ export class Game {
     });
 
     this.#framework.setOnDraw(() => {
-      GlobalApi.drawApi.clear(Pico8Colors.Black);
-      GlobalApi.drawApi.setCameraOffset(g.cameraOffset);
+      f.drawApi.clear(Pico8Colors.Black);
+      f.drawApi.setCameraOffset(g.cameraOffset);
       this.#gameState.draw();
     });
 

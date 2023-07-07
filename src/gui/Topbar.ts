@@ -1,7 +1,6 @@
-import { GlobalApi } from "@framework";
 import { Mode } from "../gameplay/Mode.ts";
 import { Score } from "../gameplay/Score.ts";
-import { g } from "../globals.ts";
+import { f, g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 
 type TopbarParams = {
@@ -19,7 +18,7 @@ export class Topbar {
   }
 
   draw() {
-    GlobalApi.drawApi.drawRectFilled(
+    f.drawApi.drawRectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.topbarSize),
       Pico8Colors.Black

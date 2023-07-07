@@ -1,7 +1,7 @@
 import type { GameUpdateContext } from "@framework";
-import { GlobalApi, StorageApiValueConstraint } from "@framework";
+import { StorageApiValueConstraint } from "@framework";
 import { Audio } from "../Audio.ts";
-import { g } from "../globals.ts";
+import { f, g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
@@ -63,7 +63,7 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
   }
 
   draw(): void {
-    GlobalApi.drawApi.drawRectFilled(
+    f.drawApi.drawRectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.screenSize),
       // TODO: migrate from Lua: a.bg_color_mode_normal

@@ -1,4 +1,6 @@
-import { xy_ } from "@framework";
+import { PocTsBGFramework, xy_ } from "@framework";
+
+export const f = PocTsBGFramework;
 
 export const g = {
   fps: 30,
