@@ -1,4 +1,4 @@
-import { GameDrawContext, xy_ } from "@framework";
+import { GlobalApi, xy_ } from "@framework";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 
@@ -54,7 +54,7 @@ export class Sash {
     this.#ttl -= 1;
   }
 
-  draw({ drawApi }: GameDrawContext): void {
+  draw(): void {
     let h: number;
     if (this.#ttl > this.#ttlExpansionStart) {
       h = 0;
@@ -69,7 +69,7 @@ export class Sash {
     }
 
     if (h > 0) {
-      drawApi.drawRectFilled(
+      GlobalApi.drawApi.drawRectFilled(
         xy_(0, this.#center.y - h / 2),
         xy_(g.screenSize.x, this.#center.y + h / 2),
         Pico8Colors.DarkGreen

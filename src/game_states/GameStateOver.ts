@@ -1,4 +1,4 @@
-import type { GameDrawContext, GameUpdateContext } from "@framework";
+import type { GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Player } from "../gameplay/Player.ts";
@@ -82,13 +82,13 @@ export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
     return this;
   }
 
-  draw({ drawApi }: GameDrawContext): void {
-    this.#level.drawBg({ drawApi });
+  draw(): void {
+    this.#level.drawBg();
 
     // TODO: migrate from Lua
     // level.draw_items()
     // player.draw()
 
-    this.#sash.draw({ drawApi });
+    this.#sash.draw();
   }
 }

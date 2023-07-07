@@ -1,4 +1,4 @@
-import { GameDrawContext, Xy } from "@framework";
+import { GlobalApi, Xy } from "@framework";
 import { Collisions } from "../Collisions.ts";
 import { g } from "../globals.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
@@ -185,11 +185,15 @@ export class Level {
    */
 
   // TODO: move API access to some globals, so it will be as easy as in PICO-8 to just draw stuff, play music, etc.
-  drawBg({ drawApi }: GameDrawContext): void {
+  drawBg(): void {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())
     // TODO: mode.bg_color()
-    drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, Pico8Colors.DarkBlue);
+    GlobalApi.drawApi.drawRectFilled(
+      Xy.zero,
+      g.gameAreaSize,
+      Pico8Colors.DarkBlue
+    );
     // TODO: migrate from Lua
     /*
           fillp()

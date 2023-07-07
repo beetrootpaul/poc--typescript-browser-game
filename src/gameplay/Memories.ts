@@ -1,4 +1,3 @@
-import { GameDrawContext } from "@framework";
 import { Memory } from "./Memory.ts";
 import { Player } from "./Player.ts";
 
@@ -59,14 +58,14 @@ export class Memories {
     end
    */
 
-  draw({ drawApi }: GameDrawContext) {
+  draw() {
     // TODO: migrate from Lua
     // for trail in all(trails) do
     //   trail.draw()
     //   end
     // TODO: migrate from Lua
     this.#memoriesFromFirstToLast.forEach((memory) => {
-      memory.draw({ drawApi });
+      memory.draw();
     });
   }
 }

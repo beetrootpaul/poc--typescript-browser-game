@@ -1,4 +1,4 @@
-import type { GameDrawContext } from "@framework";
+import { GlobalApi } from "@framework";
 import { Mode } from "../gameplay/Mode.ts";
 import { Score } from "../gameplay/Score.ts";
 import { g } from "../globals.ts";
@@ -18,8 +18,8 @@ export class Topbar {
     this.#mode = params.mode;
   }
 
-  draw({ drawApi }: GameDrawContext) {
-    drawApi.drawRectFilled(
+  draw() {
+    GlobalApi.drawApi.drawRectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.topbarSize),
       Pico8Colors.Black

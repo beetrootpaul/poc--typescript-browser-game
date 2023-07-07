@@ -1,5 +1,5 @@
-import type { GameDrawContext, GameUpdateContext } from "@framework";
-import { StorageApiValueConstraint } from "@framework";
+import type { GameUpdateContext } from "@framework";
+import { GlobalApi, StorageApiValueConstraint } from "@framework";
 import { Audio } from "../Audio.ts";
 import { g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
@@ -62,8 +62,8 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
     return this;
   }
 
-  draw({ drawApi }: GameDrawContext): void {
-    drawApi.drawRectFilled(
+  draw(): void {
+    GlobalApi.drawApi.drawRectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.screenSize),
       // TODO: migrate from Lua: a.bg_color_mode_normal
@@ -71,6 +71,6 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
     );
 
     // TODO: move API access to some globals, so it will be as easy as in PICO-8 to just draw stuff, play music, etc.
-    this.#sash.draw({ drawApi });
+    this.#sash.draw();
   }
 }

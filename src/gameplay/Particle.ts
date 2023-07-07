@@ -1,5 +1,3 @@
-import { GameDrawContext } from "@framework";
-
 export class Particle {
   // TODO: migrate from Lua
   /*
@@ -30,7 +28,7 @@ export class Particle {
 
    */
 
-  draw({ drawApi }: GameDrawContext) {
+  draw() {
     // TODO: migrate from Lua
     //   local r = flr((ttl / ttl_max) * (r_max + 0.9))
     //   circfill(x, y, r, color)

@@ -1,4 +1,4 @@
-import type { GameDrawContext, GameUpdateContext } from "@framework";
+import type { GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Mode } from "../gameplay/Mode.ts";
@@ -69,15 +69,15 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
     return this;
   }
 
-  draw({ drawApi }: GameDrawContext): void {
-    this.#level.drawBg({ drawApi });
+  draw(): void {
+    this.#level.drawBg();
 
     // TODO: migrate from Lua
     //     level.draw_items()
 
-    this.#player.draw({ drawApi });
+    this.#player.draw();
 
-    this.#topbar.draw({ drawApi });
+    this.#topbar.draw();
 
     // TODO: migrate from Lua
     //     local margin = 6

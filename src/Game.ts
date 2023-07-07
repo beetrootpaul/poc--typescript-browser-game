@@ -1,4 +1,4 @@
-import { Framework, transparent } from "@framework";
+import { Framework, GlobalApi } from "@framework";
 import * as UPNG from "upng-js";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
@@ -92,10 +92,10 @@ export class Game {
       this.#gameState = this.#gameState.update(context);
     });
 
-    this.#framework.setOnDraw((context) => {
-      context.drawApi.clear(Pico8Colors.Black);
-      context.drawApi.setCameraOffset(g.cameraOffset);
-      this.#gameState.draw(context);
+    this.#framework.setOnDraw(() => {
+      GlobalApi.drawApi.clear(Pico8Colors.Black);
+      GlobalApi.drawApi.setCameraOffset(g.cameraOffset);
+      this.#gameState.draw();
     });
 
     this.#framework.startGame(({}) => {});

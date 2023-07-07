@@ -1,4 +1,4 @@
-import type { GameDrawContext, GameUpdateContext } from "@framework";
+import type { GameUpdateContext } from "@framework";
 import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Memories } from "../gameplay/Memories.ts";
@@ -138,19 +138,19 @@ end
     return this;
   }
 
-  draw({ drawApi }: GameDrawContext): void {
-    this.#level.drawBg({ drawApi });
+  draw(): void {
+    this.#level.drawBg();
 
     // TODO: migrate from Lua
     //     level.draw_items()
 
-    this.#playerTrail.draw({ drawApi });
-    this.#player.draw({ drawApi });
+    this.#playerTrail.draw();
+    this.#player.draw();
 
     if (!this.#mode.isNoMemories()) {
-      this.#memories.draw({ drawApi });
+      this.#memories.draw();
     }
 
-    this.#topbar.draw({ drawApi });
+    this.#topbar.draw();
   }
 }
