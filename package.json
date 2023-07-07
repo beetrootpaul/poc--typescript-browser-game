@@ -17,7 +17,7 @@
   "scripts": {
     "prepare": "husky install",
     "test": "vitest run",
-    "start": "npm run dev",
+    "start": "npm-run-all --print-label --parallel dev compile:watch",
     "dev": "vite dev --open itch_io_simulation.html",
     "prod": "npm run prod:build && npm run prod:preview",
     "prod:build": "npm run compile && vite build",
@@ -41,6 +41,7 @@
     "jquery": "3.6.4",
     "lint-staged": "13.2.1",
     "mkdirp": "3.0.1",
+    "npm-run-all": "4.1.5",
     "prettier": "2.8.8",
     "rimraf": "5.0.0",
     "typescript": "5.0.4",

@@ -1,0 +1,100 @@
+import type { GameDrawContext, GameUpdateContext } from "@framework";
+import { StorageApiValueConstraint } from "@framework";
+import { Level } from "../gameplay/Level.ts";
+import { Mode } from "../gameplay/Mode.ts";
+import { Player } from "../gameplay/Player.ts";
+import { Score } from "../gameplay/Score.ts";
+import { Topbar } from "../gui/Topbar.ts";
+import { u } from "../utils.ts";
+import { GameState } from "./GameState.ts";
+import { GameStateGameplay } from "./GameStateGameplay.ts";
+
+export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
+  implements GameState<StorageApiValue>
+{
+  readonly #score = new Score();
+  readonly #mode = new Mode();
+  readonly #topbar = new Topbar({
+    score: this.#score,
+    mode: this.#mode,
+  });
+  readonly #player = new Player();
+  readonly #level = new Level({
+    mode: this.#mode,
+    player: this.#player,
+  });
+
+  constructor() {
+    // TODO: migrate from Lua
+    /*
+    audio.enable_music_layers { false, false, false }
+   */
+
+    this.#level.spawnItems();
+  }
+
+  update({
+    gameInputEvents,
+  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+    let hasStarted = false;
+    // TODO: implement one directional input clear another, like left+right = nothing
+    if (gameInputEvents.has("left")) {
+      // TODO: migrate from Lua
+      // player.direct_left()
+      hasStarted = true;
+    } else if (gameInputEvents.has("right")) {
+      // TODO: migrate from Lua
+      // player.direct_right()
+      hasStarted = true;
+    } else if (gameInputEvents.has("up")) {
+      // TODO: migrate from Lua
+      // player.direct_up()
+      hasStarted = true;
+    } else if (gameInputEvents.has("down")) {
+      // TODO: migrate from Lua
+      // player.direct_down()
+      hasStarted = true;
+    }
+
+    if (hasStarted) {
+      return new GameStateGameplay({
+        mode: this.#mode,
+        topbar: this.#topbar,
+        score: this.#score,
+        level: this.#level,
+        player: this.#player,
+      });
+    }
+
+    return this;
+  }
+
+  draw({ drawApi }: GameDrawContext): void {
+    this.#level.drawBg({ drawApi });
+
+    // TODO: migrate from Lua
+    //     level.draw_items()
+
+    this.#player.draw({ drawApi });
+
+    this.#topbar.draw({ drawApi });
+
+    // TODO: migrate from Lua
+    //     local margin = 6
+    const prompt1 = "press an arrow";
+    const prompt2 = "to choose direction";
+    const prompt1W = u.measureTextWidth(prompt1);
+    const prompt2W = u.measureTextWidth(prompt2);
+    // TODO: migrate from Lua
+    /*
+        u.print_with_outline(prompt1, player.xc() - prompt1_w / 2, player.y1() - margin - 26, u.colors.violet_grey, u.colors.dark_blue)
+        u.print_with_outline(prompt2, player.xc() - prompt2_w / 2, player.y1() - margin - 17, u.colors.violet_grey, u.colors.dark_blue)
+        local time_dependent_boolean = u.boolean_changing_every_nth_second(a.music_beat_frames / a.fps)
+        local glyph_color = time_dependent_boolean and u.colors.violet_grey or u.colors.blue
+        u.print_with_outline("⬅️", player.x1() - margin - 8, player.yc() - 2, glyph_color, u.colors.dark_blue)
+        u.print_with_outline("➡️", player.x2() + margin + 2, player.yc() - 2, glyph_color, u.colors.dark_blue)
+        u.print_with_outline("⬆️", player.xc() - 3, player.y1() - margin - 6, glyph_color, u.colors.dark_blue)
+        u.print_with_outline("⬇️", player.xc() - 3, player.y2() + margin + 2, glyph_color, u.colors.dark_blue)
+     */
+  }
+}
