@@ -50,6 +50,8 @@ export class GameStateStart implements GameState {
       hasStarted = true;
     }
 
+    this.#level.animate();
+
     if (hasStarted) {
       return new GameStateGameplay({
         mode: this.#mode,
@@ -66,8 +68,7 @@ export class GameStateStart implements GameState {
   draw(): void {
     this.#level.drawBg();
 
-    // TODO: migrate from Lua
-    //     level.draw_items()
+    this.#level.drawItems();
 
     this.#player.draw();
 

@@ -1,36 +1,44 @@
+import { spr_, Sprite, xy_ } from "@framework";
+import { g } from "../globals.ts";
+
 type AnimatedSpriteParams = {
+  firstSpriteSheetCell: number;
+  numberOfSprites: number;
   framesPerSprite: number;
 };
 
 // TODO: sounds like something to be moved to the framework
 export class AnimatedSprite {
+  readonly #firstSpriteSheetCell: number;
+  readonly #numberOfSprites: number;
   readonly #framesPerSprite: number;
 
+  readonly #loopLengthFrames;
+  #frameCounter;
+
   constructor(params: AnimatedSpriteParams) {
-    // TODO: migrate from Lua
-    //   local first_sprite = params.first_sprite
-    //   local number_of_sprites = params.number_of_sprites
+    this.#firstSpriteSheetCell = params.firstSpriteSheetCell;
+    this.#numberOfSprites = params.numberOfSprites;
     this.#framesPerSprite = params.framesPerSprite;
+
+    this.#loopLengthFrames = this.#framesPerSprite * this.#numberOfSprites;
+    this.#frameCounter = 0;
   }
 
-  // TODO: migrate from Lua
-  /*
-    local frame_counter = 0
-    local loop_length_frames = frames_per_sprite * number_of_sprites
-   */
+  advance1Frame(): void {
+    this.#frameCounter = (this.#frameCounter + 1) % this.#loopLengthFrames;
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function as.advance_1_frame()
-        frame_counter = (frame_counter + 1) % loop_length_frames
-    end
-   */
-
-  // TODO: migrate from Lua
-  /*
-    function as.current_sprite()
-        local sprite_index = flr(frame_counter / frames_per_sprite)
-        return first_sprite + sprite_index
-    end
-   */
+  currentSprite(): Sprite {
+    let spriteIndex =
+      this.#firstSpriteSheetCell +
+      Math.floor(this.#frameCounter / this.#framesPerSprite);
+    return spr_(
+      xy_(
+        spriteIndex % g.spriteSheetCells.x,
+        Math.floor(spriteIndex / g.spriteSheetCells.x)
+      ).mul(g.spriteSheetCellSize),
+      g.spriteSheetCellSize
+    );
+  }
 }

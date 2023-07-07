@@ -1,4 +1,7 @@
+import { transparent, Xy } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
+import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
+import { f, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
 
 type ItemParams = {
@@ -25,23 +28,30 @@ export class Item {
     };
   }
 
-  // TODO: migrate from Lua
-  /*
-    function it.animate()
-        animated_sprite.advance_1_frame()
-    end
-   */
-  // TODO: migrate from Lua
-  /*
-    function it.draw()
-        palt(u.colors.black, false)
-        palt(u.colors.dark_blue, true)
-        spr(
-            animated_sprite.current_sprite(),
-            (tile_x - 1) * u.tile_px,
-            (tile_y - 1) * u.tile_px
-        )
-        palt()
-    end
-   */
+  animate(): void {
+    this.#animatedSprite.advance1Frame();
+  }
+
+  draw(): void {
+    // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
+    f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
+
+    // TODO: REWORK THIS
+    if (s_imgBytes) {
+      f.drawApi.drawSprite(
+        s_imgBytes,
+        s_imgW,
+        s_imgType,
+        this.#animatedSprite.currentSprite(),
+        // TODO: migrate from Lua
+        Xy.zero
+        // (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px
+      );
+    }
+
+    // TODO: API to reset all mappings?
+    // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
+  }
 }

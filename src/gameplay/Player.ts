@@ -1,4 +1,4 @@
-import { transparent, Xy, xy_ } from "@framework";
+import { spr_, transparent, Xy, xy_ } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
 import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
@@ -16,10 +16,10 @@ export class Player {
 
   readonly #direction: "l" | "r" | "u" | "d" = "r";
   readonly #spriteForDirection = {
-    u: { spriteSheetCell: xy_(7, 2) },
-    r: { spriteSheetCell: xy_(8, 2) },
-    d: { spriteSheetCell: xy_(9, 2) },
-    l: { spriteSheetCell: xy_(10, 2) },
+    u: spr_(xy_(7, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    r: spr_(xy_(8, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    d: spr_(xy_(9, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    l: spr_(xy_(10, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
   };
 
   // TODO: migrate from Lua
@@ -94,12 +94,11 @@ export class Player {
 
     // TODO: REWORK THIS
     if (s_imgBytes) {
-      f.drawApi.drawSomething(
+      f.drawApi.drawSprite(
         s_imgBytes,
         s_imgW,
         s_imgType,
-        this.#spriteForDirection[this.#direction].spriteSheetCell.mul(8),
-        this.#spriteForDirection[this.#direction].spriteSheetCell.mul(8).add(8),
+        this.#spriteForDirection[this.#direction],
         this.#xy.sub(this.#r)
       );
     }

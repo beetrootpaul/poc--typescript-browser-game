@@ -12,8 +12,11 @@ export const g = {
   fps: 30,
   screenSize: xy_(128, 128),
   cameraOffset: xy_(0, -16),
-  gameAreaSize: xy_(128, 112),
   topbarSize: xy_(128, 16),
+  gameAreaSize: xy_(128, 112),
+  tileSize: xy_(8, 8),
+  spriteSheetCells: xy_(16, 16),
+  spriteSheetCellSize: xy_(8, 8),
   musicBeatFrames: 16,
 
   // TODO: migrate from Lua
@@ -69,6 +72,5 @@ export const g = {
 
     text_height_px = 5,
 
-    tile_px = 8,
    */
 };

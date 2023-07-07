@@ -66,9 +66,8 @@ export class Level {
       // tile_y = coin_tile.tile_y,
       // collision_circle_r = 2.5,
       animatedSprite: new AnimatedSprite({
-        // TODO: migrate from Lua
-        // first_sprite = 16,
-        //   number_of_sprites = 16,
+        firstSpriteSheetCell: 16,
+        numberOfSprites: 16,
         framesPerSprite: 2,
       }),
     });
@@ -167,21 +166,18 @@ export class Level {
      */
   }
 
-  // TODO: migrate from Lua
-  /*
-      function l.animate()
-        if coin then
-            coin.animate()
-        end
-        if droplet_no_coins then
-            droplet_no_coins.animate()
-        end
-        if droplet_no_memories then
-            droplet_no_memories.animate()
-        end
-    end
-
-   */
+  animate(): void {
+    this.#coin?.animate();
+    // TODO: migrate from Lua
+    /*
+          if droplet_no_coins then
+              droplet_no_coins.animate()
+          end
+          if droplet_no_memories then
+              droplet_no_memories.animate()
+          end
+     */
+  }
 
   drawBg(): void {
     // TODO: migrate from Lua
@@ -214,19 +210,18 @@ export class Level {
      */
   }
 
-  // TODO: migrate from Lua
-  /*
-      function l.draw_items()
-        if not mode.is_no_coins() then
-            coin.draw()
-        end
-        if droplet_no_coins then
-            droplet_no_coins.draw()
-        end
-        if droplet_no_memories then
-            droplet_no_memories.draw()
-        end
-    end
-
-   */
+  drawItems(): void {
+    if (!this.#mode.isNoCoins()) {
+      this.#coin?.draw();
+    }
+    // TODO: migrate from Lua
+    /*
+          if droplet_no_coins then
+              droplet_no_coins.draw()
+          end
+          if droplet_no_memories then
+              droplet_no_memories.draw()
+          end
+     */
+  }
 }

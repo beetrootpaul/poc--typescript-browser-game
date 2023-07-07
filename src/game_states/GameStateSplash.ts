@@ -6,7 +6,9 @@ import { GameStateStart } from "./GameStateStart.ts";
 
 export class GameStateSplash implements GameState {
   readonly #sash: Sash = new Sash({
-    duration: 10 * g.musicBeatFrames,
+    // TODO: REVERT
+    duration: 0,
+    // duration: 10 * g.musicBeatFrames,
     expand: false,
     // TODO: migrate from Lua
     // draw_text = function(sash_center_x, sash_center_y)
