@@ -1,5 +1,3 @@
-import { GameDrawContext } from "@framework";
-
 export class Memory {
   // TODO: migrate from Lua
   /*
@@ -114,7 +112,7 @@ export class Memory {
     end
    */
 
-  draw({ drawApi }: GameDrawContext) {
+  draw() {
     // TODO: migrate from Lua
     // palt(u.colors.black, false)
     // palt(u.colors.dark_blue, true)

@@ -1,10 +1,5 @@
-import type { GameDrawContext } from "@framework";
-import { GameUpdateContext, StorageApiValueConstraint } from "@framework";
+export interface GameState {
+  update(): GameState;
 
-export interface GameState<StorageApiValue extends StorageApiValueConstraint> {
-  update(
-    context: GameUpdateContext<StorageApiValue>
-  ): GameState<StorageApiValue>;
-
-  draw(context: GameDrawContext): void;
+  draw(): void;
 }

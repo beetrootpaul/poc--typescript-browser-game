@@ -1,4 +1,4 @@
-import { GameDrawContext, SolidColor } from "@framework";
+import { SolidColor } from "@framework";
 import { Particle } from "./Particle.ts";
 import { Player } from "./Player.ts";
 
@@ -51,9 +51,9 @@ export class Trail {
     end
    */
 
-  draw({ drawApi }: GameDrawContext) {
+  draw() {
     this.#particles.forEach((particle) => {
-      particle.draw({ drawApi });
+      particle.draw();
     });
   }
 }

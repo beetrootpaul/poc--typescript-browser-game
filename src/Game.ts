@@ -1,8 +1,7 @@
-import { Framework, transparent } from "@framework";
 import * as UPNG from "upng-js";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
-import { g } from "./globals.ts";
+import { f, g } from "./globals.ts";
 import { Pico8Colors } from "./Pico8Color.ts";
 
 type GameOptions = {
@@ -12,7 +11,13 @@ type GameOptions = {
   htmlControlsFullscreenSelector: string;
 };
 
-type GameStoredState = {};
+type GameStoredState = {
+  // TODO: Is it possible to enforce optionality of every field in the framework itself?
+  // TODO: This field is used only to drive a proper framework implementation,
+  //       but it's not really used in the game itself.
+  //       Update it to something meaningful in a context of the game.
+  mostRecentFameNumber?: number;
+};
 
 // TODO: REWORK THIS
 export let s_imgW = 0;
@@ -21,12 +26,10 @@ export let s_imgType: "rgba" | "rgb" = "rgba";
 export let s_imgBytes: Uint8Array | undefined;
 
 export class Game {
-  readonly #framework: Framework<GameStoredState>;
-
-  #gameState: GameState<GameStoredState>;
+  #gameState: GameState;
 
   constructor(options: GameOptions) {
-    this.#framework = new Framework<GameStoredState>({
+    f.init({
       htmlDisplaySelector: options.htmlDisplaySelector,
       htmlCanvasSelector: options.htmlCanvasSelector,
       htmlOffscreenCanvasFallbackSelector:
@@ -53,7 +56,7 @@ export class Game {
       .then((blob) => blob.arrayBuffer())
       // docs: https://github.com/photopea/UPNG.js/#upngdecodebuffer
       .then((rawArrayBuffer) => UPNG.decode(rawArrayBuffer))
-      .then(({ width, height, depth, ctype, frames, tabs, data }) => {
+      .then(({ width, height, depth, ctype, frames, data }) => {
         s_imgW = width;
         s_imgH = height;
         if (depth != 8) {
@@ -88,16 +91,34 @@ export class Game {
         console.error("FETCH:", e);
       });
 
-    this.#framework.setOnUpdate((context) => {
-      this.#gameState = this.#gameState.update(context);
+    f.setOnUpdate(() => {
+      f.storageApi.store<GameStoredState>({
+        mostRecentFameNumber: f.frameNumber,
+      });
+      this.#gameState = this.#gameState.update();
     });
 
-    this.#framework.setOnDraw((context) => {
-      context.drawApi.clear(Pico8Colors.Black);
-      context.drawApi.setCameraOffset(g.cameraOffset);
-      this.#gameState.draw(context);
+    f.setOnDraw(() => {
+      f.drawApi.clear(Pico8Colors.Black);
+      f.drawApi.setCameraOffset(g.cameraOffset);
+      this.#gameState.draw();
     });
 
-    this.#framework.startGame(({}) => {});
+    f.startGame(() => {
+      let restoredState: GameStoredState | null = null;
+      try {
+        restoredState = f.storageApi.load<GameStoredState>();
+      } catch (err) {
+        // TODO: move this error to the framework itself, because there we can explicitly tell it's about `JSON.parse(…)` error
+        console.warn("Failed to stored state.");
+        f.storageApi.clear();
+      }
+      restoredState = restoredState ?? {
+        mostRecentFameNumber: 0,
+      };
+      console.info(
+        `Restored most recent frame number: ${restoredState.mostRecentFameNumber}`
+      );
+    });
   }
 }

@@ -1,15 +1,11 @@
-import type { GameDrawContext, GameUpdateContext } from "@framework";
-import { StorageApiValueConstraint } from "@framework";
 import { Audio } from "../Audio.ts";
-import { g } from "../globals.ts";
+import { f, g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
 
-export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
-  implements GameState<StorageApiValue>
-{
+export class GameStateSplash implements GameState {
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
     expand: false,
@@ -41,18 +37,16 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
     // audio.enable_music_layers { false, false, false }
   }
 
-  update({
-    gameInputEvents,
-  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+  update(): GameState {
     if (this.#sash.has_collapsed()) {
       return new GameStateStart();
     }
 
     if (
-      gameInputEvents.has("left") ||
-      gameInputEvents.has("right") ||
-      gameInputEvents.has("up") ||
-      gameInputEvents.has("down")
+      f.gameInputEvents.has("left") ||
+      f.gameInputEvents.has("right") ||
+      f.gameInputEvents.has("up") ||
+      f.gameInputEvents.has("down")
     ) {
       this.#sash.collapse();
     }
@@ -62,15 +56,14 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
     return this;
   }
 
-  draw({ drawApi }: GameDrawContext): void {
-    drawApi.drawRectFilled(
+  draw(): void {
+    f.drawApi.drawRectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.screenSize),
       // TODO: migrate from Lua: a.bg_color_mode_normal
       Pico8Colors.DarkBlue
     );
 
-    // TODO: move API access to some globals, so it will be as easy as in PICO-8 to just draw stuff, play music, etc.
-    this.#sash.draw({ drawApi });
+    this.#sash.draw();
   }
 }

@@ -1,17 +1,14 @@
-import type { GameDrawContext, GameUpdateContext } from "@framework";
-import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
+import { f } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { u } from "../utils.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
 
-export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
-  implements GameState<StorageApiValue>
-{
+export class GameStateStart implements GameState {
   readonly #score = new Score();
   readonly #mode = new Mode();
   readonly #topbar = new Topbar({
@@ -33,24 +30,22 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
     this.#level.spawnItems();
   }
 
-  update({
-    gameInputEvents,
-  }: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+  update(): GameState {
     let hasStarted = false;
     // TODO: implement one directional input clear another, like left+right = nothing
-    if (gameInputEvents.has("left")) {
+    if (f.gameInputEvents.has("left")) {
       // TODO: migrate from Lua
       // player.direct_left()
       hasStarted = true;
-    } else if (gameInputEvents.has("right")) {
+    } else if (f.gameInputEvents.has("right")) {
       // TODO: migrate from Lua
       // player.direct_right()
       hasStarted = true;
-    } else if (gameInputEvents.has("up")) {
+    } else if (f.gameInputEvents.has("up")) {
       // TODO: migrate from Lua
       // player.direct_up()
       hasStarted = true;
-    } else if (gameInputEvents.has("down")) {
+    } else if (f.gameInputEvents.has("down")) {
       // TODO: migrate from Lua
       // player.direct_down()
       hasStarted = true;
@@ -69,15 +64,15 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
     return this;
   }
 
-  draw({ drawApi }: GameDrawContext): void {
-    this.#level.drawBg({ drawApi });
+  draw(): void {
+    this.#level.drawBg();
 
     // TODO: migrate from Lua
     //     level.draw_items()
 
-    this.#player.draw({ drawApi });
+    this.#player.draw();
 
-    this.#topbar.draw({ drawApi });
+    this.#topbar.draw();
 
     // TODO: migrate from Lua
     //     local margin = 6
