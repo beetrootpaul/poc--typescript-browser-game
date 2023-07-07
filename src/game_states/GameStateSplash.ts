@@ -1,5 +1,3 @@
-import type { GameUpdateContext } from "@framework";
-import { StorageApiValueConstraint } from "@framework";
 import { Audio } from "../Audio.ts";
 import { f, g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
@@ -7,9 +5,7 @@ import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
 
-export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
-  implements GameState<StorageApiValue>
-{
+export class GameStateSplash implements GameState {
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
     expand: false,
@@ -41,7 +37,7 @@ export class GameStateSplash<StorageApiValue extends StorageApiValueConstraint>
     // audio.enable_music_layers { false, false, false }
   }
 
-  update(): GameState<StorageApiValue> {
+  update(): GameState {
     if (this.#sash.has_collapsed()) {
       return new GameStateStart();
     }

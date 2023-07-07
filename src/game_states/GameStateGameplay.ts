@@ -1,5 +1,4 @@
 import type { GameUpdateContext } from "@framework";
-import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Memories } from "../gameplay/Memories.ts";
 import { Mode } from "../gameplay/Mode.ts";
@@ -20,10 +19,7 @@ type GameStateGameplayParams = {
 };
 
 // TODO: make it not needed to pass <StorageApiValueConstraint> by maybe decoupling what goes into `update`
-export class GameStateGameplay<
-  StorageApiValue extends StorageApiValueConstraint
-> implements GameState<StorageApiValue>
-{
+export class GameStateGameplay implements GameState {
   readonly #mode: Mode;
   readonly #topbar: Topbar;
   readonly #score: Score;
@@ -86,7 +82,7 @@ export class GameStateGameplay<
   // TODO: migrate from Lua
   // audio.enable_music_layers { true, false, false }
 
-  update({}: GameUpdateContext<StorageApiValue>): GameState<StorageApiValue> {
+  update({}: GameUpdateContext): GameState {
     // TODO: migrate from Lua
     /*
            if btnp(u.buttons.l) then

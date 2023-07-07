@@ -1,5 +1,3 @@
-import type { GameUpdateContext } from "@framework";
-import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
@@ -14,9 +12,7 @@ type GameStateOverParams = {
   player: Player;
 };
 
-export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
-  implements GameState<StorageApiValue>
-{
+export class GameStateOver implements GameState {
   readonly #score: Score;
   readonly #level: Level;
   readonly #player: Player;
@@ -59,7 +55,7 @@ export class GameStateOver<StorageApiValue extends StorageApiValueConstraint>
     this.#player = params.player;
   }
 
-  update(): GameState<StorageApiValue> {
+  update(): GameState {
     if (this.#sash.has_collapsed()) {
       return new GameStateStart();
     }

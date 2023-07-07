@@ -27,12 +27,12 @@ export let s_imgType: "rgba" | "rgb" = "rgba";
 export let s_imgBytes: Uint8Array | undefined;
 
 export class Game {
-  readonly #framework: Framework<GameStoredState>;
+  readonly #framework: Framework;
 
-  #gameState: GameState<GameStoredState>;
+  #gameState: GameState;
 
   constructor(options: GameOptions) {
-    this.#framework = new Framework<GameStoredState>({
+    this.#framework = new Framework({
       htmlDisplaySelector: options.htmlDisplaySelector,
       htmlCanvasSelector: options.htmlCanvasSelector,
       htmlOffscreenCanvasFallbackSelector:
@@ -95,7 +95,7 @@ export class Game {
       });
 
     this.#framework.setOnUpdate((context) => {
-      context.storageApi.store({
+      f.storageApi.store<GameStoredState>({
         mostRecentFameNumber: f.frameNumber,
       });
       this.#gameState = this.#gameState.update(context);
@@ -110,7 +110,7 @@ export class Game {
     this.#framework.startGame(({ storageApi }) => {
       let restoredState: GameStoredState | null = null;
       try {
-        restoredState = storageApi.load();
+        restoredState = f.storageApi.load<GameStoredState>();
       } catch (err) {
         // TODO: move this error to the framework itself, because there we can explicitly tell it's about `JSON.parse(…)` error
         console.warn("Failed to stored state.");

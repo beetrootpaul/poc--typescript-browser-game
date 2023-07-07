@@ -1,5 +1,3 @@
-import type { GameUpdateContext } from "@framework";
-import { StorageApiValueConstraint } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
@@ -10,9 +8,7 @@ import { u } from "../utils.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
 
-export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
-  implements GameState<StorageApiValue>
-{
+export class GameStateStart implements GameState {
   readonly #score = new Score();
   readonly #mode = new Mode();
   readonly #topbar = new Topbar({
@@ -34,7 +30,7 @@ export class GameStateStart<StorageApiValue extends StorageApiValueConstraint>
     this.#level.spawnItems();
   }
 
-  update(): GameState<StorageApiValue> {
+  update(): GameState {
     let hasStarted = false;
     // TODO: implement one directional input clear another, like left+right = nothing
     if (f.gameInputEvents.has("left")) {
