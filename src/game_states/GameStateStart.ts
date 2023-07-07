@@ -2,9 +2,8 @@ import { Level } from "../gameplay/Level.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
-import { f } from "../globals.ts";
+import { f, u } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
-import { u } from "../utils.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
 

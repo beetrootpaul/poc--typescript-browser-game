@@ -1,8 +1,7 @@
 import { transparent, Xy, xy_ } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
 import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
-import { f, g } from "../globals.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
+import { f, g, p8c } from "../globals.ts";
 
 export class Player {
   readonly #xy: Xy = g.gameAreaSize.div(2);
@@ -90,8 +89,8 @@ export class Player {
 
   draw() {
     // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
-    f.drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Black);
-    f.drawApi.mapSpriteColor(Pico8Colors.DarkBlue, transparent);
+    f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
     // TODO: REWORK THIS
     if (s_imgBytes) {
@@ -107,7 +106,7 @@ export class Player {
 
     // TODO: API to reset all mappings?
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
-    f.drawApi.mapSpriteColor(Pico8Colors.DarkBlue, Pico8Colors.DarkBlue);
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
 
     // TODO: migrate from Lua
     //     if __debug__ then

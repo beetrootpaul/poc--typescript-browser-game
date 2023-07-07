@@ -4,8 +4,8 @@ import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
 import { Trail } from "../gameplay/Trail.ts";
+import { p8c } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateOver } from "./GameStateOver.ts";
 
@@ -38,7 +38,7 @@ export class GameStateGameplay implements GameState {
     });
     this.#playerTrail = new Trail({
       origin: this.#player,
-      color: Pico8Colors.DarkGreen,
+      color: p8c.DarkGreen,
     });
   }
 

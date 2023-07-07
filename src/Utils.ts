@@ -1,4 +1,4 @@
-export const u = {
+export class Utils {
   // TODO: migrate from Lua
   /*
   function u.boolean_changing_every_nth_second(n)
@@ -6,12 +6,12 @@ export const u = {
 end
 */
 
-  measureTextWidth(text: string): number {
+  static measureTextWidth(text: string): number {
     // TODO: remove tmp impl and migrate from Lua
     return 123;
     // local y_to_print_outside_screen = a.camera_y - u.text_height_px
     // return print(text, 0, y_to_print_outside_screen) - 1
-  },
+  }
 
   // TODO: migrate from Lua
   /*
@@ -36,4 +36,4 @@ end
     return result
 end
 */
-};
+}

@@ -1,7 +1,6 @@
 import { Xy } from "@framework";
 import { Collisions } from "../Collisions.ts";
-import { f, g } from "../globals.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
+import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
 import { Item } from "./Item.ts";
 import { Mode } from "./Mode.ts";
@@ -188,7 +187,7 @@ export class Level {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())
     // TODO: mode.bg_color()
-    f.drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, Pico8Colors.DarkBlue);
+    f.drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
     // TODO: migrate from Lua
     /*
           fillp()

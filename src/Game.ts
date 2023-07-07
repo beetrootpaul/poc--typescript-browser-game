@@ -1,8 +1,7 @@
 import * as UPNG from "upng-js";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
-import { f, g } from "./globals.ts";
-import { Pico8Colors } from "./Pico8Color.ts";
+import { f, g, p8c } from "./globals.ts";
 
 type GameOptions = {
   htmlDisplaySelector: string;
@@ -35,7 +34,7 @@ export class Game {
       htmlOffscreenCanvasFallbackSelector:
         options.htmlOffscreenCanvasFallbackSelector,
       htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
-      htmlCanvasBackground: Pico8Colors.Black,
+      htmlCanvasBackground: p8c.Black,
       gameCanvasSize: g.screenSize,
       desiredFps: g.fps,
       // TODO: consider disabling these logs in the production build
@@ -99,7 +98,7 @@ export class Game {
     });
 
     f.setOnDraw(() => {
-      f.drawApi.clear(Pico8Colors.Black);
+      f.drawApi.clear(p8c.Black);
       f.drawApi.setCameraOffset(g.cameraOffset);
       this.#gameState.draw();
     });

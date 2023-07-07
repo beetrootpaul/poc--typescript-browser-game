@@ -1,7 +1,6 @@
 import { Mode } from "../gameplay/Mode.ts";
 import { Score } from "../gameplay/Score.ts";
-import { f, g } from "../globals.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
+import { f, g, p8c } from "../globals.ts";
 
 type TopbarParams = {
   score: Score;
@@ -21,7 +20,7 @@ export class Topbar {
     f.drawApi.drawRectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.topbarSize),
-      Pico8Colors.Black
+      p8c.Black
     );
 
     const modeLabel = this.#mode.label();

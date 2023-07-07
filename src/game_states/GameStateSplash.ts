@@ -1,7 +1,6 @@
 import { Audio } from "../Audio.ts";
-import { f, g } from "../globals.ts";
+import { f, g, p8c } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
 
@@ -61,7 +60,7 @@ export class GameStateSplash implements GameState {
       g.cameraOffset,
       g.cameraOffset.add(g.screenSize),
       // TODO: migrate from Lua: a.bg_color_mode_normal
-      Pico8Colors.DarkBlue
+      p8c.DarkBlue
     );
 
     this.#sash.draw();

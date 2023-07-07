@@ -1,6 +1,5 @@
 import { xy_ } from "@framework";
-import { f, g } from "../globals.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
+import { f, g, p8c } from "../globals.ts";
 
 type SashOptions = {
   duration: number;
@@ -72,7 +71,7 @@ export class Sash {
       f.drawApi.drawRectFilled(
         xy_(0, this.#center.y - h / 2),
         xy_(g.screenSize.x, this.#center.y + h / 2),
-        Pico8Colors.DarkGreen
+        p8c.DarkGreen
       );
     }
 
