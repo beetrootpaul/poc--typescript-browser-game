@@ -47,36 +47,37 @@ export class GameStateGameplay implements GameState {
   // audio.enable_music_layers { true, false, false }
   // end
 
-  // TODO: migrate from Lua
-  // local function on_coin_collision()
-  // if mode.is_no_coins() then
-  // return
-  // end
-  //
-  // audio.play_sfx(a.sfx_coin)
-  // score.add(10)
-  // if not mode.is_no_memories() then
-  // memories.add_memory()
-  // end
-  // level.remove_coin()
-  // level.spawn_items()
-  // end
+  #onCoinCollision(): void {
+    // TODO: migrate from Lua
+    console.log("COLLISION WITH COIN");
+    // if mode.is_no_coins() then
+    // return
+    // end
+    //
+    // audio.play_sfx(a.sfx_coin)
+    // score.add(10)
+    // if not mode.is_no_memories() then
+    // memories.add_memory()
+    // end
+    // level.remove_coin()
+    // level.spawn_items()
+  }
 
-  // TODO: migrate from Lua
-  // local function on_droplet_no_coins_collision()
-  // audio.enable_music_layers { true, false, true }
-  // score.add(3)
-  // mode.start_no_coins()
-  // level.remove_droplet_no_coins()
-  // end
+  #onDropletNoCoinsCollision(): void {
+    // TODO: migrate from Lua
+    // audio.enable_music_layers { true, false, true }
+    // score.add(3)
+    // mode.start_no_coins()
+    // level.remove_droplet_no_coins()
+  }
 
-  // TODO: migrate from Lua
-  // local function on_droplet_no_memories_collision()
-  // audio.enable_music_layers { true, true, false }
-  // score.add(1)
-  // mode.start_no_memories()
-  // level.remove_droplet_no_memories()
-  // end
+  #onDropletNoMemoriesCollision(): void {
+    // TODO: migrate from Lua
+    // audio.enable_music_layers { true, true, false }
+    // score.add(1)
+    // mode.start_no_memories()
+    // level.remove_droplet_no_memories()
+  }
 
   // TODO: migrate from Lua
   // audio.enable_music_layers { true, false, false }
@@ -99,13 +100,11 @@ export class GameStateGameplay implements GameState {
         }
         */
 
-    this.#level.checkCollisions();
-    // TODO: migrate from Lua these params to checkCollisions()
-    // {
-    //         on_coin = on_coin_collision,
-    //         on_droplet_no_coins = on_droplet_no_coins_collision,
-    //         on_droplet_no_memories = on_droplet_no_memories_collision,
-    //     }
+    this.#level.checkCollisions({
+      onCoin: this.#onCoinCollision,
+      onDropletNoCoins: this.#onDropletNoCoinsCollision,
+      onDropletNoMemories: this.#onDropletNoMemoriesCollision,
+    });
 
     // TODO: migrate from Lua
     // level.animate()

@@ -1,30 +1,30 @@
 import { transparent, Xy } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
 import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
-import { f, p8c } from "../globals.ts";
+import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
 
 type ItemParams = {
+  tile: Xy;
+  collisionCircleR: number;
   animatedSprite: AnimatedSprite;
 };
 
 export class Item {
+  readonly #tile: Xy;
+  readonly #collisionCircleR: number;
   readonly #animatedSprite: AnimatedSprite;
 
   constructor(params: ItemParams) {
-    // TODO: migrate from Lua
-    //   local tile_x = params.tile_x
-    //   local tile_y = params.tile_y
-    //   local collision_circle_r = params.collision_circle_r
+    this.#tile = params.tile;
+    this.#collisionCircleR = params.collisionCircleR;
     this.#animatedSprite = params.animatedSprite;
   }
 
   collisionCircle(): CollisionCircle {
     return {
-      // TODO: migrate from Lua
-      // x = (tile_x - 1) * u.tile_px + u.tile_px / 2 - 0.5,
-      // y = (tile_y - 1) * u.tile_px + u.tile_px / 2 - 0.5,
-      // r = collision_circle_r,
+      center: this.#tile.sub(1).mul(g.tileSize).add(g.tileSize.div(2)).sub(0.5),
+      r: this.#collisionCircleR,
     };
   }
 
@@ -44,9 +44,7 @@ export class Item {
         s_imgW,
         s_imgType,
         this.#animatedSprite.currentSprite(),
-        // TODO: migrate from Lua
-        Xy.zero
-        // (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px
+        this.#tile.sub(1).mul(g.tileSize)
       );
     }
 

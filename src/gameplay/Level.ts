@@ -1,4 +1,4 @@
-import { Xy } from "@framework";
+import { Xy, xy_ } from "@framework";
 import { Collisions } from "../Collisions.ts";
 import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
@@ -62,9 +62,10 @@ export class Level {
     // if coin_tile then
     this.#coin = new Item({
       // TODO: migrate from Lua
+      tile: xy_(3, 3),
       // tile_x = coin_tile.tile_x,
       // tile_y = coin_tile.tile_y,
-      // collision_circle_r = 2.5,
+      collisionCircleR: 2.5,
       animatedSprite: new AnimatedSprite({
         firstSpriteSheetCell: 16,
         numberOfSprites: 16,
@@ -130,7 +131,11 @@ export class Level {
    */
 
   // TODO: migrate from Lua `callbacks` param
-  checkCollisions(): void {
+  checkCollisions(callbacks: {
+    onCoin: () => void;
+    onDropletNoCoins: () => void;
+    onDropletNoMemories: () => void;
+  }): void {
     if (this.#coin) {
       if (
         Collisions.haveCirclesCollided(
@@ -138,8 +143,7 @@ export class Level {
           this.#coin.collisionCircle()
         )
       ) {
-        // TODO: migrate from Lua
-        // callbacks.on_coin()
+        callbacks.onCoin();
       }
     }
 

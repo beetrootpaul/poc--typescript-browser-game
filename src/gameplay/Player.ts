@@ -51,8 +51,8 @@ export class Player {
 
   collisionCircle(): CollisionCircle {
     return {
-      // TODO: migrate from Lua
-      // x = x, y = y, r = r
+      center: this.#xy,
+      r: this.#r,
     };
   }
 
