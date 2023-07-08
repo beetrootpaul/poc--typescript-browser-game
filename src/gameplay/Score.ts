@@ -1,14 +1,11 @@
 export class Score {
-  readonly #value = 0;
+  #value = 0;
 
   value(): number {
     return this.#value;
   }
 
-  // TODO: migrate from Lua
-  /*
-    function s.add(points)
-        value = value + points
-    end
-   */
+  public add(points: number): void {
+    this.#value += points;
+  }
 }

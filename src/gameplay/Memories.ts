@@ -1,5 +1,8 @@
+import { Collisions } from "../Collisions.ts";
+import { p8c } from "../globals.ts";
 import { Memory } from "./Memory.ts";
 import { Player } from "./Player.ts";
+import { Trail } from "./Trail.ts";
 
 type MemoriesParams = {
   player: Player;
@@ -9,6 +12,7 @@ export class Memories {
   readonly #player: Player;
 
   readonly #memoriesFromFirstToLast: Memory[] = [];
+  readonly #trails: Trail[] = [];
 
   // TODO: migrate from Lua
   // local trails = {}
@@ -17,53 +21,53 @@ export class Memories {
     this.#player = params.player;
   }
 
-  // TODO: migrate from Lua
-  /*
-    function mm.add_memory()
-        local memory = new_memory {
-            origin = memories_from_first_to_last[#memories_from_first_to_last] or player
-        }
-        memories_from_first_to_last[#memories_from_first_to_last + 1] = memory
-        add(trails, new_trail {
-            origin = memory,
-            color = u.colors.purple,
-        })
-    end
-   */
+  addMemory(): void {
+    const memory = new Memory({
+      origin:
+        this.#memoriesFromFirstToLast.length > 0
+          ? this.#memoriesFromFirstToLast[
+              this.#memoriesFromFirstToLast.length - 1
+            ]
+          : this.#player,
+    });
 
-  // TODO: migrate from Lua
-  /*
-    function mm.move()
-        for trail in all(trails) do
-            trail.update()
-        end
-        for memory in all(memories_from_first_to_last) do
-            memory.follow_origin()
-        end
-    end
-   */
+    this.#memoriesFromFirstToLast.push(memory);
 
-  // TODO: migrate from Lua
-  /*
-    function mm.has_player_collided_with_memory()
-        for memory in all(memories_from_first_to_last) do
-            if memory.is_active() and collisions.have_circles_collided(
-                player.collision_circle(),
-                memory.collision_circle()
-            ) then
-                return true
-            end
-        end
-        return false
-    end
-   */
+    this.#trails.push(
+      new Trail({
+        origin: memory,
+        color: p8c.DarkPurple,
+      })
+    );
+  }
+
+  move(): void {
+    // TODO: migrate from Lua
+    /*
+          for trail in all(trails) do
+              trail.update()
+          end
+     */
+    this.#memoriesFromFirstToLast.forEach((memory) => {
+      memory.followOrigin();
+    });
+  }
+
+  hasPlayerCollidedWithMemory(): boolean {
+    return this.#memoriesFromFirstToLast.some(
+      (memory) =>
+        memory.isActive() &&
+        Collisions.haveCirclesCollided(
+          this.#player.collisionCircle(),
+          memory.collisionCircle()
+        )
+    );
+  }
 
   draw() {
-    // TODO: migrate from Lua
-    // for trail in all(trails) do
-    //   trail.draw()
-    //   end
-    // TODO: migrate from Lua
+    this.#trails.forEach((trail) => {
+      trail.draw();
+    });
     this.#memoriesFromFirstToLast.forEach((memory) => {
       memory.draw();
     });

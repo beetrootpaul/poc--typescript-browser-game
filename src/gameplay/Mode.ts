@@ -8,12 +8,10 @@ export class Mode {
     local ttl_max_no_memories = 150
    */
 
-  // TODO: migrate from Lua
-  /*
-    function m.is_no_coins()
-        return current == "no_coins"
-    end
-   */
+  isNoCoins(): boolean {
+    return this.#current === "no_coins";
+  }
+
   isNoMemories(): boolean {
     return this.#current === "no_memories";
   }

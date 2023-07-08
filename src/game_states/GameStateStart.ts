@@ -2,9 +2,8 @@ import { Level } from "../gameplay/Level.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
-import { f } from "../globals.ts";
+import { f, u } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
-import { u } from "../utils.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
 
@@ -23,33 +22,29 @@ export class GameStateStart implements GameState {
 
   constructor() {
     // TODO: migrate from Lua
-    /*
-    audio.enable_music_layers { false, false, false }
-   */
+    // audio.enable_music_layers { false, false, false }
 
     this.#level.spawnItems();
   }
 
   update(): GameState {
     let hasStarted = false;
-    // TODO: implement one directional input clear another, like left+right = nothing
+    // TODO: make one directional input clear another, like left+right = nothing
     if (f.gameInputEvents.has("left")) {
-      // TODO: migrate from Lua
-      // player.direct_left()
+      this.#player.directLeft();
       hasStarted = true;
     } else if (f.gameInputEvents.has("right")) {
-      // TODO: migrate from Lua
-      // player.direct_right()
+      this.#player.directRight();
       hasStarted = true;
     } else if (f.gameInputEvents.has("up")) {
-      // TODO: migrate from Lua
-      // player.direct_up()
+      this.#player.directUp();
       hasStarted = true;
     } else if (f.gameInputEvents.has("down")) {
-      // TODO: migrate from Lua
-      // player.direct_down()
+      this.#player.directDown();
       hasStarted = true;
     }
+
+    this.#level.animate();
 
     if (hasStarted) {
       return new GameStateGameplay({
@@ -67,8 +62,7 @@ export class GameStateStart implements GameState {
   draw(): void {
     this.#level.drawBg();
 
-    // TODO: migrate from Lua
-    //     level.draw_items()
+    this.#level.drawItems();
 
     this.#player.draw();
 

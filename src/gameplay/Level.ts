@@ -1,7 +1,6 @@
-import { Xy } from "@framework";
+import { Xy, xy_ } from "@framework";
 import { Collisions } from "../Collisions.ts";
-import { f, g } from "../globals.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
+import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
 import { Item } from "./Item.ts";
 import { Mode } from "./Mode.ts";
@@ -46,35 +45,45 @@ export class Level {
 
     local l = {}
    */
+
   spawnItems(): void {
     // TODO: migrate from Lua
     // local tiles_close_to_player = get_tiles_close_to_player()
-    // local available_tiles = {}
-    // local margin_tiles = 1
-    // for tile_x = 1 + margin_tiles, a.game_area_w_tiles - margin_tiles do
-    //     for tile_y = 1 + margin_tiles, a.game_area_h_tiles - margin_tiles do
-    //         if not tiles_close_to_player[tile_x .. "_" .. tile_y] then
-    //             add(available_tiles, { tile_x = tile_x, tile_y = tile_y })
-    //         end
-    //     end
-    // end
-    //
-    // local coin_tile = rnd(available_tiles)
-    // if coin_tile then
-    this.#coin = new Item({
-      // TODO: migrate from Lua
-      // tile_x = coin_tile.tile_x,
-      // tile_y = coin_tile.tile_y,
-      // collision_circle_r = 2.5,
-      animatedSprite: new AnimatedSprite({
+
+    const availableTiles: Xy[] = [];
+    const marginTiles = 1;
+    for (
+      let tileX = 1 + marginTiles;
+      tileX <= g.gameAreaSize.div(g.tileSize).x - marginTiles;
+      tileX += 1
+    ) {
+      for (
+        let tileY = 1 + marginTiles;
+        tileY <= g.gameAreaSize.div(g.tileSize).y - marginTiles;
+        tileY += 1
+      ) {
         // TODO: migrate from Lua
-        // first_sprite = 16,
-        //   number_of_sprites = 16,
-        framesPerSprite: 2,
-      }),
-    });
-    // TODO: migrate from Lua
-    // end
+        // if not tiles_close_to_player[tile_x .. "_" .. tile_y] then
+        availableTiles.push(xy_(tileX, tileY));
+        // TODO: migrate from Lua
+        // end
+      }
+    }
+
+    if (availableTiles.length > 0) {
+      // TODO: create an util for random array pick + cover it with tests
+      const coinTile =
+        availableTiles[Math.floor(Math.random() * availableTiles.length)];
+      this.#coin = new Item({
+        tile: coinTile,
+        collisionCircleR: 2.5,
+        animatedSprite: new AnimatedSprite({
+          firstSpriteSheetCell: 16,
+          numberOfSprites: 16,
+          framesPerSprite: 2,
+        }),
+      });
+    }
 
     // TODO: migrate from Lua
     /*
@@ -114,13 +123,10 @@ export class Level {
          */
   }
 
-  // TODO: migrate from Lua
-  /*
+  removeCoin(): void {
+    this.#coin = null;
+  }
 
-    function l.remove_coin()
-        coin = nil
-    end
-   */
   // TODO: migrate from Lua
   /*
       function l.remove_droplet_no_coins()
@@ -132,7 +138,11 @@ export class Level {
    */
 
   // TODO: migrate from Lua `callbacks` param
-  checkCollisions(): void {
+  checkCollisions(callbacks: {
+    onCoin: () => void;
+    onDropletNoCoins: () => void;
+    onDropletNoMemories: () => void;
+  }): void {
     if (this.#coin) {
       if (
         Collisions.haveCirclesCollided(
@@ -140,8 +150,7 @@ export class Level {
           this.#coin.collisionCircle()
         )
       ) {
-        // TODO: migrate from Lua
-        // callbacks.on_coin()
+        callbacks.onCoin();
       }
     }
 
@@ -168,27 +177,24 @@ export class Level {
      */
   }
 
-  // TODO: migrate from Lua
-  /*
-      function l.animate()
-        if coin then
-            coin.animate()
-        end
-        if droplet_no_coins then
-            droplet_no_coins.animate()
-        end
-        if droplet_no_memories then
-            droplet_no_memories.animate()
-        end
-    end
-
-   */
+  animate(): void {
+    this.#coin?.animate();
+    // TODO: migrate from Lua
+    /*
+          if droplet_no_coins then
+              droplet_no_coins.animate()
+          end
+          if droplet_no_memories then
+              droplet_no_memories.animate()
+          end
+     */
+  }
 
   drawBg(): void {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())
     // TODO: mode.bg_color()
-    f.drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, Pico8Colors.DarkBlue);
+    f.drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
     // TODO: migrate from Lua
     /*
           fillp()
@@ -215,19 +221,18 @@ export class Level {
      */
   }
 
-  // TODO: migrate from Lua
-  /*
-      function l.draw_items()
-        if not mode.is_no_coins() then
-            coin.draw()
-        end
-        if droplet_no_coins then
-            droplet_no_coins.draw()
-        end
-        if droplet_no_memories then
-            droplet_no_memories.draw()
-        end
-    end
-
-   */
+  drawItems(): void {
+    if (!this.#mode.isNoCoins()) {
+      this.#coin?.draw();
+    }
+    // TODO: migrate from Lua
+    /*
+          if droplet_no_coins then
+              droplet_no_coins.draw()
+          end
+          if droplet_no_memories then
+              droplet_no_memories.draw()
+          end
+     */
+  }
 }

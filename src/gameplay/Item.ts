@@ -1,47 +1,55 @@
+import { transparent, Xy } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
+import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
+import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
 
 type ItemParams = {
+  tile: Xy;
+  collisionCircleR: number;
   animatedSprite: AnimatedSprite;
 };
 
 export class Item {
+  readonly #tile: Xy;
+  readonly #collisionCircleR: number;
   readonly #animatedSprite: AnimatedSprite;
 
   constructor(params: ItemParams) {
-    // TODO: migrate from Lua
-    //   local tile_x = params.tile_x
-    //   local tile_y = params.tile_y
-    //   local collision_circle_r = params.collision_circle_r
+    this.#tile = params.tile;
+    this.#collisionCircleR = params.collisionCircleR;
     this.#animatedSprite = params.animatedSprite;
   }
 
   collisionCircle(): CollisionCircle {
     return {
-      // TODO: migrate from Lua
-      // x = (tile_x - 1) * u.tile_px + u.tile_px / 2 - 0.5,
-      // y = (tile_y - 1) * u.tile_px + u.tile_px / 2 - 0.5,
-      // r = collision_circle_r,
+      center: this.#tile.sub(1).mul(g.tileSize).add(g.tileSize.div(2)).sub(0.5),
+      r: this.#collisionCircleR,
     };
   }
 
-  // TODO: migrate from Lua
-  /*
-    function it.animate()
-        animated_sprite.advance_1_frame()
-    end
-   */
-  // TODO: migrate from Lua
-  /*
-    function it.draw()
-        palt(u.colors.black, false)
-        palt(u.colors.dark_blue, true)
-        spr(
-            animated_sprite.current_sprite(),
-            (tile_x - 1) * u.tile_px,
-            (tile_y - 1) * u.tile_px
-        )
-        palt()
-    end
-   */
+  animate(): void {
+    this.#animatedSprite.advance1Frame();
+  }
+
+  draw(): void {
+    // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
+    f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
+
+    // TODO: REWORK THIS
+    if (s_imgBytes) {
+      f.drawApi.drawSprite(
+        s_imgBytes,
+        s_imgW,
+        s_imgType,
+        this.#animatedSprite.currentSprite(),
+        this.#tile.sub(1).mul(g.tileSize)
+      );
+    }
+
+    // TODO: API to reset all mappings?
+    // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
+  }
 }

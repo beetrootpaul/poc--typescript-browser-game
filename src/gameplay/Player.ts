@@ -1,35 +1,44 @@
-import { transparent, Xy, xy_ } from "@framework";
+import { spr_, transparent, Xy, xy_ } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
 import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
-import { f, g } from "../globals.ts";
-import { Pico8Colors } from "../Pico8Color.ts";
+import { f, g, p8c } from "../globals.ts";
+import { Direction } from "./Direction.ts";
+import { Origin } from "./Origin.ts";
 
-export class Player {
-  readonly #xy: Xy = g.gameAreaSize.div(2);
-  readonly #r: number = 3;
+export class Player extends Origin {
+  readonly #r = 3;
+  readonly #speed = 2;
 
-  // TODO: migrate from Lua
-  /*
-   local speed = 2
-    local dx = speed
-    local dy = 0
-   */
+  #xy: Xy = g.gameAreaSize.div(2);
 
-  readonly #direction: "l" | "r" | "u" | "d" = "r";
+  // Let's start right (but it's effectively unused, because we
+  //   let the user to choose the direction at the game's start).
+  #direction: Direction = "r";
+  #dXy = xy_(this.#speed, 0);
+
   readonly #spriteForDirection = {
-    u: { spriteSheetCell: xy_(7, 2) },
-    r: { spriteSheetCell: xy_(8, 2) },
-    d: { spriteSheetCell: xy_(9, 2) },
-    l: { spriteSheetCell: xy_(10, 2) },
+    u: spr_(xy_(7, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    r: spr_(xy_(8, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    d: spr_(xy_(9, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    l: spr_(xy_(10, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
   };
+
+  center(): Xy {
+    return this.#xy;
+  }
+
+  r(): number {
+    return this.#r;
+  }
+
+  direction(): Direction {
+    return this.#direction;
+  }
 
   // TODO: migrate from Lua
   /*
     function p.x1()
         return x - r
-    end
-    function p.xc()
-        return x
     end
     function p.x2()
         return x + r
@@ -37,77 +46,66 @@ export class Player {
     function p.y1()
         return y - r
     end
-    function p.yc()
-        return y
-    end
     function p.y2()
         return y + r
-    end
-    function p.r()
-        return r
-    end
-    function p.direction()
-        return direction
     end
    */
 
   collisionCircle(): CollisionCircle {
     return {
-      // TODO: migrate from Lua
-      // x = x, y = y, r = r
+      center: this.#xy,
+      r: this.#r,
     };
   }
 
-  // TODO: migrate from Lua
-  /*
-  function p.direct_left()
-        dx, dy = -speed, 0
-        direction = "l"
-    end
-    function p.direct_right()
-        dx, dy = speed, 0
-        direction = "r"
-    end
-    function p.direct_up()
-        dx, dy = 0, -speed
-        direction = "u"
-    end
-    function p.direct_down()
-        dx, dy = 0, speed
-        direction = "d"
-    end
-   */
+  // TODO: replace all these 4 methods with a single one which takes Direction as a param
+  directLeft(): void {
+    this.#dXy = xy_(-this.#speed, 0);
+    this.#direction = "l";
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function p.move()
-        x = x + dx
-        y = y + dy
-        x = mid(r, x, a.game_area_w - r - 1)
-        y = mid(r, y, a.game_area_h - r - 1)
-    end
-   */
+  directRight(): void {
+    this.#dXy = xy_(this.#speed, 0);
+    this.#direction = "r";
+  }
+
+  directUp(): void {
+    this.#dXy = xy_(0, -this.#speed);
+    this.#direction = "u";
+  }
+
+  directDown(): void {
+    this.#dXy = xy_(0, this.#speed);
+    this.#direction = "d";
+  }
+
+  move(): void {
+    this.#xy = this.#xy.add(this.#dXy);
+    this.#xy = this.#xy.clamp(
+      xy_(this.#r, this.#r),
+      g.gameAreaSize.sub(this.#r + 1)
+    );
+  }
 
   draw() {
     // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
-    f.drawApi.mapSpriteColor(Pico8Colors.Black, Pico8Colors.Black);
-    f.drawApi.mapSpriteColor(Pico8Colors.DarkBlue, transparent);
+    f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
     // TODO: REWORK THIS
     if (s_imgBytes) {
-      f.drawApi.drawSomething(
+      f.drawApi.drawSprite(
         s_imgBytes,
         s_imgW,
         s_imgType,
-        this.#spriteForDirection[this.#direction].spriteSheetCell.mul(8),
-        this.#spriteForDirection[this.#direction].spriteSheetCell.mul(8).add(8),
+        this.#spriteForDirection[this.#direction],
         this.#xy.sub(this.#r)
       );
     }
 
     // TODO: API to reset all mappings?
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
-    f.drawApi.mapSpriteColor(Pico8Colors.DarkBlue, Pico8Colors.DarkBlue);
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
 
     // TODO: migrate from Lua
     //     if __debug__ then
