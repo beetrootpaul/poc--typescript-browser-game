@@ -39,7 +39,7 @@ export class Item {
 
     // TODO: REWORK THIS
     if (s_imgBytes) {
-      f.drawApi.drawSprite(
+      f.drawApi.sprite(
         s_imgBytes,
         s_imgW,
         s_imgType,

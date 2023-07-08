@@ -16,39 +16,38 @@ export class Level {
   readonly #player: Player;
 
   #coin: Item | null = null;
-  // TODO: migrate from Lua
-  // local droplet_no_coins
-  // local droplet_no_memories
+  #dropletNoCoins: Item | null = null;
+  #dropletNoMemories: Item | null = null;
 
   constructor(params: LevelParams) {
     this.#mode = params.mode;
     this.#player = params.player;
   }
 
-  // TODO: migrate from Lua
-  /*
-    local function get_tiles_close_to_player()
-        local left_tile_x = flr(player.x1() / u.tile_px) + 1
-        local right_tile_x = flr(player.x2() / u.tile_px) + 1
-        local top_tile_y = flr(player.y1() / u.tile_px) + 1
-        local bottom_tile_y = flr(player.y2() / u.tile_px) + 1
+  #getTilesCloseToPlayer(): Record<string, boolean> {
+    const leftTopTile = this.#player.xy1().div(g.tileSize).floor().add(1);
+    const rightBottomTile = this.#player.xy2().div(g.tileSize).floor().add(1);
 
-        local close_tiles = {}
-        local margin_tiles = 3
-        for tile_x = left_tile_x - margin_tiles, right_tile_x + margin_tiles do
-            for tile_y = top_tile_y - margin_tiles, bottom_tile_y + margin_tiles do
-                close_tiles[tile_x .. "_" .. tile_y] = true
-            end
-        end
-        return close_tiles
-    end
-
-    local l = {}
-   */
+    const closeTiles: Record<string, boolean> = {};
+    const marginTiles = 3;
+    for (
+      let tileX = leftTopTile.x - marginTiles;
+      tileX <= rightBottomTile.x + marginTiles;
+      tileX += 1
+    ) {
+      for (
+        let tileY = leftTopTile.y - marginTiles;
+        tileY <= rightBottomTile.y + marginTiles;
+        tileY += 1
+      ) {
+        closeTiles[`${tileX}_${tileY}`] = true;
+      }
+    }
+    return closeTiles;
+  }
 
   spawnItems(): void {
-    // TODO: migrate from Lua
-    // local tiles_close_to_player = get_tiles_close_to_player()
+    const tilesCloseToPlayer = this.#getTilesCloseToPlayer();
 
     const availableTiles: Xy[] = [];
     const marginTiles = 1;
@@ -62,11 +61,9 @@ export class Level {
         tileY <= g.gameAreaSize.div(g.tileSize).y - marginTiles;
         tileY += 1
       ) {
-        // TODO: migrate from Lua
-        // if not tiles_close_to_player[tile_x .. "_" .. tile_y] then
-        availableTiles.push(xy_(tileX, tileY));
-        // TODO: migrate from Lua
-        // end
+        if (!tilesCloseToPlayer[`${tileX}_${tileY}`]) {
+          availableTiles.push(xy_(tileX, tileY));
+        }
       }
     }
 
@@ -127,17 +124,14 @@ export class Level {
     this.#coin = null;
   }
 
-  // TODO: migrate from Lua
-  /*
-      function l.remove_droplet_no_coins()
-        droplet_no_coins = nil
-    end
-    function l.remove_droplet_no_memories()
-        droplet_no_memories = nil
-    end
-   */
+  removeDropletNoCoins(): void {
+    this.#dropletNoCoins = null;
+  }
 
-  // TODO: migrate from Lua `callbacks` param
+  removeDropletNoMemories(): void {
+    this.#dropletNoMemories = null;
+  }
+
   checkCollisions(callbacks: {
     onCoin: () => void;
     onDropletNoCoins: () => void;
@@ -154,85 +148,76 @@ export class Level {
       }
     }
 
-    // TODO: migrate from Lua
-    /*
-          if droplet_no_coins then
-              if collisions.have_circles_collided(
-                  player.collision_circle(),
-                  droplet_no_coins.collision_circle()
-              ) then
-                  callbacks.on_droplet_no_coins()
-              end
-          end
-          if droplet_no_memories then
-              if collisions.have_circles_collided(
-                  player.collision_circle(),
-                  droplet_no_memories.collision_circle()
-              ) then
-                  callbacks.on_droplet_no_memories()
-              end
-          end
-      end
-  
-     */
+    if (this.#dropletNoCoins) {
+      if (
+        Collisions.haveCirclesCollided(
+          this.#player.collisionCircle(),
+          this.#dropletNoCoins.collisionCircle()
+        )
+      ) {
+        callbacks.onDropletNoCoins();
+      }
+    }
+    if (this.#dropletNoMemories) {
+      if (
+        Collisions.haveCirclesCollided(
+          this.#player.collisionCircle(),
+          this.#dropletNoMemories.collisionCircle()
+        )
+      ) {
+        callbacks.onDropletNoMemories();
+      }
+    }
   }
 
   animate(): void {
     this.#coin?.animate();
-    // TODO: migrate from Lua
-    /*
-          if droplet_no_coins then
-              droplet_no_coins.animate()
-          end
-          if droplet_no_memories then
-              droplet_no_memories.animate()
-          end
-     */
+    this.#dropletNoCoins?.animate();
+    this.#dropletNoMemories?.animate();
   }
 
   drawBg(): void {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())
-    // TODO: mode.bg_color()
-    f.drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
+    f.drawApi.rectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
     // TODO: migrate from Lua
-    /*
-          fillp()
-  
-          if __debug__ then
-              local tiles_close_to_player = get_tiles_close_to_player()
-              for tile_x = 1, a.game_area_w_tiles do
-                  for tile_y = 1, a.game_area_h_tiles do
-                      line(
-                          (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-                          (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-                          u.colors.violet_grey
-                      )
-                      if tiles_close_to_player[tile_x .. "_" .. tile_y] then
-                          rectfill(
-                              (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-                              tile_x * u.tile_px - 1, tile_y * u.tile_px - 1,
-                              u.colors.purple
-                          )
-                      end
-                  end
-              end
-          end
-     */
+    // fillp()
+
+    if (f.debug) {
+      const tilesCloseToPlayer = this.#getTilesCloseToPlayer();
+      for (
+        let tileX = 1;
+        tileX <= g.gameAreaSize.div(g.tileSize).x;
+        tileX += 1
+      ) {
+        for (
+          let tileY = 1;
+          tileY <= g.gameAreaSize.div(g.tileSize).y;
+          tileY += 1
+        ) {
+          f.drawApi.pixel(
+            xy_(tileX, tileY).sub(1).mul(g.tileSize),
+            p8c.Lavender
+          );
+          if (tilesCloseToPlayer[`${tileX}_${tileY}`]) {
+            f.drawApi.rectFilled(
+              xy_(tileX - 1, tileY - 1)
+                .mul(g.tileSize)
+                .add(1),
+              xy_(tileX, tileY).mul(g.tileSize),
+              p8c.DarkPurple
+            );
+          }
+        }
+      }
+    }
   }
 
   drawItems(): void {
     if (!this.#mode.isNoCoins()) {
       this.#coin?.draw();
     }
-    // TODO: migrate from Lua
-    /*
-          if droplet_no_coins then
-              droplet_no_coins.draw()
-          end
-          if droplet_no_memories then
-              droplet_no_memories.draw()
-          end
-     */
+    this.#dropletNoCoins?.draw();
+    this.#dropletNoMemories?.draw();
   }
 }

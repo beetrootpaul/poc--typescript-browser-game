@@ -14,9 +14,6 @@ export class Memories {
   readonly #memoriesFromFirstToLast: Memory[] = [];
   readonly #trails: Trail[] = [];
 
-  // TODO: migrate from Lua
-  // local trails = {}
-
   constructor(params: MemoriesParams) {
     this.#player = params.player;
   }
@@ -42,12 +39,9 @@ export class Memories {
   }
 
   move(): void {
-    // TODO: migrate from Lua
-    /*
-          for trail in all(trails) do
-              trail.update()
-          end
-     */
+    this.#trails.forEach((trail) => {
+      trail.update();
+    });
     this.#memoriesFromFirstToLast.forEach((memory) => {
       memory.followOrigin();
     });

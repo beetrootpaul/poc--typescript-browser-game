@@ -40,7 +40,10 @@ export class Game {
       // TODO: consider disabling these logs in the production build
       logActualFps: true,
       // TODO: make it disabled for prod and toggleable for dev
-      debug: true,
+      debug: {
+        enabledOnInit: true,
+        toggleKey: ";",
+      },
     });
 
     this.#gameState = new GameStateSplash();

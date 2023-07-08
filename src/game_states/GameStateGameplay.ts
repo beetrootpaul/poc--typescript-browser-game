@@ -54,13 +54,10 @@ export class GameStateGameplay implements GameState {
 
     // TODO: migrate from Lua
     // audio.play_sfx(a.sfx_coin)
-
     this.#score.add(10);
-
     if (!this.#mode.isNoMemories()) {
       this.#memories.addMemory();
     }
-
     this.#level.removeCoin();
     this.#level.spawnItems();
   }
@@ -68,17 +65,17 @@ export class GameStateGameplay implements GameState {
   #onDropletNoCoinsCollision(): void {
     // TODO: migrate from Lua
     // audio.enable_music_layers { true, false, true }
-    // score.add(3)
-    // mode.start_no_coins()
-    // level.remove_droplet_no_coins()
+    this.#score.add(3);
+    this.#mode.startNoCoins();
+    this.#level.removeDropletNoCoins();
   }
 
   #onDropletNoMemoriesCollision(): void {
     // TODO: migrate from Lua
     // audio.enable_music_layers { true, true, false }
-    // score.add(1)
-    // mode.start_no_memories()
-    // level.remove_droplet_no_memories()
+    this.#score.add(1);
+    this.#mode.startNoMemories();
+    this.#level.removeDropletNoMemories();
   }
 
   // TODO: migrate from Lua
@@ -110,8 +107,7 @@ export class GameStateGameplay implements GameState {
 
     this.#level.animate();
 
-    // TODO: migrate from Lua
-    // player_trail.update()
+    this.#playerTrail.update();
     this.#player.move();
 
     this.#memories.move();
