@@ -48,18 +48,20 @@ export class GameStateGameplay implements GameState {
   // end
 
   #onCoinCollision(): void {
+    if (this.#mode.isNoCoins()) {
+      return;
+    }
+
     // TODO: migrate from Lua
-    // if mode.is_no_coins() then
-    // return
-    // end
-    //
     // audio.play_sfx(a.sfx_coin)
+
     this.#score.add(10);
     // TODO: migrate from Lua
     // if not mode.is_no_memories() then
     // memories.add_memory()
     // end
-    // level.remove_coin()
+
+    this.#level.removeCoin();
     // level.spawn_items()
   }
 

@@ -113,13 +113,10 @@ export class Level {
          */
   }
 
-  // TODO: migrate from Lua
-  /*
+  removeCoin(): void {
+    this.#coin = null;
+  }
 
-    function l.remove_coin()
-        coin = nil
-    end
-   */
   // TODO: migrate from Lua
   /*
       function l.remove_droplet_no_coins()
