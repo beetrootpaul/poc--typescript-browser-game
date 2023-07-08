@@ -1,10 +1,24 @@
 import { Xy } from "@framework";
 import { Direction } from "./Direction.ts";
 
-export interface Origin {
-  center(): Xy;
+export abstract class Origin {
+  abstract center(): Xy;
 
-  r(): number;
+  abstract r(): number;
 
-  direction(): Direction;
+  abstract direction(): Direction;
+
+  snapshot(): OriginSnapshot {
+    return {
+      center: this.center(),
+      r: this.r(),
+      direction: this.direction(),
+    };
+  }
 }
+
+export type OriginSnapshot = {
+  center: Xy;
+  r: number;
+  direction: Direction;
+};

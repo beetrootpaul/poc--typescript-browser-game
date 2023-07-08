@@ -1,18 +1,23 @@
 import { spr_, transparent, Xy, xy_ } from "@framework";
+import { CollisionCircle } from "../Collisions.ts";
 import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
 import { Direction } from "./Direction.ts";
-import { Origin } from "./Origin.ts";
+import { Origin, OriginSnapshot } from "./Origin.ts";
 
 type MemoryParams = {
   origin: Origin;
 };
 
-export class Memory implements Origin {
+export class Memory extends Origin {
+  readonly #originStateDelay = 40;
+  readonly #originStateBuffer: OriginSnapshot[] = [];
+  #originStateBufferIndex: number = 0;
+
   readonly #origin: Origin;
-  readonly #xy: Xy;
-  readonly #r: number;
-  readonly #direction: Direction;
+  #xy: Xy;
+  #r: number;
+  #direction: Direction;
 
   readonly #spriteForDirection = {
     u: spr_(xy_(7, 3).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
@@ -22,25 +27,12 @@ export class Memory implements Origin {
   };
 
   constructor(params: MemoryParams) {
+    super();
     this.#origin = params.origin;
     this.#xy = this.#origin.center();
     this.#r = this.#origin.r();
     this.#direction = this.#origin.direction();
   }
-
-  // TODO: migrate from Lua
-  /*
-    local origin_state_delay = 40
-    local origin_state_buffer = {}
-    local origin_state_buffer_index = 1
-   */
-
-  // TODO: migrate from Lua
-  /*
-    local function is_active()
-        return #origin_state_buffer > origin_state_delay
-    end
-   */
 
   center(): Xy {
     return this.#xy;
@@ -54,80 +46,51 @@ export class Memory implements Origin {
     return this.#direction;
   }
 
-  // TODO: migrate from Lua
-  /*
-    function m.collision_circle()
-        return { x = x, y = y, r = r }
-    end
-   */
+  collisionCircle(): CollisionCircle {
+    return {
+      center: this.#xy,
+      r: this.#r,
+    };
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function m.is_active()
-        return is_active()
-    end
-   */
+  isActive(): boolean {
+    return this.#originStateBuffer.length > this.#originStateDelay;
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function m.follow_origin()
-        origin_state_buffer[origin_state_buffer_index] = {
-            x = origin.xc(),
-            y = origin.yc(),
-            r = origin.r(),
-            direction = origin.direction(),
-        }
+  // TODO: cover the ring-moving index logic with tests
+  followOrigin(): void {
+    this.#originStateBuffer[this.#originStateBufferIndex] =
+      this.#origin.snapshot();
 
-        local offset_for_1_indexed_table = 1
-        local delayed_state_index = (origin_state_buffer_index - origin_state_delay - offset_for_1_indexed_table) %
-            (origin_state_delay + 1) +
-            offset_for_1_indexed_table
-        local delayed_state = origin_state_buffer[delayed_state_index]
-        if delayed_state then
-            x = delayed_state.x
-            y = delayed_state.y
-            r = delayed_state.r
-            direction = delayed_state.direction
-        end
-        origin_state_buffer_index = (origin_state_buffer_index + 1 - offset_for_1_indexed_table)
-            % (origin_state_delay + 1)
-            + offset_for_1_indexed_table
-    end
-   */
+    const bufferSize = this.#originStateDelay + 1;
+    const delayedStateIndex = (this.#originStateBufferIndex + 1) % bufferSize;
+    const delayedState = this.#originStateBuffer[delayedStateIndex];
+    if (delayedState) {
+      this.#xy = delayedState.center;
+      this.#r = delayedState.r;
+      this.#direction = delayedState.direction;
+    }
 
-  // TODO: migrate from Lua
-  /*
-    function m.draw()
-        palt(u.colors.black, false)
-        palt(u.colors.dark_blue, true)
-        if is_active() then
-            spr(
-                sprite_for_direction[direction],
-                x - r,
-                y - r
-            )
-        end
-        palt()
-        if __debug__ then
-            circfill(x, y, r, is_active() and u.colors.salmon or u.colors.violet_grey)
-        end
-    end
-   */
+    this.#originStateBufferIndex =
+      (this.#originStateBufferIndex + 1) % bufferSize;
+  }
 
   draw() {
     // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
     f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
     f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
-    // TODO: REWORK THIS
-    if (s_imgBytes) {
-      f.drawApi.drawSprite(
-        s_imgBytes,
-        s_imgW,
-        s_imgType,
-        this.#spriteForDirection[this.#direction],
-        this.#xy.sub(this.#r)
-      );
+    if (this.isActive()) {
+      // TODO: REWORK THIS
+      if (s_imgBytes) {
+        f.drawApi.drawSprite(
+          s_imgBytes,
+          s_imgW,
+          s_imgType,
+          this.#spriteForDirection[this.#direction],
+          this.#xy.sub(this.#r)
+        );
+      }
     }
 
     // TODO: API to reset all mappings?

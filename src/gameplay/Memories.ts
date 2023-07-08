@@ -1,3 +1,4 @@
+import { Collisions } from "../Collisions.ts";
 import { p8c } from "../globals.ts";
 import { Memory } from "./Memory.ts";
 import { Player } from "./Player.ts";
@@ -40,37 +41,27 @@ export class Memories {
     );
   }
 
-  // TODO: migrate from Lua
-  /*
-    function mm.move()
-        for trail in all(trails) do
-            trail.update()
-        end
-        for memory in all(memories_from_first_to_last) do
-            memory.follow_origin()
-        end
-    end
-   */
+  move(): void {
+    // TODO: migrate from Lua
+    /*
+          for trail in all(trails) do
+              trail.update()
+          end
+     */
+    this.#memoriesFromFirstToLast.forEach((memory) => {
+      memory.followOrigin();
+    });
+  }
 
   hasPlayerCollidedWithMemory(): boolean {
-    // TODO: migrate from Lua
-    /*
-      function mm.has_player_collided_with_memory()
-          for memory in all(memories_from_first_to_last) do
-              if memory.is_active() and collisions.have_circles_collided(
-                  player.collision_circle(),
-                  memory.collision_circle()
-              ) then
-                  return true
-              end
-          end
-
-     */
-    return false;
-    // TODO: migrate from Lua
-    /*
-end
-*/
+    return this.#memoriesFromFirstToLast.some(
+      (memory) =>
+        memory.isActive() &&
+        Collisions.haveCirclesCollided(
+          this.#player.collisionCircle(),
+          memory.collisionCircle()
+        )
+    );
   }
 
   draw() {

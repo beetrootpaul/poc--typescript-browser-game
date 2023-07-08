@@ -114,8 +114,7 @@ export class GameStateGameplay implements GameState {
     // player_trail.update()
     this.#player.move();
 
-    // TODO: migrate from Lua
-    // memories.move()
+    this.#memories.move();
 
     if (!this.#mode.isNoMemories()) {
       if (this.#memories.hasPlayerCollidedWithMemory()) {

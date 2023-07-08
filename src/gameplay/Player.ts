@@ -5,7 +5,7 @@ import { f, g, p8c } from "../globals.ts";
 import { Direction } from "./Direction.ts";
 import { Origin } from "./Origin.ts";
 
-export class Player implements Origin {
+export class Player extends Origin {
   readonly #r = 3;
   readonly #speed = 2;
 
