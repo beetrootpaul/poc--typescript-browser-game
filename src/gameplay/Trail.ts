@@ -1,14 +1,14 @@
 import { SolidColor } from "@framework";
+import { Origin } from "./Origin.ts";
 import { Particle } from "./Particle.ts";
-import { Player } from "./Player.ts";
 
 type TrailParams = {
-  origin: Player;
+  origin: Origin;
   color: SolidColor;
 };
 
 export class Trail {
-  readonly #origin: Player;
+  readonly #origin: Origin;
   readonly #color: SolidColor;
 
   // TODO: migrate from Lua

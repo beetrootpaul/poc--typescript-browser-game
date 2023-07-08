@@ -2,8 +2,10 @@ import { spr_, transparent, Xy, xy_ } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
 import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
+import { Direction } from "./Direction.ts";
+import { Origin } from "./Origin.ts";
 
-export class Player {
+export class Player implements Origin {
   readonly #r = 3;
   readonly #speed = 2;
 
@@ -11,8 +13,8 @@ export class Player {
 
   // Let's start right (but it's effectively unused, because we
   //   let the user to choose the direction at the game's start).
-  #direction: "l" | "r" | "u" | "d" = "r";
-  #dxy = xy_(this.#speed, 0);
+  #direction: Direction = "r";
+  #dXy = xy_(this.#speed, 0);
 
   readonly #spriteForDirection = {
     u: spr_(xy_(7, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
@@ -21,13 +23,22 @@ export class Player {
     l: spr_(xy_(10, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
   };
 
+  center(): Xy {
+    return this.#xy;
+  }
+
+  r(): number {
+    return this.#r;
+  }
+
+  direction(): Direction {
+    return this.#direction;
+  }
+
   // TODO: migrate from Lua
   /*
     function p.x1()
         return x - r
-    end
-    function p.xc()
-        return x
     end
     function p.x2()
         return x + r
@@ -35,17 +46,8 @@ export class Player {
     function p.y1()
         return y - r
     end
-    function p.yc()
-        return y
-    end
     function p.y2()
         return y + r
-    end
-    function p.r()
-        return r
-    end
-    function p.direction()
-        return direction
     end
    */
 
@@ -56,28 +58,29 @@ export class Player {
     };
   }
 
+  // TODO: replace all these 4 methods with a single one which takes Direction as a param
   directLeft(): void {
-    this.#dxy = xy_(-this.#speed, 0);
+    this.#dXy = xy_(-this.#speed, 0);
     this.#direction = "l";
   }
 
   directRight(): void {
-    this.#dxy = xy_(this.#speed, 0);
+    this.#dXy = xy_(this.#speed, 0);
     this.#direction = "r";
   }
 
   directUp(): void {
-    this.#dxy = xy_(0, -this.#speed);
+    this.#dXy = xy_(0, -this.#speed);
     this.#direction = "u";
   }
 
   directDown(): void {
-    this.#dxy = xy_(0, this.#speed);
+    this.#dXy = xy_(0, this.#speed);
     this.#direction = "d";
   }
 
   move(): void {
-    this.#xy = this.#xy.add(this.#dxy);
+    this.#xy = this.#xy.add(this.#dXy);
     this.#xy = this.#xy.clamp(
       xy_(this.#r, this.#r),
       g.gameAreaSize.sub(this.#r + 1)

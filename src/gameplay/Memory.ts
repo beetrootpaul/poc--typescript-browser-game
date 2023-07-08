@@ -1,26 +1,32 @@
-export class Memory {
-  // TODO: migrate from Lua
-  /*
-    local origin = params.origin
-   */
+import { spr_, transparent, Xy, xy_ } from "@framework";
+import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
+import { f, g, p8c } from "../globals.ts";
+import { Direction } from "./Direction.ts";
+import { Origin } from "./Origin.ts";
 
-  // TODO: migrate from Lua
-  /*
-    local x = origin.xc()
-    local y = origin.yc()
-    local r = origin.r()
-   */
+type MemoryParams = {
+  origin: Origin;
+};
 
-  // TODO: migrate from Lua
-  /*
-    local direction = origin.direction
-    local sprite_for_direction = {
-        u = 55,
-        r = 56,
-        d = 57,
-        l = 58,
-    }
-   */
+export class Memory implements Origin {
+  readonly #origin: Origin;
+  readonly #xy: Xy;
+  readonly #r: number;
+  readonly #direction: Direction;
+
+  readonly #spriteForDirection = {
+    u: spr_(xy_(7, 3).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    r: spr_(xy_(8, 3).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    d: spr_(xy_(9, 3).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+    l: spr_(xy_(10, 3).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+  };
+
+  constructor(params: MemoryParams) {
+    this.#origin = params.origin;
+    this.#xy = this.#origin.center();
+    this.#r = this.#origin.r();
+    this.#direction = this.#origin.direction();
+  }
 
   // TODO: migrate from Lua
   /*
@@ -36,21 +42,17 @@ export class Memory {
     end
    */
 
-  // TODO: migrate from Lua
-  /*
-    function m.xc()
-        return x
-    end
-    function m.yc()
-        return y
-    end
-    function m.r()
-        return r
-    end
-    function m.direction()
-        return direction
-    end
-   */
+  center(): Xy {
+    return this.#xy;
+  }
+
+  r(): number {
+    return this.#r;
+  }
+
+  direction(): Direction {
+    return this.#direction;
+  }
 
   // TODO: migrate from Lua
   /*
@@ -113,19 +115,25 @@ export class Memory {
    */
 
   draw() {
-    // TODO: migrate from Lua
-    // palt(u.colors.black, false)
-    // palt(u.colors.dark_blue, true)
-    // TODO: migrate from Lua
-    // if is_active() then
-    //     spr(
-    //       sprite_for_direction[direction],
-    //       x - r,
-    //       y - r
-    //     )
-    // end
-    // TODO: migrate from Lua
-    // palt()
+    // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
+    f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
+
+    // TODO: REWORK THIS
+    if (s_imgBytes) {
+      f.drawApi.drawSprite(
+        s_imgBytes,
+        s_imgW,
+        s_imgType,
+        this.#spriteForDirection[this.#direction],
+        this.#xy.sub(this.#r)
+      );
+    }
+
+    // TODO: API to reset all mappings?
+    // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
+    f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
+
     // TODO: migrate from Lua
     // if __debug__ then
     //      circfill(x, y, r, is_active() and u.colors.salmon or u.colors.violet_grey)

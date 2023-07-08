@@ -56,10 +56,10 @@ export class GameStateGameplay implements GameState {
     // audio.play_sfx(a.sfx_coin)
 
     this.#score.add(10);
-    // TODO: migrate from Lua
-    // if not mode.is_no_memories() then
-    // memories.add_memory()
-    // end
+
+    if (!this.#mode.isNoMemories()) {
+      this.#memories.addMemory();
+    }
 
     this.#level.removeCoin();
     // level.spawn_items()
