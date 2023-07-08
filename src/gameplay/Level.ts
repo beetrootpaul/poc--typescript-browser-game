@@ -26,7 +26,6 @@ export class Level {
   }
 
   #getTilesCloseToPlayer(): Record<string, boolean> {
-    // TODO: migrate from Lua
     const leftTopTile = this.#player.xy1().div(g.tileSize).floor().add(1);
     const rightBottomTile = this.#player.xy2().div(g.tileSize).floor().add(1);
 
@@ -49,8 +48,7 @@ export class Level {
   }
 
   spawnItems(): void {
-    // TODO: migrate from Lua
-    // local tiles_close_to_player = get_tiles_close_to_player()
+    const tilesCloseToPlayer = this.#getTilesCloseToPlayer();
 
     const availableTiles: Xy[] = [];
     const marginTiles = 1;
@@ -64,11 +62,9 @@ export class Level {
         tileY <= g.gameAreaSize.div(g.tileSize).y - marginTiles;
         tileY += 1
       ) {
-        // TODO: migrate from Lua
-        // if not tiles_close_to_player[tile_x .. "_" .. tile_y] then
-        availableTiles.push(xy_(tileX, tileY));
-        // TODO: migrate from Lua
-        // end
+        if (!tilesCloseToPlayer[`${tileX}_${tileY}`]) {
+          availableTiles.push(xy_(tileX, tileY));
+        }
       }
     }
 
