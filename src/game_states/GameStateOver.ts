@@ -20,31 +20,27 @@ export class GameStateOver implements GameState {
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
     expand: true,
+    // TODO: migrate from Lua
+    // draw_text = function(sash_center_x, sash_center_y)
+    //     local heading = "your score"
+    //     local heading_w = u.measure_text_width(heading)
+    //     local final_score = tostr(score.value())
+    //     local final_score_w = u.measure_text_width(final_score)
+    //     print(
+    //         heading,
+    //         sash_center_x - heading_w / 2,
+    //         sash_center_y - u.text_height_px - 3,
+    //         u.colors.white
+    //     )
+    //     u.print_with_outline(
+    //         final_score,
+    //         sash_center_x - final_score_w / 2,
+    //         sash_center_y + 2,
+    //         u.colors.pink,
+    //         u.colors.black
+    //     )
+    // end,
   });
-  // TODO: migrate from Lua
-  /*
-    local sash = new_sash({
-        draw_text = function(sash_center_x, sash_center_y)
-            local heading = "your score"
-            local heading_w = u.measure_text_width(heading)
-            local final_score = tostr(score.value())
-            local final_score_w = u.measure_text_width(final_score)
-            print(
-                heading,
-                sash_center_x - heading_w / 2,
-                sash_center_y - u.text_height_px - 3,
-                u.colors.white
-            )
-            u.print_with_outline(
-                final_score,
-                sash_center_x - final_score_w / 2,
-                sash_center_y + 2,
-                u.colors.pink,
-                u.colors.black
-            )
-        end,
-    })
-   */
 
   // TODO: migrate from Lua
   // audio.enable_music_layers { false, false, false }
@@ -79,9 +75,9 @@ export class GameStateOver implements GameState {
   draw(): void {
     this.#level.drawBg();
 
-    // TODO: migrate from Lua
-    // level.draw_items()
-    // player.draw()
+    this.#level.drawItems();
+
+    this.#player.draw();
 
     this.#sash.draw();
   }

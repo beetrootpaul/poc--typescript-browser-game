@@ -38,17 +38,6 @@ export const g = {
 
   // TODO: migrate from Lua
   /*
-      buttons = {
-        -- left, right, up, down
-        l = 0,
-        r = 1,
-        u = 2,
-        d = 3,
-        -- button O (Z), button X
-        o = 4,
-        x = 5,
-    },
-
     colors = {
         black = 0,
         dark_blue = 1,
@@ -67,8 +56,6 @@ export const g = {
         pink = 14,
         salmon = 15,
     },
-
-    screen_tiles = 16,
 
     text_height_px = 5,
 

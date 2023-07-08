@@ -1,5 +1,5 @@
 export class Mode {
-  readonly #current: "regular" | "no_coins" | "no_memories" = "regular";
+  #current: "regular" | "no_coins" | "no_memories" = "regular";
 
   // TODO: migrate from Lua
   /*
@@ -16,17 +16,17 @@ export class Mode {
     return this.#current === "no_memories";
   }
 
-  // TODO: migrate from Lua
-  /*
-    function m.start_no_coins()
-        current = "no_coins"
-        ttl = ttl_max_no_coins
-    end
-    function m.start_no_memories()
-        current = "no_memories"
-        ttl = ttl_max_no_memories
-    end
-   */
+  startNoCoins(): void {
+    this.#current = "no_coins";
+    // TODO: migrate from Lua
+    // ttl = ttl_max_no_coins
+  }
+
+  startNoMemories(): void {
+    this.#current = "no_memories";
+    // TODO: migrate from Lua
+    // ttl = ttl_max_no_memories
+  }
 
   label(): string | null {
     switch (this.#current) {

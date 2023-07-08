@@ -6,9 +6,7 @@ import { GameStateStart } from "./GameStateStart.ts";
 
 export class GameStateSplash implements GameState {
   readonly #sash: Sash = new Sash({
-    // TODO: REVERT
-    duration: 0,
-    // duration: 10 * g.musicBeatFrames,
+    duration: 10 * g.musicBeatFrames,
     expand: false,
     // TODO: migrate from Lua
     // draw_text = function(sash_center_x, sash_center_y)
@@ -63,6 +61,7 @@ export class GameStateSplash implements GameState {
       g.cameraOffset.add(g.screenSize),
       // TODO: migrate from Lua: a.bg_color_mode_normal
       p8c.DarkBlue
+      // a.bg_color_mode_normal
     );
 
     this.#sash.draw();

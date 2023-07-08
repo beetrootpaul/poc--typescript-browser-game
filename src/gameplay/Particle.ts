@@ -13,12 +13,12 @@ export class Particle {
     local ttl = ttl_max
    */
 
-  // TODO: migrate from Lua
-  /*
-    function p.age()
-        ttl = max(0, ttl - 1)
-    end
-   */
+  age(): void {
+    // TODO: migrate from Lua
+    /*
+          ttl = max(0, ttl - 1)
+     */
+  }
 
   // TODO: migrate from Lua
   /*

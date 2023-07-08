@@ -16,9 +16,8 @@ export class Level {
   readonly #player: Player;
 
   #coin: Item | null = null;
-  // TODO: migrate from Lua
-  // local droplet_no_coins
-  // local droplet_no_memories
+  #dropletNoCoins: Item | null = null;
+  #dropletNoMemories: Item | null = null;
 
   constructor(params: LevelParams) {
     this.#mode = params.mode;
@@ -125,17 +124,14 @@ export class Level {
     this.#coin = null;
   }
 
-  // TODO: migrate from Lua
-  /*
-      function l.remove_droplet_no_coins()
-        droplet_no_coins = nil
-    end
-    function l.remove_droplet_no_memories()
-        droplet_no_memories = nil
-    end
-   */
+  removeDropletNoCoins(): void {
+    this.#dropletNoCoins = null;
+  }
 
-  // TODO: migrate from Lua `callbacks` param
+  removeDropletNoMemories(): void {
+    this.#dropletNoMemories = null;
+  }
+
   checkCollisions(callbacks: {
     onCoin: () => void;
     onDropletNoCoins: () => void;
@@ -152,40 +148,32 @@ export class Level {
       }
     }
 
-    // TODO: migrate from Lua
-    /*
-          if droplet_no_coins then
-              if collisions.have_circles_collided(
-                  player.collision_circle(),
-                  droplet_no_coins.collision_circle()
-              ) then
-                  callbacks.on_droplet_no_coins()
-              end
-          end
-          if droplet_no_memories then
-              if collisions.have_circles_collided(
-                  player.collision_circle(),
-                  droplet_no_memories.collision_circle()
-              ) then
-                  callbacks.on_droplet_no_memories()
-              end
-          end
-      end
-  
-     */
+    if (this.#dropletNoCoins) {
+      if (
+        Collisions.haveCirclesCollided(
+          this.#player.collisionCircle(),
+          this.#dropletNoCoins.collisionCircle()
+        )
+      ) {
+        callbacks.onDropletNoCoins();
+      }
+    }
+    if (this.#dropletNoMemories) {
+      if (
+        Collisions.haveCirclesCollided(
+          this.#player.collisionCircle(),
+          this.#dropletNoMemories.collisionCircle()
+        )
+      ) {
+        callbacks.onDropletNoMemories();
+      }
+    }
   }
 
   animate(): void {
     this.#coin?.animate();
-    // TODO: migrate from Lua
-    /*
-          if droplet_no_coins then
-              droplet_no_coins.animate()
-          end
-          if droplet_no_memories then
-              droplet_no_memories.animate()
-          end
-     */
+    this.#dropletNoCoins?.animate();
+    this.#dropletNoMemories?.animate();
   }
 
   drawBg(): void {
@@ -229,14 +217,7 @@ export class Level {
     if (!this.#mode.isNoCoins()) {
       this.#coin?.draw();
     }
-    // TODO: migrate from Lua
-    /*
-          if droplet_no_coins then
-              droplet_no_coins.draw()
-          end
-          if droplet_no_memories then
-              droplet_no_memories.draw()
-          end
-     */
+    this.#dropletNoCoins?.draw();
+    this.#dropletNoMemories?.draw();
   }
 }
