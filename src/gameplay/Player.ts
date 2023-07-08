@@ -4,17 +4,16 @@ import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
 
 export class Player {
-  readonly #xy: Xy = g.gameAreaSize.div(2);
-  readonly #r: number = 3;
+  readonly #r = 3;
+  readonly #speed = 2;
 
-  // TODO: migrate from Lua
-  /*
-   local speed = 2
-    local dx = speed
-    local dy = 0
-   */
+  #xy: Xy = g.gameAreaSize.div(2);
 
-  readonly #direction: "l" | "r" | "u" | "d" = "r";
+  // Let's start right (but it's effectively unused, because we
+  //   let the user to choose the direction at the game's start).
+  #direction: "l" | "r" | "u" | "d" = "r";
+  #dxy = xy_(this.#speed, 0);
+
   readonly #spriteForDirection = {
     u: spr_(xy_(7, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
     r: spr_(xy_(8, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
@@ -57,35 +56,33 @@ export class Player {
     };
   }
 
-  // TODO: migrate from Lua
-  /*
-  function p.direct_left()
-        dx, dy = -speed, 0
-        direction = "l"
-    end
-    function p.direct_right()
-        dx, dy = speed, 0
-        direction = "r"
-    end
-    function p.direct_up()
-        dx, dy = 0, -speed
-        direction = "u"
-    end
-    function p.direct_down()
-        dx, dy = 0, speed
-        direction = "d"
-    end
-   */
+  directLeft(): void {
+    this.#dxy = xy_(-this.#speed, 0);
+    this.#direction = "l";
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function p.move()
-        x = x + dx
-        y = y + dy
-        x = mid(r, x, a.game_area_w - r - 1)
-        y = mid(r, y, a.game_area_h - r - 1)
-    end
-   */
+  directRight(): void {
+    this.#dxy = xy_(this.#speed, 0);
+    this.#direction = "r";
+  }
+
+  directUp(): void {
+    this.#dxy = xy_(0, -this.#speed);
+    this.#direction = "u";
+  }
+
+  directDown(): void {
+    this.#dxy = xy_(0, this.#speed);
+    this.#direction = "d";
+  }
+
+  move(): void {
+    this.#xy = this.#xy.add(this.#dxy);
+    this.#xy = this.#xy.clamp(
+      xy_(this.#r, this.#r),
+      g.gameAreaSize.sub(this.#r + 1)
+    );
+  }
 
   draw() {
     // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?

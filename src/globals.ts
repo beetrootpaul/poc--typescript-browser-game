@@ -1,6 +1,5 @@
-import { PocTsBGFramework, xy_ } from "@framework";
+import { PocTsBGFramework, Utils, xy_ } from "@framework";
 import { Pico8Colors } from "./Pico8Color.ts";
-import { Utils } from "./Utils.ts";
 
 export const f = PocTsBGFramework;
 

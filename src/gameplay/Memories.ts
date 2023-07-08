@@ -43,20 +43,26 @@ export class Memories {
     end
    */
 
-  // TODO: migrate from Lua
-  /*
-    function mm.has_player_collided_with_memory()
-        for memory in all(memories_from_first_to_last) do
-            if memory.is_active() and collisions.have_circles_collided(
-                player.collision_circle(),
-                memory.collision_circle()
-            ) then
-                return true
-            end
-        end
-        return false
-    end
-   */
+  hasPlayerCollidedWithMemory(): boolean {
+    // TODO: migrate from Lua
+    /*
+      function mm.has_player_collided_with_memory()
+          for memory in all(memories_from_first_to_last) do
+              if memory.is_active() and collisions.have_circles_collided(
+                  player.collision_circle(),
+                  memory.collision_circle()
+              ) then
+                  return true
+              end
+          end
+
+     */
+    return false;
+    // TODO: migrate from Lua
+    /*
+end
+*/
+  }
 
   draw() {
     // TODO: migrate from Lua

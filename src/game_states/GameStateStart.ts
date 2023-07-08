@@ -22,31 +22,25 @@ export class GameStateStart implements GameState {
 
   constructor() {
     // TODO: migrate from Lua
-    /*
-    audio.enable_music_layers { false, false, false }
-   */
+    // audio.enable_music_layers { false, false, false }
 
     this.#level.spawnItems();
   }
 
   update(): GameState {
     let hasStarted = false;
-    // TODO: implement one directional input clear another, like left+right = nothing
+    // TODO: make one directional input clear another, like left+right = nothing
     if (f.gameInputEvents.has("left")) {
-      // TODO: migrate from Lua
-      // player.direct_left()
+      this.#player.directLeft();
       hasStarted = true;
     } else if (f.gameInputEvents.has("right")) {
-      // TODO: migrate from Lua
-      // player.direct_right()
+      this.#player.directRight();
       hasStarted = true;
     } else if (f.gameInputEvents.has("up")) {
-      // TODO: migrate from Lua
-      // player.direct_up()
+      this.#player.directUp();
       hasStarted = true;
     } else if (f.gameInputEvents.has("down")) {
-      // TODO: migrate from Lua
-      // player.direct_down()
+      this.#player.directDown();
       hasStarted = true;
     }
 

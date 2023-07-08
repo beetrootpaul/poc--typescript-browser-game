@@ -4,7 +4,7 @@ import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
 import { Trail } from "../gameplay/Trail.ts";
-import { p8c } from "../globals.ts";
+import { f, p8c } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateOver } from "./GameStateOver.ts";
@@ -82,18 +82,18 @@ export class GameStateGameplay implements GameState {
   // audio.enable_music_layers { true, false, false }
 
   update(): GameState {
+    if (f.gameInputEvents.has("left")) {
+      this.#player.directLeft();
+    } else if (f.gameInputEvents.has("right")) {
+      this.#player.directRight();
+    } else if (f.gameInputEvents.has("up")) {
+      this.#player.directUp();
+    } else if (f.gameInputEvents.has("down")) {
+      this.#player.directDown();
+    }
+
     // TODO: migrate from Lua
     /*
-           if btnp(u.buttons.l) then
-            player.direct_left()
-        elseif btnp(u.buttons.r) then
-            player.direct_right()
-        elseif btnp(u.buttons.u) then
-            player.direct_up()
-        elseif btnp(u.buttons.d) then
-            player.direct_down()
-        end
-
         mode.update {
             on_back_to_regular_mode = on_back_to_regular_mode
         }
@@ -108,27 +108,24 @@ export class GameStateGameplay implements GameState {
     //     }
 
     // TODO: migrate from Lua
-    /*
-    level.animate()
+    // level.animate()
 
-    player_trail.update()
-    player.move()
-
-    memories.move()
-
-    if not mode.is_no_memories() then
-        if memories.has_player_collided_with_memory() then
-        */
-    return new GameStateOver({
-      score: this.#score,
-      level: this.#level,
-      player: this.#player,
-    });
     // TODO: migrate from Lua
-    /*
-end
-end
-*/
+    // player_trail.update()
+    this.#player.move();
+
+    // TODO: migrate from Lua
+    // memories.move()
+
+    if (!this.#mode.isNoMemories()) {
+      if (this.#memories.hasPlayerCollidedWithMemory()) {
+        return new GameStateOver({
+          score: this.#score,
+          level: this.#level,
+          player: this.#player,
+        });
+      }
+    }
 
     return this;
   }
@@ -136,8 +133,7 @@ end
   draw(): void {
     this.#level.drawBg();
 
-    // TODO: migrate from Lua
-    //     level.draw_items()
+    this.#level.drawItems();
 
     this.#playerTrail.draw();
     this.#player.draw();
