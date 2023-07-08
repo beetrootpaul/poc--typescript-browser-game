@@ -17,7 +17,7 @@ export class Topbar {
   }
 
   draw() {
-    f.drawApi.drawRectFilled(
+    f.drawApi.rectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.topbarSize),
       p8c.Black

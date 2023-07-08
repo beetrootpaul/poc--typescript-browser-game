@@ -58,7 +58,7 @@ export class GameStateSplash implements GameState {
   }
 
   draw(): void {
-    f.drawApi.drawRectFilled(
+    f.drawApi.rectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.screenSize),
       // TODO: migrate from Lua: a.bg_color_mode_normal

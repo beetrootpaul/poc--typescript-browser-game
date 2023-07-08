@@ -63,7 +63,7 @@ export const g = {
         yellow = 10,
         lime = 11,
         blue = 12,
-        violet_grey = 13,
+        violet_grey = 13, --> Lavender
         pink = 14,
         salmon = 15,
     },

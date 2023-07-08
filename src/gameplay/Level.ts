@@ -195,7 +195,7 @@ export class Level {
   drawBg(): void {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())
-    f.drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
+    f.drawApi.rectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
     // TODO: migrate from Lua
     // fillp()
 
@@ -211,16 +211,16 @@ export class Level {
           tileY <= g.gameAreaSize.div(g.tileSize).y;
           tileY += 1
         ) {
-          // TODO: migrate from Lua
-          //line(
-          //  (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-          //  (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-          //  u.colors.violet_grey
-          //)
+          f.drawApi.pixel(
+            xy_(tileX, tileY).sub(1).mul(g.tileSize),
+            p8c.Lavender
+          );
           if (tilesCloseToPlayer[`${tileX}_${tileY}`]) {
-            f.drawApi.drawRectFilled(
-              xy_(tileX - 1, tileY - 1).mul(g.tileSize),
-              xy_(tileX, tileY).mul(g.tileSize).sub(1),
+            f.drawApi.rectFilled(
+              xy_(tileX - 1, tileY - 1)
+                .mul(g.tileSize)
+                .add(1),
+              xy_(tileX, tileY).mul(g.tileSize),
               p8c.DarkPurple
             );
           }
