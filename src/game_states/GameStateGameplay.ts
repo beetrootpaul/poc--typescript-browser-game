@@ -49,13 +49,13 @@ export class GameStateGameplay implements GameState {
 
   #onCoinCollision(): void {
     // TODO: migrate from Lua
-    console.log("COLLISION WITH COIN");
     // if mode.is_no_coins() then
     // return
     // end
     //
     // audio.play_sfx(a.sfx_coin)
-    // score.add(10)
+    this.#score.add(10);
+    // TODO: migrate from Lua
     // if not mode.is_no_memories() then
     // memories.add_memory()
     // end
@@ -101,13 +101,12 @@ export class GameStateGameplay implements GameState {
         */
 
     this.#level.checkCollisions({
-      onCoin: this.#onCoinCollision,
-      onDropletNoCoins: this.#onDropletNoCoinsCollision,
-      onDropletNoMemories: this.#onDropletNoMemoriesCollision,
+      onCoin: this.#onCoinCollision.bind(this),
+      onDropletNoCoins: this.#onDropletNoCoinsCollision.bind(this),
+      onDropletNoMemories: this.#onDropletNoMemoriesCollision.bind(this),
     });
 
-    // TODO: migrate from Lua
-    // level.animate()
+    this.#level.animate();
 
     // TODO: migrate from Lua
     // player_trail.update()
