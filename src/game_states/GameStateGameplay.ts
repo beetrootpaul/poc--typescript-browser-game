@@ -62,7 +62,7 @@ export class GameStateGameplay implements GameState {
     }
 
     this.#level.removeCoin();
-    // level.spawn_items()
+    this.#level.spawnItems();
   }
 
   #onDropletNoCoinsCollision(): void {

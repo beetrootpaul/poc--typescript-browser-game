@@ -34,9 +34,6 @@ export const g = {
     sfx_looped_empty_2 = 5,
     sfx_looped_empty_3 = 6,
     sfx_coin = 0,
-
-    game_area_w_tiles = 16,
-    game_area_h_tiles = 14,
    */
 
   // TODO: migrate from Lua

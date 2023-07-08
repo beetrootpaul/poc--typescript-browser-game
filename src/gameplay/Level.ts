@@ -45,35 +45,45 @@ export class Level {
 
     local l = {}
    */
+
   spawnItems(): void {
     // TODO: migrate from Lua
     // local tiles_close_to_player = get_tiles_close_to_player()
-    // local available_tiles = {}
-    // local margin_tiles = 1
-    // for tile_x = 1 + margin_tiles, a.game_area_w_tiles - margin_tiles do
-    //     for tile_y = 1 + margin_tiles, a.game_area_h_tiles - margin_tiles do
-    //         if not tiles_close_to_player[tile_x .. "_" .. tile_y] then
-    //             add(available_tiles, { tile_x = tile_x, tile_y = tile_y })
-    //         end
-    //     end
-    // end
-    //
-    // local coin_tile = rnd(available_tiles)
-    // if coin_tile then
-    this.#coin = new Item({
-      // TODO: migrate from Lua
-      tile: xy_(3, 3),
-      // tile_x = coin_tile.tile_x,
-      // tile_y = coin_tile.tile_y,
-      collisionCircleR: 2.5,
-      animatedSprite: new AnimatedSprite({
-        firstSpriteSheetCell: 16,
-        numberOfSprites: 16,
-        framesPerSprite: 2,
-      }),
-    });
-    // TODO: migrate from Lua
-    // end
+
+    const availableTiles: Xy[] = [];
+    const marginTiles = 1;
+    for (
+      let tileX = 1 + marginTiles;
+      tileX <= g.gameAreaSize.div(g.tileSize).x - marginTiles;
+      tileX += 1
+    ) {
+      for (
+        let tileY = 1 + marginTiles;
+        tileY <= g.gameAreaSize.div(g.tileSize).y - marginTiles;
+        tileY += 1
+      ) {
+        // TODO: migrate from Lua
+        // if not tiles_close_to_player[tile_x .. "_" .. tile_y] then
+        availableTiles.push(xy_(tileX, tileY));
+        // TODO: migrate from Lua
+        // end
+      }
+    }
+
+    if (availableTiles.length > 0) {
+      // TODO: create an util for random array pick + cover it with tests
+      const coinTile =
+        availableTiles[Math.floor(Math.random() * availableTiles.length)];
+      this.#coin = new Item({
+        tile: coinTile,
+        collisionCircleR: 2.5,
+        animatedSprite: new AnimatedSprite({
+          firstSpriteSheetCell: 16,
+          numberOfSprites: 16,
+          framesPerSprite: 2,
+        }),
+      });
+    }
 
     // TODO: migrate from Lua
     /*
