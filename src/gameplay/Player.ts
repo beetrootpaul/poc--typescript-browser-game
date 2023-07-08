@@ -35,21 +35,13 @@ export class Player extends Origin {
     return this.#direction;
   }
 
-  // TODO: migrate from Lua
-  /*
-    function p.x1()
-        return x - r
-    end
-    function p.x2()
-        return x + r
-    end
-    function p.y1()
-        return y - r
-    end
-    function p.y2()
-        return y + r
-    end
-   */
+  xy1(): Xy {
+    return this.#xy.sub(this.#r);
+  }
+
+  xy2(): Xy {
+    return this.#xy.add(this.#r);
+  }
 
   collisionCircle(): CollisionCircle {
     return {

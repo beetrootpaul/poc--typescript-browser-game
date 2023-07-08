@@ -25,26 +25,28 @@ export class Level {
     this.#player = params.player;
   }
 
-  // TODO: migrate from Lua
-  /*
-    local function get_tiles_close_to_player()
-        local left_tile_x = flr(player.x1() / u.tile_px) + 1
-        local right_tile_x = flr(player.x2() / u.tile_px) + 1
-        local top_tile_y = flr(player.y1() / u.tile_px) + 1
-        local bottom_tile_y = flr(player.y2() / u.tile_px) + 1
+  #getTilesCloseToPlayer(): Record<string, boolean> {
+    // TODO: migrate from Lua
+    const leftTopTile = this.#player.xy1().div(g.tileSize).floor().add(1);
+    const rightBottomTile = this.#player.xy2().div(g.tileSize).floor().add(1);
 
-        local close_tiles = {}
-        local margin_tiles = 3
-        for tile_x = left_tile_x - margin_tiles, right_tile_x + margin_tiles do
-            for tile_y = top_tile_y - margin_tiles, bottom_tile_y + margin_tiles do
-                close_tiles[tile_x .. "_" .. tile_y] = true
-            end
-        end
-        return close_tiles
-    end
-
-    local l = {}
-   */
+    const closeTiles: Record<string, boolean> = {};
+    const marginTiles = 3;
+    for (
+      let tileX = leftTopTile.x - marginTiles;
+      tileX <= rightBottomTile.x + marginTiles;
+      tileX += 1
+    ) {
+      for (
+        let tileY = leftTopTile.y - marginTiles;
+        tileY <= rightBottomTile.y + marginTiles;
+        tileY += 1
+      ) {
+        closeTiles[`${tileX}_${tileY}`] = true;
+      }
+    }
+    return closeTiles;
+  }
 
   spawnItems(): void {
     // TODO: migrate from Lua
@@ -193,32 +195,38 @@ export class Level {
   drawBg(): void {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())
-    // TODO: mode.bg_color()
     f.drawApi.drawRectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
     // TODO: migrate from Lua
-    /*
-          fillp()
-  
-          if __debug__ then
-              local tiles_close_to_player = get_tiles_close_to_player()
-              for tile_x = 1, a.game_area_w_tiles do
-                  for tile_y = 1, a.game_area_h_tiles do
-                      line(
-                          (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-                          (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-                          u.colors.violet_grey
-                      )
-                      if tiles_close_to_player[tile_x .. "_" .. tile_y] then
-                          rectfill(
-                              (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
-                              tile_x * u.tile_px - 1, tile_y * u.tile_px - 1,
-                              u.colors.purple
-                          )
-                      end
-                  end
-              end
-          end
-     */
+    // fillp()
+
+    if (f.debug) {
+      const tilesCloseToPlayer = this.#getTilesCloseToPlayer();
+      for (
+        let tileX = 1;
+        tileX <= g.gameAreaSize.div(g.tileSize).x;
+        tileX += 1
+      ) {
+        for (
+          let tileY = 1;
+          tileY <= g.gameAreaSize.div(g.tileSize).y;
+          tileY += 1
+        ) {
+          // TODO: migrate from Lua
+          //line(
+          //  (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
+          //  (tile_x - 1) * u.tile_px, (tile_y - 1) * u.tile_px,
+          //  u.colors.violet_grey
+          //)
+          if (tilesCloseToPlayer[`${tileX}_${tileY}`]) {
+            f.drawApi.drawRectFilled(
+              xy_(tileX - 1, tileY - 1).mul(g.tileSize),
+              xy_(tileX, tileY).mul(g.tileSize).sub(1),
+              p8c.DarkPurple
+            );
+          }
+        }
+      }
+    }
   }
 
   drawItems(): void {
