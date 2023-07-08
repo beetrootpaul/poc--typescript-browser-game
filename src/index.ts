@@ -17,3 +17,7 @@ new Game({
 // TODO: pause state
 
 // TODO: debug pause to run the game frame by frame
+
+// TODO: a script for checkout main, merge dev, push, checkout dev, reset to main, push
+
+// TODO: pause menu
