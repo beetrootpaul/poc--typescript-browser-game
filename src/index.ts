@@ -4,8 +4,7 @@ import "./style.css";
 new Game({
   htmlDisplaySelector: "#display",
   htmlCanvasSelector: "#canvas",
-  htmlOffscreenCanvasFallbackSelector: "#fallback_offscreen_canvas",
-  htmlControlsFullscreenSelector: ".controls_fullscreen",
+  htmlControlsFullscreenSelector: ".controls_fullscreen_toggle",
 }).start();
 
 // TODO: polished "loading…" screen

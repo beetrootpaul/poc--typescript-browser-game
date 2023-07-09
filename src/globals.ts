@@ -9,7 +9,7 @@ export const u = Utils;
 
 export const g = {
   // TODO: make it always false for prod build
-  __quickStart: false,
+  __quickStart: true,
   //
   fps: 30,
   //

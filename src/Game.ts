@@ -5,7 +5,6 @@ import { f, g, p8c } from "./globals.ts";
 type GameOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
-  htmlOffscreenCanvasFallbackSelector: string;
   htmlControlsFullscreenSelector: string;
 };
 
@@ -30,8 +29,6 @@ export class Game {
     f.init({
       htmlDisplaySelector: options.htmlDisplaySelector,
       htmlCanvasSelector: options.htmlCanvasSelector,
-      htmlOffscreenCanvasFallbackSelector:
-        options.htmlOffscreenCanvasFallbackSelector,
       htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
       htmlCanvasBackground: p8c.Black,
       gameCanvasSize: g.screenSize,
@@ -68,10 +65,6 @@ export class Game {
         canvas.width,
         canvas.height
       );
-      console.log(imageData.width);
-      console.log(imageData.height);
-      console.log(imageData.data);
-      console.log(imageData.data.length / 4);
       // getImageData(event.offsetX, event.offsetY, 1, 1).data;
 
       s2_imgW = imageData.width;

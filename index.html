@@ -44,10 +44,6 @@
             visibility: hidden;
         }
 
-        #fallback_offscreen_canvas {
-            visibility: hidden;
-        }
-
         .touch_controls_area_left {
             display: none;
         }
@@ -98,10 +94,10 @@
     </div>
     <canvas id="canvas"></canvas>
     <div class="mouse_controls_area_right">
-        <button class="controls_fullscreen">FS</button>
+        <button class="controls_fullscreen_toggle">FS</button>
     </div>
     <div class="touch_controls_area_right">
-        <div class="touch_button controls_fullscreen">FS</div>
+        <div class="touch_button controls_fullscreen_toggle">FS</div>
     </div>
     <div class="touch_controls touch_controls_area_bottom">
         <div class="touch_button controls_up">W</div>
@@ -111,13 +107,9 @@
         </div>
         <div class="touch_button controls_down">S</div>
         <div class="spacer">S</div>
-        <div class="touch_button controls_fullscreen">FS</div>
+        <div class="touch_button controls_fullscreen_toggle">FS</div>
     </div>
 </main>
-
-<!-- Keep this element hidden with use of inline styles, because external
-     CSS file is loaded by Vite in a way which makes GUI flicker. -->
-<canvas id="fallback_offscreen_canvas"></canvas>
 
 <script type="module" src="/src/index.ts"></script>
 

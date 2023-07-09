@@ -134,7 +134,7 @@
   justify-content: space-between;
 }
 
-.touch_controls_area_bottom .controls_fullscreen {
+.touch_controls_area_bottom .controls_fullscreen_toggle {
   align-self: start;
   width: 6vh;
   height: 6vh;
