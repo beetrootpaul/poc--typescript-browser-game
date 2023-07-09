@@ -1,6 +1,6 @@
 import { spr_, transparent, Xy, xy_ } from "@framework";
 import { CollisionCircle } from "../Collisions.ts";
-import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
+import { s2_imgBytes, s2_imgType, s2_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
 import { Direction } from "./Direction.ts";
 import { Origin, OriginSnapshot } from "./Origin.ts";
@@ -82,11 +82,11 @@ export class Memory extends Origin {
 
     if (this.isActive()) {
       // TODO: REWORK THIS
-      if (s_imgBytes) {
+      if (s2_imgBytes) {
         f.drawApi.sprite(
-          s_imgBytes,
-          s_imgW,
-          s_imgType,
+          s2_imgBytes,
+          s2_imgW,
+          s2_imgType,
           this.#spriteForDirection[this.#direction],
           this.#xy.sub(this.#r)
         );
