@@ -1,4 +1,3 @@
-import * as UPNG from "upng-js";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
 import { f, g, p8c } from "./globals.ts";
@@ -19,10 +18,10 @@ type GameStoredState = {
 };
 
 // TODO: REWORK THIS
-export let s_imgW = 0;
-export let s_imgH = 0;
-export let s_imgType: "rgba" | "rgb" = "rgba";
-export let s_imgBytes: Uint8Array | undefined;
+export let s2_imgW = 0;
+export let s2_imgH = 0;
+export let s2_imgType: "rgba" | "rgb" = "rgba";
+export let s2_imgBytes: Uint8ClampedArray | undefined;
 
 export class Game {
   #gameState: GameState;
@@ -51,47 +50,35 @@ export class Game {
 
   start(): void {
     // TODO: REWORK THIS
-    // const spriteFile = "test-image.png";
-    const spriteFile = "spritesheet.png";
-    fetch(spriteFile)
-      .then((response) => response.blob())
-      .then((blob) => blob.arrayBuffer())
-      // docs: https://github.com/photopea/UPNG.js/#upngdecodebuffer
-      .then((rawArrayBuffer) => UPNG.decode(rawArrayBuffer))
-      .then(({ width, height, depth, ctype, frames, data }) => {
-        s_imgW = width;
-        s_imgH = height;
-        if (depth != 8) {
-          throw Error(`Unexpected img depth of ${depth}. Expected: 8`);
-        }
-        // Values and their meaning taken from https://github.com/photopea/UPNG.js/blob/master/UPNG.js
-        if (ctype != 2 && ctype != 6) {
-          throw Error(
-            `Unexpected img ctype of ${ctype}. Expected: 2 (RGB) or 6 (RGB + alpha)`
-          );
-        }
-        if (ctype === 2) {
-          s_imgType = "rgb";
-        }
-        if (ctype === 6) {
-          s_imgType = "rgba";
-        }
-        if (frames.length > 0) {
-          throw Error(
-            `Unexpected img frames in length of ${frames.length}. Expected length: 0`
-          );
-        }
-        return new Uint8Array(data);
-      })
-      .then((uint8Array) => {
-        s_imgBytes = uint8Array.slice(
-          0,
-          s_imgW * s_imgH * (s_imgType === "rgb" ? 3 : 4)
-        );
-      })
-      .catch((e) => {
-        console.error("FETCH:", e);
-      });
+    const spriteSheetImage = new Image();
+    spriteSheetImage.src = "spritesheet.png";
+    spriteSheetImage.decode().then(() => {
+      console.log("DECODED");
+      const canvas = document.createElement("canvas");
+      canvas.width = spriteSheetImage.naturalWidth;
+      canvas.height = spriteSheetImage.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        throw Error(`Failed to process the image: ${spriteSheetImage.src}`);
+      }
+      ctx.drawImage(spriteSheetImage, 0, 0);
+      const imageData: ImageData = ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      console.log(imageData.width);
+      console.log(imageData.height);
+      console.log(imageData.data);
+      console.log(imageData.data.length / 4);
+      // getImageData(event.offsetX, event.offsetY, 1, 1).data;
+
+      s2_imgW = imageData.width;
+      s2_imgH = imageData.height;
+      s2_imgType = "rgba";
+      s2_imgBytes = imageData.data;
+    });
 
     f.setOnUpdate(() => {
       f.storageApi.store<GameStoredState>({

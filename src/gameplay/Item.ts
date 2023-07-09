@@ -1,6 +1,6 @@
 import { transparent, Xy } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
-import { s_imgBytes, s_imgType, s_imgW } from "../Game.ts";
+import { s2_imgBytes, s2_imgType, s2_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
 
@@ -38,11 +38,11 @@ export class Item {
     f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
     // TODO: REWORK THIS
-    if (s_imgBytes) {
+    if (s2_imgBytes) {
       f.drawApi.sprite(
-        s_imgBytes,
-        s_imgW,
-        s_imgType,
+        s2_imgBytes,
+        s2_imgW,
+        s2_imgType,
         this.#animatedSprite.currentSprite(),
         this.#tile.sub(1).mul(g.tileSize)
       );
