@@ -1,6 +1,5 @@
 import { spr_, transparent, Xy, xy_ } from "@framework";
 import { CollisionCircle } from "../Collisions.ts";
-import { s2_imgBytes, s2_imgType, s2_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
 import { Direction } from "./Direction.ts";
 import { Origin, OriginSnapshot } from "./Origin.ts";
@@ -81,16 +80,11 @@ export class Memory extends Origin {
     f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
     if (this.isActive()) {
-      // TODO: REWORK THIS
-      if (s2_imgBytes) {
-        f.drawApi.sprite(
-          s2_imgBytes,
-          s2_imgW,
-          s2_imgType,
-          this.#spriteForDirection[this.#direction],
-          this.#xy.sub(this.#r)
-        );
-      }
+      f.drawApi.sprite(
+        g.assets.spritesheet,
+        this.#spriteForDirection[this.#direction],
+        this.#xy.sub(this.#r)
+      );
     }
 
     // TODO: API to reset all mappings?

@@ -24,6 +24,10 @@ export const g = {
   //
   musicBeatFrames: 16,
   //
+  assets: {
+    spritesheet: "spritesheet.png",
+  },
+  //
 
   // TODO: migrate from Lua
   /*
