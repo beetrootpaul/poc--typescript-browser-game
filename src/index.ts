@@ -21,3 +21,5 @@ new Game({
 // TODO: a script for checkout main, merge dev, push, checkout dev, reset to main, push
 
 // TODO: pause menu
+
+// TODO: review personal tasks BEFORE re-publishing the framework under a desired name
