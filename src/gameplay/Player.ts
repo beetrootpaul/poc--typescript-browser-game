@@ -93,9 +93,12 @@ export class Player extends Origin {
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
     f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
 
-    // TODO: migrate from Lua
-    //     if __debug__ then
-    //         circfill(x, y, r, u.colors.red)
-    //     end
+    if (f.debug) {
+      f.drawApi.ellipseFilled(
+        this.#xy.sub(this.#r),
+        this.#xy.add(this.#r),
+        p8c.Red
+      );
+    }
   }
 }
