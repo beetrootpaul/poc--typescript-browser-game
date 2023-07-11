@@ -1,4 +1,4 @@
-import { spr_, Sprite, xy_ } from "@framework";
+import { Sprite, xy_ } from "@framework";
 import { g } from "../globals.ts";
 
 type AnimatedSpriteParams = {
@@ -33,12 +33,13 @@ export class AnimatedSprite {
     let spriteIndex =
       this.#firstSpriteSheetCell +
       Math.floor(this.#frameCounter / this.#framesPerSprite);
-    return spr_(
-      xy_(
-        spriteIndex % g.spriteSheetCells.x,
-        Math.floor(spriteIndex / g.spriteSheetCells.x)
-      ).mul(g.spriteSheetCellSize),
-      g.spriteSheetCellSize
-    );
+    const spriteXy1 = xy_(
+      spriteIndex % g.spriteSheetCells.x,
+      Math.floor(spriteIndex / g.spriteSheetCells.x)
+    ).mul(g.spriteSheetCellSize);
+    return {
+      xy1: spriteXy1,
+      xy2: spriteXy1.add(g.spriteSheetCellSize),
+    };
   }
 }
