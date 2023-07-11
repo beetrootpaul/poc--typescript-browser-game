@@ -1,6 +1,5 @@
 import { transparent, Xy } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
-import { s2_imgBytes, s2_imgType, s2_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
 
@@ -37,19 +36,19 @@ export class Item {
     f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
     f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
-    // TODO: REWORK THIS
-    if (s2_imgBytes) {
-      f.drawApi.sprite(
-        s2_imgBytes,
-        s2_imgW,
-        s2_imgType,
-        this.#animatedSprite.currentSprite(),
-        this.#tile.sub(1).mul(g.tileSize)
-      );
-    }
+    f.drawApi.sprite(
+      g.assets.spritesheet,
+      this.#animatedSprite.currentSprite(),
+      this.#tile.sub(1).mul(g.tileSize)
+    );
 
     // TODO: API to reset all mappings?
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
     f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
+
+    if (f.debug) {
+      const cc = this.collisionCircle();
+      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.Red);
+    }
   }
 }

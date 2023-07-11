@@ -9,7 +9,7 @@ export const u = Utils;
 
 export const g = {
   // TODO: make it always false for prod build
-  __quickStart: false,
+  __quickStart: true,
   //
   fps: 30,
   //
@@ -23,6 +23,10 @@ export const g = {
   spriteSheetCellSize: xy_(8, 8),
   //
   musicBeatFrames: 16,
+  //
+  assets: {
+    spritesheet: "spritesheet.png",
+  },
   //
 
   // TODO: migrate from Lua

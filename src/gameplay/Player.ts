@@ -1,6 +1,5 @@
-import { spr_, transparent, Xy, xy_ } from "@framework";
+import { transparent, Xy, xy_ } from "@framework";
 import { type CollisionCircle } from "../Collisions.ts";
-import { s2_imgBytes, s2_imgType, s2_imgW } from "../Game.ts";
 import { f, g, p8c } from "../globals.ts";
 import { Direction } from "./Direction.ts";
 import { Origin } from "./Origin.ts";
@@ -16,11 +15,11 @@ export class Player extends Origin {
   #direction: Direction = "r";
   #dXy = xy_(this.#speed, 0);
 
-  readonly #spriteForDirection = {
-    u: spr_(xy_(7, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
-    r: spr_(xy_(8, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
-    d: spr_(xy_(9, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
-    l: spr_(xy_(10, 2).mul(g.spriteSheetCellSize), g.spriteSheetCellSize),
+  readonly #spriteXy1ForDirection = {
+    u: xy_(7, 2).mul(g.spriteSheetCellSize),
+    r: xy_(8, 2).mul(g.spriteSheetCellSize),
+    d: xy_(9, 2).mul(g.spriteSheetCellSize),
+    l: xy_(10, 2).mul(g.spriteSheetCellSize),
   };
 
   center(): Xy {
@@ -84,24 +83,23 @@ export class Player extends Origin {
     f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
     f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
-    // TODO: REWORK THIS
-    if (s2_imgBytes) {
-      f.drawApi.sprite(
-        s2_imgBytes,
-        s2_imgW,
-        s2_imgType,
-        this.#spriteForDirection[this.#direction],
-        this.#xy.sub(this.#r)
-      );
-    }
+    const spriteXy1 = this.#spriteXy1ForDirection[this.#direction];
+    f.drawApi.sprite(
+      g.assets.spritesheet,
+      {
+        xy1: spriteXy1,
+        xy2: spriteXy1.add(g.spriteSheetCellSize),
+      },
+      this.#xy.sub(this.#r)
+    );
 
     // TODO: API to reset all mappings?
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
     f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
 
-    // TODO: migrate from Lua
-    //     if __debug__ then
-    //         circfill(x, y, r, u.colors.red)
-    //     end
+    if (f.debug) {
+      const cc = this.collisionCircle();
+      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.Red);
+    }
   }
 }

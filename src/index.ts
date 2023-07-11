@@ -1,12 +1,11 @@
 import { Game } from "./Game.ts";
 import "./style.css";
 
-new Game({
+new Game().start({
   htmlDisplaySelector: "#display",
   htmlCanvasSelector: "#canvas",
-  htmlOffscreenCanvasFallbackSelector: "#fallback_offscreen_canvas",
-  htmlControlsFullscreenSelector: ".controls_fullscreen",
-}).start();
+  htmlControlsFullscreenSelector: ".controls_fullscreen_toggle",
+});
 
 // TODO: polished "loading…" screen
 
