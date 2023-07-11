@@ -91,9 +91,13 @@ export class Memory extends Origin {
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
     f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
 
-    // TODO: migrate from Lua
-    // if __debug__ then
-    //      circfill(x, y, r, is_active() and u.colors.salmon or u.colors.violet_grey)
-    // end
+    if (f.debug) {
+      const cc = this.collisionCircle();
+      f.drawApi.ellipse(
+        cc.center.sub(cc.r),
+        cc.center.add(cc.r),
+        this.isActive() ? p8c.Red : p8c.DarkGrey
+      );
+    }
   }
 }

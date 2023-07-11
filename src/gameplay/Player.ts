@@ -94,11 +94,8 @@ export class Player extends Origin {
     f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
 
     if (f.debug) {
-      f.drawApi.ellipseFilled(
-        this.#xy.sub(this.#r),
-        this.#xy.add(this.#r),
-        p8c.Red
-      );
+      const cc = this.collisionCircle();
+      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.Red);
     }
   }
 }

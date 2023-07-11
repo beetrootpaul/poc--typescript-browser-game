@@ -45,5 +45,10 @@ export class Item {
     // TODO: API to reset all mappings?
     // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
     f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
+
+    if (f.debug) {
+      const cc = this.collisionCircle();
+      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.Red);
+    }
   }
 }
