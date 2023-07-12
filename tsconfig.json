@@ -25,6 +25,7 @@
     "noEmit": true,
     //
     "strict": true,
+    "noUncheckedIndexedAccess": true,
     // Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields)
     "useDefineForClassFields": true,
     "noFallthroughCasesInSwitch": true,

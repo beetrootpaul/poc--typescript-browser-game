@@ -1,3 +1,4 @@
+import { xy_ } from "@framework";
 import { Mode } from "../gameplay/Mode.ts";
 import { Score } from "../gameplay/Score.ts";
 import { f, g, p8c } from "../globals.ts";
@@ -25,15 +26,18 @@ export class Topbar {
 
     const modeLabel = this.#mode.label();
     if (modeLabel) {
+      const textY = g.cameraOffset.y + 4;
       // TODO: migrate from Lua
-      /*
-              local text_y = a.camera_y + 4
-              local progress_w = u.measure_text_width(mode_label)
-              local progress_remaining_w = (mode.percentage_left() / 100) * progress_w
-              local progress_x = a.camera_x + u.screen_px - progress_w - 1
-              local progress_y = text_y + u.text_height_px + 2
-              local progress_h = 1
-              */
+      const progressW = 60;
+      //  local progress_w = u.measure_text_width(mode_label)
+      const progressRemainingW = Math.floor(
+        (this.#mode.percentageLeft() / 100) * progressW
+      );
+      console.log(progressRemainingW);
+      const progressX = g.cameraOffset.x + g.screenSize.x - progressW - 1;
+      // TODO: migrate from Lua
+      const progressY = textY + 8 + 2;
+      //  local progress_y = text_y + u.text_height_px + 2
 
       // TODO: remove tmp implementation and migrate from Lua
       console.log(modeLabel);
@@ -44,18 +48,23 @@ export class Topbar {
       //     u.colors.light_grey
       // )
 
-      // TODO: migrate from Lua
-      /*
-              if progress_remaining_w > 0 then
-                  line(
-                      progress_x + progress_w - progress_remaining_w,
-                      progress_y,
-                      progress_x + progress_w - 1,
-                      progress_y + progress_h - 1,
-                      mode.progress_color()
-                  )
-              end
-       */
+      if (progressRemainingW > 0) {
+        // TODO: replace with line drawing, once implemented in DrawApi
+        for (
+          let x = progressX + progressW - progressRemainingW;
+          x <= progressX + progressW - 1;
+          x += 1
+        ) {
+          f.drawApi.pixel(xy_(x, progressY), this.#mode.progressColor());
+        }
+        // line(
+        //   progress_x + progress_w - progress_remaining_w,
+        //   progress_y,
+        //   progress_x + progress_w - 1,
+        //   progress_y + progress_h - 1,
+        //   mode.progress_color()
+        // )
+      }
     }
 
     // TODO: remove the tmp implementation and migrate from Lua

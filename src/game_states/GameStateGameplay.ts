@@ -17,7 +17,6 @@ type GameStateGameplayParams = {
   player: Player;
 };
 
-// TODO: make it not needed to pass <StorageApiValueConstraint> by maybe decoupling what goes into `update`
 export class GameStateGameplay implements GameState {
   readonly #mode: Mode;
   readonly #topbar: Topbar;
@@ -42,10 +41,10 @@ export class GameStateGameplay implements GameState {
     });
   }
 
-  // TODO: migrate from Lua
-  // local function on_back_to_regular_mode()
-  // audio.enable_music_layers { true, false, false }
-  // end
+  #onBackToRegularMode(): void {
+    // TODO: migrate from Lua
+    // audio.enable_music_layers { true, false, false }
+  }
 
   #onCoinCollision(): void {
     if (this.#mode.isNoCoins()) {
@@ -93,11 +92,9 @@ export class GameStateGameplay implements GameState {
     }
 
     // TODO: migrate from Lua
-    /*
-        mode.update {
-            on_back_to_regular_mode = on_back_to_regular_mode
-        }
-        */
+    this.#mode.update({
+      onBackToRegularMode: this.#onBackToRegularMode.bind(this),
+    });
 
     this.#level.checkCollisions({
       onCoin: this.#onCoinCollision.bind(this),

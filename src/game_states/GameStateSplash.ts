@@ -1,5 +1,5 @@
 import { Audio } from "../Audio.ts";
-import { f, g, p8c } from "../globals.ts";
+import { f, g } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
@@ -59,9 +59,7 @@ export class GameStateSplash implements GameState {
     f.drawApi.rectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.screenSize),
-      // TODO: migrate from Lua: a.bg_color_mode_normal
-      p8c.DarkBlue
-      // a.bg_color_mode_normal
+      g.colors.bgColorModeNormal
     );
 
     this.#sash.draw();

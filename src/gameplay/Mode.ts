@@ -1,12 +1,22 @@
+import { CompositeColor, FillPattern, SolidColor } from "@framework";
+import { g } from "../globals.ts";
+
 export class Mode {
   #current: "regular" | "no_coins" | "no_memories" = "regular";
 
-  // TODO: migrate from Lua
-  /*
-    local ttl = 0
-    local ttl_max_no_coins = 90
-    local ttl_max_no_memories = 150
-   */
+  #ttl = 0;
+
+  #ttlMax(): number {
+    switch (this.#current) {
+      case "no_coins":
+        return 90;
+      case "no_memories":
+        return 150;
+      default:
+        // Any value, safe to use as in divisions. In theory, this code won't be reached.
+        return 1;
+    }
+  }
 
   isNoCoins(): boolean {
     return this.#current === "no_coins";
@@ -18,14 +28,12 @@ export class Mode {
 
   startNoCoins(): void {
     this.#current = "no_coins";
-    // TODO: migrate from Lua
-    // ttl = ttl_max_no_coins
+    this.#ttl = this.#ttlMax();
   }
 
   startNoMemories(): void {
     this.#current = "no_memories";
-    // TODO: migrate from Lua
-    // ttl = ttl_max_no_memories
+    this.#ttl = this.#ttlMax();
   }
 
   label(): string | null {
@@ -39,101 +47,76 @@ export class Mode {
     }
   }
 
-  // TODO: migrate from Lua
-  /*
-    function m.label()
-        if current == "no_coins" then
-            return "cannot collect coins"
-        elseif current == "no_memories" then
-            return "invulnerable"
-        else
-            return nil
-        end
-    end
-   */
+  progressColor(): SolidColor {
+    switch (this.#current) {
+      case "no_coins":
+        return g.colors.bgColorModeNoCoins;
+      case "no_memories":
+        return g.colors.bgColorModeNoMemories;
+      default:
+        return g.colors.bgColorModeNormal;
+    }
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function m.progress_color()
-        if current == "no_coins" then
-            return a.bg_color_mode_no_coins
-        elseif current == "no_memories" then
-            return a.bg_color_mode_no_memories
-        else
-            return a.bg_color_mode_normal
-        end
-    end
-   */
+  bgColor(): SolidColor | CompositeColor {
+    switch (this.#current) {
+      case "no_coins":
+        return new CompositeColor(
+          g.colors.bgColorModeNoCoins,
+          g.colors.bgColorModeNormal
+        );
+      case "no_memories":
+        return new CompositeColor(
+          g.colors.bgColorModeNoMemories,
+          g.colors.bgColorModeNormal
+        );
+      default:
+        return g.colors.bgColorModeNormal;
+    }
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function m.bg_color()
-        if current == "no_coins" then
-            return a.bg_color_mode_no_coins + 16 * a.bg_color_mode_normal
-        elseif current == "no_memories" then
-            return a.bg_color_mode_no_memories + 16 * a.bg_color_mode_normal
-        else
-            return a.bg_color_mode_normal
-        end
-    end
-   */
+  bgPattern(): FillPattern {
+    if (this.#current == "regular") {
+      return FillPattern.primaryOnly;
+    }
 
-  // TODO: migrate from Lua
-  /*
-    function m.bg_pattern()
-        if current == "regular" then
-            return nil
-        end
+    const ttlMax = this.#ttlMax();
+    let ttlDistanceFromStartToEnd = Math.min(this.#ttl, ttlMax - this.#ttl);
 
-        local ttl_max
-        if current == "no_coins" then
-            ttl_max = ttl_max_no_coins
-        elseif current == "no_memories" then
-            ttl_max = ttl_max_no_memories
-        else
-            assert(false, "unexpected " .. current .. " mode")
-        end
+    switch (ttlDistanceFromStartToEnd) {
+      case 0:
+        return FillPattern.of(0b1111_1111_1011_1111);
+      case 1:
+        return FillPattern.of(0b1010_1111_1010_1111);
+      case 2:
+        return FillPattern.of(0b1010_0101_1010_0101);
+      case 3:
+        return FillPattern.of(0b0000_0101_0000_0101);
+      case 4:
+        return FillPattern.of(0b0000_0000_0000_0001);
+      default:
+        return FillPattern.primaryOnly;
+    }
+  }
 
-        local ttl_distance_from_start_end = min(ttl, ttl_max - ttl)
-        if ttl_distance_from_start_end < 1 then
-            return 1 + 2 + 4 + 8 + 16 + 32 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768
-        elseif ttl_distance_from_start_end < 2 then
-            return 1 + 2 + 4 + 8 + 32 + 128 + 256 + 512 + 1024 + 2048 + 8192 + 32768
-        elseif ttl_distance_from_start_end < 3 then
-            return 1 + 4 + 32 + 128 + 256 + 1024 + 8192 + 32768
-        elseif ttl_distance_from_start_end < 4 then
-            return 1 + 4 + 256 + 1024
-        elseif ttl_distance_from_start_end < 5 then
-            return 1
-        else
-            return nil
-        end
-    end
-   */
+  percentageLeft(): number {
+    switch (this.#current) {
+      case "no_coins":
+        return (100 * this.#ttl) / this.#ttlMax();
+      case "no_memories":
+        return (100 * this.#ttl) / this.#ttlMax();
+      default:
+        return 0;
+    }
+  }
 
-  // TODO: migrate from Lua
-  /*
-    function m.percentage_left()
-        if current == "no_coins" then
-            return 100 * ttl / ttl_max_no_coins
-        elseif current == "no_memories" then
-            return 100 * ttl / ttl_max_no_memories
-        else
-            return 0
-        end
-    end
-   */
-
-  // TODO: migrate from Lua
-  /*
-    function m.update(callbacks)
-        if current ~= "regular" and ttl <= 0 then
-            current = "regular"
-            callbacks.on_back_to_regular_mode()
-        end
-        if ttl > 0 then
-            ttl = ttl - 1
-        end
-    end
-   */
+  update(callbacks: { onBackToRegularMode: () => void }): void {
+    if (this.#current != "regular" && this.#ttl <= 0) {
+      this.#current = "regular";
+      callbacks.onBackToRegularMode();
+    }
+    if (this.#ttl > 0) {
+      this.#ttl -= 1;
+    }
+  }
 }
