@@ -24,6 +24,12 @@ export const g = {
   //
   musicBeatFrames: 16,
   //
+  colors: {
+    bgColorModeNormal: p8c.DarkBlue,
+    bgColorModeNoCoins: p8c.Orange,
+    bgColorModeNoMemories: p8c.Pink,
+  },
+  //
   assets: {
     spritesheet: "spritesheet.png",
   },
@@ -31,10 +37,6 @@ export const g = {
 
   // TODO: migrate from Lua
   /*
-      bg_color_mode_normal = u.colors.dark_blue,
-    bg_color_mode_no_coins = u.colors.orange,
-    bg_color_mode_no_memories = u.colors.pink,
-
     music = 1,
 
     sfx_looped_empty_1 = 4,

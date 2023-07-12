@@ -1,3 +1,6 @@
+import { SolidColor } from "@framework";
+import { g } from "../globals.ts";
+
 export class Mode {
   #current: "regular" | "no_coins" | "no_memories" = "regular";
 
@@ -34,44 +37,16 @@ export class Mode {
     }
   }
 
-  // TODO: migrate from Lua
-  /*
-    function m.label()
-        if current == "no_coins" then
-            return "cannot collect coins"
-        elseif current == "no_memories" then
-            return "invulnerable"
-        else
-            return nil
-        end
-    end
-   */
-
-  // TODO: migrate from Lua
-  /*
-    function m.progress_color()
-        if current == "no_coins" then
-            return a.bg_color_mode_no_coins
-        elseif current == "no_memories" then
-            return a.bg_color_mode_no_memories
-        else
-            return a.bg_color_mode_normal
-        end
-    end
-   */
-
-  // TODO: migrate from Lua
-  /*
-    function m.bg_color()
-        if current == "no_coins" then
-            return a.bg_color_mode_no_coins + 16 * a.bg_color_mode_normal
-        elseif current == "no_memories" then
-            return a.bg_color_mode_no_memories + 16 * a.bg_color_mode_normal
-        else
-            return a.bg_color_mode_normal
-        end
-    end
-   */
+  progressColor(): SolidColor {
+    switch (this.#current) {
+      case "no_coins":
+        return g.colors.bgColorModeNoCoins;
+      case "no_memories":
+        return g.colors.bgColorModeNoMemories;
+      default:
+        return g.colors.bgColorModeNormal;
+    }
+  }
 
   // TODO: migrate from Lua
   /*
@@ -106,18 +81,16 @@ export class Mode {
     end
    */
 
-  // TODO: migrate from Lua
-  /*
-    function m.percentage_left()
-        if current == "no_coins" then
-            return 100 * ttl / ttl_max_no_coins
-        elseif current == "no_memories" then
-            return 100 * ttl / ttl_max_no_memories
-        else
-            return 0
-        end
-    end
-   */
+  percentageLeft(): number {
+    switch (this.#current) {
+      case "no_coins":
+        return (100 * this.#ttl) / this.#ttlMaxNoCoins;
+      case "no_memories":
+        return (100 * this.#ttl) / this.#ttlMaxNoMemories;
+      default:
+        return 0;
+    }
+  }
 
   update(callbacks: { onBackToRegularMode: () => void }): void {
     if (this.#current != "regular" && this.#ttl <= 0) {
