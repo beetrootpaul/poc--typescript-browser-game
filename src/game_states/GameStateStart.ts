@@ -72,8 +72,8 @@ export class GameStateStart implements GameState {
     //     local margin = 6
     const prompt1 = "press an arrow";
     const prompt2 = "to choose direction";
-    const prompt1W = u.measureTextWidth(prompt1);
-    const prompt2W = u.measureTextWidth(prompt2);
+    const prompt1Size = u.measureTextSize(prompt1);
+    const prompt2Size = u.measureTextSize(prompt2);
     // TODO: migrate from Lua
     /*
         u.print_with_outline(prompt1, player.xc() - prompt1_w / 2, player.y1() - margin - 26, u.colors.violet_grey, u.colors.dark_blue)

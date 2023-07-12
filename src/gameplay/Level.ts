@@ -98,7 +98,7 @@ export class Level {
         const probability = Math.random();
         if (f.debug) {
           // TODO: use some custom logger?
-          console.log("Droplet probability:", probability);
+          console.debug("Droplet probability:", probability);
         }
         if (probability < 0.3) {
           this.#dropletNoCoins = new Item({
