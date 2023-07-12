@@ -1,12 +1,9 @@
 export class Mode {
   #current: "regular" | "no_coins" | "no_memories" = "regular";
 
-  // TODO: migrate from Lua
-  /*
-    local ttl = 0
-    local ttl_max_no_coins = 90
-    local ttl_max_no_memories = 150
-   */
+  #ttl = 0;
+  #ttlMaxNoCoins = 90;
+  #ttlMaxNoMemories = 150;
 
   isNoCoins(): boolean {
     return this.#current === "no_coins";
@@ -18,14 +15,12 @@ export class Mode {
 
   startNoCoins(): void {
     this.#current = "no_coins";
-    // TODO: migrate from Lua
-    // ttl = ttl_max_no_coins
+    this.#ttl = this.#ttlMaxNoCoins;
   }
 
   startNoMemories(): void {
     this.#current = "no_memories";
-    // TODO: migrate from Lua
-    // ttl = ttl_max_no_memories
+    this.#ttl = this.#ttlMaxNoMemories;
   }
 
   label(): string | null {
@@ -124,16 +119,13 @@ export class Mode {
     end
    */
 
-  // TODO: migrate from Lua
-  /*
-    function m.update(callbacks)
-        if current ~= "regular" and ttl <= 0 then
-            current = "regular"
-            callbacks.on_back_to_regular_mode()
-        end
-        if ttl > 0 then
-            ttl = ttl - 1
-        end
-    end
-   */
+  update(callbacks: { onBackToRegularMode: () => void }): void {
+    if (this.#current != "regular" && this.#ttl <= 0) {
+      this.#current = "regular";
+      callbacks.onBackToRegularMode();
+    }
+    if (this.#ttl > 0) {
+      this.#ttl -= 1;
+    }
+  }
 }

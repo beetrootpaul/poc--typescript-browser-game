@@ -49,7 +49,8 @@ export class Level {
   spawnItems(): void {
     const tilesCloseToPlayer = this.#getTilesCloseToPlayer();
 
-    const availableTiles: Xy[] = [];
+    let availableTiles: Xy[] = [];
+
     const marginTiles = 1;
     for (
       let tileX = 1 + marginTiles;
@@ -71,53 +72,57 @@ export class Level {
       // TODO: create an util for random array pick + cover it with tests
       const coinTile =
         availableTiles[Math.floor(Math.random() * availableTiles.length)];
-      this.#coin = new Item({
-        tile: coinTile,
-        collisionCircleR: 2.5,
-        animatedSprite: new AnimatedSprite({
-          firstSpriteSheetCell: 16,
-          numberOfSprites: 16,
-          framesPerSprite: 2,
-        }),
-      });
+      if (coinTile) {
+        availableTiles = availableTiles.filter((tile) => !tile.eq(coinTile));
+        this.#coin = new Item({
+          tile: coinTile,
+          collisionCircleR: 2.5,
+          animatedSprite: new AnimatedSprite({
+            firstSpriteSheetCell: 16,
+            numberOfSprites: 16,
+            framesPerSprite: 2,
+          }),
+        });
+      }
     }
 
-    // TODO: migrate from Lua
-    /*
-              if not droplet_no_coins and not droplet_no_memories and not mode.is_no_coins() and not mode.is_no_memories() then
-                  del(available_tiles, coin_tile)
-                  local droplet_tile = rnd(available_tiles)
-                  if droplet_tile then
-                      local probability = rnd(1)
-                      if __debug__ then
-                          printh(probability)
-                      end
-                      if probability < 0.3 then
-                          droplet_no_coins = new_item {
-                              tile_x = droplet_tile.tile_x,
-                              tile_y = droplet_tile.tile_y,
-                              collision_circle_r = 3.5,
-                              animated_sprite = new_animated_sprite {
-                                  first_sprite = 32,
-                                  number_of_sprites = 1,
-                                  frames_per_sprite = 1,
-                              }
-                          }
-                      elseif probability > 0.7 then
-                          droplet_no_memories = new_item {
-                              tile_x = droplet_tile.tile_x,
-                              tile_y = droplet_tile.tile_y,
-                              collision_circle_r = 3.5,
-                              animated_sprite = new_animated_sprite {
-                                  first_sprite = 48,
-                                  number_of_sprites = 1,
-                                  frames_per_sprite = 1,
-                              }
-                          }
-                      end
-                  end
-              end
-         */
+    if (
+      !this.#dropletNoCoins &&
+      !this.#dropletNoMemories &&
+      !this.#mode.isNoCoins() &&
+      !this.#mode.isNoMemories()
+    ) {
+      const dropletTile =
+        availableTiles[Math.floor(Math.random() * availableTiles.length)];
+      if (dropletTile) {
+        const probability = Math.random();
+        if (f.debug) {
+          // TODO: use some custom logger?
+          console.log("Droplet probability:", probability);
+        }
+        if (probability < 0.3) {
+          this.#dropletNoCoins = new Item({
+            tile: dropletTile,
+            collisionCircleR: 3.5,
+            animatedSprite: new AnimatedSprite({
+              firstSpriteSheetCell: 32,
+              numberOfSprites: 1,
+              framesPerSprite: 1,
+            }),
+          });
+        } else if (probability > 0.7) {
+          this.#dropletNoMemories = new Item({
+            tile: dropletTile,
+            collisionCircleR: 3.5,
+            animatedSprite: new AnimatedSprite({
+              firstSpriteSheetCell: 48,
+              numberOfSprites: 1,
+              framesPerSprite: 1,
+            }),
+          });
+        }
+      }
+    }
   }
 
   removeCoin(): void {
