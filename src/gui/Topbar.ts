@@ -33,20 +33,12 @@ export class Topbar {
       const progressRemainingW = Math.floor(
         (this.#mode.percentageLeft() / 100) * progressW
       );
-      console.log(progressRemainingW);
       const progressX = g.cameraOffset.x + g.screenSize.x - progressW - 1;
       // TODO: migrate from Lua
       const progressY = textY + 8 + 2;
       //  local progress_y = text_y + u.text_height_px + 2
 
-      // TODO: remove tmp implementation and migrate from Lua
-      console.log(modeLabel);
-      // print(
-      //     mode_label,
-      //     progress_x,
-      //     text_y,
-      //     u.colors.light_grey
-      // )
+      f.drawApi.print(modeLabel, xy_(progressX, textY), p8c.LightGrey);
 
       if (progressRemainingW > 0) {
         // TODO: replace with line drawing, once implemented in DrawApi
@@ -67,15 +59,10 @@ export class Topbar {
       }
     }
 
-    // TODO: remove the tmp implementation and migrate from Lua
-    console.log(`score ${this.#score.value()}`);
-    /*
-        print(
-            "score " .. tostr(score.value()),
-            a.camera_x + 1,
-            a.camera_y + 4,
-            u.colors.light_grey
-        )
-     */
+    f.drawApi.print(
+      `score ${this.#score.value()}`,
+      g.cameraOffset.add(xy_(1, 4)),
+      p8c.LightGrey
+    );
   }
 }
