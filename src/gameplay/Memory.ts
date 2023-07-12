@@ -1,4 +1,4 @@
-import { transparent, Xy, xy_ } from "@framework";
+import { Sprite, transparent, Xy, xy_ } from "@framework";
 import { CollisionCircle } from "../Collisions.ts";
 import { f, g, p8c } from "../globals.ts";
 import { Direction } from "./Direction.ts";
@@ -83,10 +83,7 @@ export class Memory extends Origin {
       const spriteXy1 = this.#spriteXy1ForDirection[this.#direction];
       f.drawApi.sprite(
         g.assets.spritesheet,
-        {
-          xy1: spriteXy1,
-          xy2: spriteXy1.add(g.spriteSheetCellSize),
-        },
+        new Sprite(spriteXy1, spriteXy1.add(g.spriteSheetCellSize)),
         this.#xy.sub(this.#r)
       );
     }

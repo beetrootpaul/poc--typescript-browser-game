@@ -1,5 +1,6 @@
 import { PocTsBGFramework, Utils, xy_ } from "@framework";
 import { Pico8Colors } from "./Pico8Color.ts";
+import { Pico8Font } from "./Pico8Font.ts";
 
 export const f = PocTsBGFramework;
 
@@ -33,7 +34,8 @@ export const g = {
   //
   assets: {
     spritesheet: "spritesheet.png",
-  },
+    pico8Font: "pico-8-font.png",
+  } as const,
   //
 
   // TODO: migrate from Lua

@@ -1,6 +1,7 @@
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
 import { f, g, p8c } from "./globals.ts";
+import { Pico8Font } from "./Pico8Font.ts";
 
 type GameOptions = {
   htmlDisplaySelector: string;
@@ -37,11 +38,12 @@ export class Game {
         },
       },
       {
-        images: Object.values(g.assets)
-          .filter((url) => url.endsWith(".png"))
-          .map((url) => ({ url })),
+        images: [{ url: g.assets.spritesheet }],
+        fonts: [{ url: g.assets.pico8Font, font: new Pico8Font() }],
       }
     ).then(({ startGame }) => {
+      f.drawApi.setFont(g.assets.pico8Font);
+
       f.setOnUpdate(() => {
         f.storageApi.store<GameStoredState>({
           mostRecentFameNumber: f.frameNumber,
