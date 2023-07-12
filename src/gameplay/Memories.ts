@@ -24,7 +24,7 @@ export class Memories {
         this.#memoriesFromFirstToLast.length > 0
           ? this.#memoriesFromFirstToLast[
               this.#memoriesFromFirstToLast.length - 1
-            ]
+            ]!
           : this.#player,
     });
 
