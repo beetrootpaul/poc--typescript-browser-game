@@ -1,4 +1,4 @@
-import { Xy, xy_ } from "@framework";
+import { FillPattern, Xy, xy_ } from "@framework";
 import { Collisions } from "../Collisions.ts";
 import { f, g, p8c } from "../globals.ts";
 import { AnimatedSprite } from "./AnimatedSprite.ts";
@@ -182,11 +182,9 @@ export class Level {
   }
 
   drawBg(): void {
-    // TODO: migrate from Lua
-    // fillp(mode.bg_pattern())
+    f.drawApi.setFillPattern(this.#mode.bgPattern());
     f.drawApi.rectFilled(Xy.zero, g.gameAreaSize, this.#mode.bgColor());
-    // TODO: migrate from Lua
-    // fillp()
+    f.drawApi.setFillPattern(FillPattern.primaryOnly);
 
     if (f.debug) {
       const tilesCloseToPlayer = this.#getTilesCloseToPlayer();

@@ -1,12 +1,22 @@
-import { SolidColor } from "@framework";
+import { CompositeColor, FillPattern, SolidColor } from "@framework";
 import { g } from "../globals.ts";
 
 export class Mode {
   #current: "regular" | "no_coins" | "no_memories" = "regular";
 
   #ttl = 0;
-  #ttlMaxNoCoins = 90;
-  #ttlMaxNoMemories = 150;
+
+  #ttlMax(): number {
+    switch (this.#current) {
+      case "no_coins":
+        return 90;
+      case "no_memories":
+        return 150;
+      default:
+        // Any value, safe to use as in divisions. In theory, this code won't be reached.
+        return 1;
+    }
+  }
 
   isNoCoins(): boolean {
     return this.#current === "no_coins";
@@ -18,12 +28,12 @@ export class Mode {
 
   startNoCoins(): void {
     this.#current = "no_coins";
-    this.#ttl = this.#ttlMaxNoCoins;
+    this.#ttl = this.#ttlMax();
   }
 
   startNoMemories(): void {
     this.#current = "no_memories";
-    this.#ttl = this.#ttlMaxNoMemories;
+    this.#ttl = this.#ttlMax();
   }
 
   label(): string | null {
@@ -48,60 +58,53 @@ export class Mode {
     }
   }
 
-  bgColor(): SolidColor {
+  bgColor(): SolidColor | CompositeColor {
     switch (this.#current) {
       case "no_coins":
-        // TODO: migrate from Lua
-        // return a.bg_color_mode_no_coins + 16 * a.bg_color_mode_normal
-        return g.colors.bgColorModeNoCoins;
+        return new CompositeColor(
+          g.colors.bgColorModeNoCoins,
+          g.colors.bgColorModeNormal
+        );
       case "no_memories":
-        // TODO: migrate from Lua
-        // return a.bg_color_mode_no_memories + 16 * a.bg_color_mode_normal
-        return g.colors.bgColorModeNoMemories;
+        return new CompositeColor(
+          g.colors.bgColorModeNoMemories,
+          g.colors.bgColorModeNormal
+        );
       default:
         return g.colors.bgColorModeNormal;
     }
   }
 
-  // TODO: migrate from Lua
-  /*
-    function m.bg_pattern()
-        if current == "regular" then
-            return nil
-        end
+  bgPattern(): FillPattern {
+    if (this.#current == "regular") {
+      return FillPattern.primaryOnly;
+    }
 
-        local ttl_max
-        if current == "no_coins" then
-            ttl_max = ttl_max_no_coins
-        elseif current == "no_memories" then
-            ttl_max = ttl_max_no_memories
-        else
-            assert(false, "unexpected " .. current .. " mode")
-        end
+    const ttlMax = this.#ttlMax();
+    let ttlDistanceFromStartToEnd = Math.min(this.#ttl, ttlMax - this.#ttl);
 
-        local ttl_distance_from_start_end = min(ttl, ttl_max - ttl)
-        if ttl_distance_from_start_end < 1 then
-            return 1 + 2 + 4 + 8 + 16 + 32 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768
-        elseif ttl_distance_from_start_end < 2 then
-            return 1 + 2 + 4 + 8 + 32 + 128 + 256 + 512 + 1024 + 2048 + 8192 + 32768
-        elseif ttl_distance_from_start_end < 3 then
-            return 1 + 4 + 32 + 128 + 256 + 1024 + 8192 + 32768
-        elseif ttl_distance_from_start_end < 4 then
-            return 1 + 4 + 256 + 1024
-        elseif ttl_distance_from_start_end < 5 then
-            return 1
-        else
-            return nil
-        end
-    end
-   */
+    switch (ttlDistanceFromStartToEnd) {
+      case 0:
+        return FillPattern.of(0b1111_1111_1011_1111);
+      case 1:
+        return FillPattern.of(0b1010_1111_1010_1111);
+      case 2:
+        return FillPattern.of(0b1010_0101_1010_0101);
+      case 3:
+        return FillPattern.of(0b0000_0101_0000_0101);
+      case 4:
+        return FillPattern.of(0b0000_0000_0000_0001);
+      default:
+        return FillPattern.primaryOnly;
+    }
+  }
 
   percentageLeft(): number {
     switch (this.#current) {
       case "no_coins":
-        return (100 * this.#ttl) / this.#ttlMaxNoCoins;
+        return (100 * this.#ttl) / this.#ttlMax();
       case "no_memories":
-        return (100 * this.#ttl) / this.#ttlMaxNoMemories;
+        return (100 * this.#ttl) / this.#ttlMax();
       default:
         return 0;
     }
