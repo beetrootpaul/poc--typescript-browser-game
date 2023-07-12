@@ -32,7 +32,7 @@ export class Game {
         logActualFps: true,
         // TODO: make it disabled for prod and toggleable for dev
         debug: {
-          enabledOnInit: true,
+          enabledOnInit: g.__debug,
           toggleKey: ";",
         },
       },

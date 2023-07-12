@@ -184,7 +184,7 @@ export class Level {
   drawBg(): void {
     // TODO: migrate from Lua
     // fillp(mode.bg_pattern())
-    f.drawApi.rectFilled(Xy.zero, g.gameAreaSize, p8c.DarkBlue);
+    f.drawApi.rectFilled(Xy.zero, g.gameAreaSize, this.#mode.bgColor());
     // TODO: migrate from Lua
     // fillp()
 

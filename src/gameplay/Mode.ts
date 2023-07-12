@@ -48,6 +48,21 @@ export class Mode {
     }
   }
 
+  bgColor(): SolidColor {
+    switch (this.#current) {
+      case "no_coins":
+        // TODO: migrate from Lua
+        // return a.bg_color_mode_no_coins + 16 * a.bg_color_mode_normal
+        return g.colors.bgColorModeNoCoins;
+      case "no_memories":
+        // TODO: migrate from Lua
+        // return a.bg_color_mode_no_memories + 16 * a.bg_color_mode_normal
+        return g.colors.bgColorModeNoMemories;
+      default:
+        return g.colors.bgColorModeNormal;
+    }
+  }
+
   // TODO: migrate from Lua
   /*
     function m.bg_pattern()
