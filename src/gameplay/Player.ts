@@ -78,7 +78,7 @@ export class Player extends Origin {
     );
   }
 
-  draw() {
+  draw(): void {
     f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
     const spriteXy1 = this.#spriteXy1ForDirection[this.#direction];

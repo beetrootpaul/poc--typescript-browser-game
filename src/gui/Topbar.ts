@@ -17,7 +17,7 @@ export class Topbar {
     this.#mode = params.mode;
   }
 
-  draw() {
+  draw(): void {
     f.drawApi.rectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.topbarSize),

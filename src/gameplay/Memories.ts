@@ -58,7 +58,7 @@ export class Memories {
     );
   }
 
-  draw() {
+  draw(): void {
     this.#trails.forEach((trail) => {
       trail.draw();
     });

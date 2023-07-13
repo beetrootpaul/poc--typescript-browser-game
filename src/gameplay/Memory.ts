@@ -74,7 +74,7 @@ export class Memory extends Origin {
       (this.#originStateBufferIndex + 1) % bufferSize;
   }
 
-  draw() {
+  draw(): void {
     f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
 
     if (this.isActive()) {
