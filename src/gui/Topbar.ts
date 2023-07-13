@@ -38,7 +38,7 @@ export class Topbar {
       f.drawApi.print(modeLabel, xy_(progressX, textY), p8c.LightGrey);
 
       if (progressRemainingW > 0) {
-        // TODO: replace with line drawing, once implemented in DrawApi
+        // TODO: migrate from Lua
         for (
           let x = progressX + progressW - progressRemainingW;
           x <= progressX + progressW - 1;

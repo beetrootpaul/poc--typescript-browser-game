@@ -92,6 +92,7 @@ export class Level {
       !this.#mode.isNoCoins() &&
       !this.#mode.isNoMemories()
     ) {
+      // TODO: create an util for random array pick + cover it with tests
       const dropletTile =
         availableTiles[Math.floor(Math.random() * availableTiles.length)];
       if (dropletTile) {

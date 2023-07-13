@@ -91,7 +91,6 @@ export class GameStateGameplay implements GameState {
       this.#player.directDown();
     }
 
-    // TODO: migrate from Lua
     this.#mode.update({
       onBackToRegularMode: this.#onBackToRegularMode.bind(this),
     });

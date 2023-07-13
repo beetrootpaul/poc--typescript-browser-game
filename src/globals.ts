@@ -68,8 +68,5 @@ export const g = {
         pink = 14,
         salmon = 15,
     },
-
-    text_height_px = 5,
-
    */
 };
