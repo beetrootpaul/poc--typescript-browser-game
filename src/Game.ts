@@ -39,7 +39,14 @@ export class Game {
       },
       {
         images: [{ url: g.assets.spritesheet }],
-        fonts: [{ url: g.assets.pico8Font, font: new Pico8Font() }],
+        fonts: [
+          {
+            font: new Pico8Font(),
+            url: g.assets.pico8Font,
+            imageTextColor: p8c.White,
+            imageBgColor: p8c.Black,
+          },
+        ],
       }
     ).then(({ startGame }) => {
       f.drawApi.setFont(g.assets.pico8Font);

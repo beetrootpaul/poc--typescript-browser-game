@@ -1,7 +1,8 @@
+import { xy_ } from "@framework";
 import { Level } from "../gameplay/Level.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
-import { f, g } from "../globals.ts";
+import { f, g, p8c, u } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
@@ -20,26 +21,23 @@ export class GameStateOver implements GameState {
   readonly #sash: Sash = new Sash({
     duration: 10 * g.musicBeatFrames,
     expand: true,
-    // TODO: migrate from Lua
-    // draw_text = function(sash_center_x, sash_center_y)
-    //     local heading = "your score"
-    //     local heading_w = u.measure_text_width(heading)
-    //     local final_score = tostr(score.value())
-    //     local final_score_w = u.measure_text_width(final_score)
-    //     print(
-    //         heading,
-    //         sash_center_x - heading_w / 2,
-    //         sash_center_y - u.text_height_px - 3,
-    //         u.colors.white
-    //     )
-    //     u.print_with_outline(
-    //         final_score,
-    //         sash_center_x - final_score_w / 2,
-    //         sash_center_y + 2,
-    //         u.colors.pink,
-    //         u.colors.black
-    //     )
-    // end,
+    drawText: (sashCenter) => {
+      const heading = "your score";
+      const headingSize = u.measureTextSize(heading);
+      const finalScore = this.#score.value().toFixed(0);
+      const finalScoreSize = u.measureTextSize(finalScore);
+      f.drawApi.print(
+        heading,
+        sashCenter.add(xy_(-headingSize.x / 2, -headingSize.y - 3)),
+        p8c.White
+      );
+      u.printWithOutline(
+        finalScore,
+        sashCenter.add(xy_(-finalScoreSize.x / 2, 2)),
+        p8c.Pink,
+        p8c.Black
+      );
+    },
   });
 
   // TODO: migrate from Lua

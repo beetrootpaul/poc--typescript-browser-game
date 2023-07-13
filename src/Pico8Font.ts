@@ -15,6 +15,8 @@ export class Pico8Font implements Font {
     ["8"]: xy_(8, 3),
     ["9"]: xy_(9, 3),
     //
+    ["@"]: xy_(0, 4),
+    //
     ["a"]: xy_(1, 6),
     ["b"]: xy_(2, 6),
     ["c"]: xy_(3, 6),
