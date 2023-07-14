@@ -20,6 +20,7 @@ type GameOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlControlsFullscreenSelector: string;
+  htmlControlsMuteSelector: string;
 };
 
 type GameStoredState = {
@@ -57,6 +58,7 @@ export class Game {
         htmlDisplaySelector: options.htmlDisplaySelector,
         htmlCanvasSelector: options.htmlCanvasSelector,
         htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
+        htmlControlsMuteSelector: options.htmlControlsMuteSelector,
         htmlCanvasBackground: p8c.black,
         gameCanvasSize: g.screenSize,
         desiredFps: g.fps,
