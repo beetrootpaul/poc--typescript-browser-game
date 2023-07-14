@@ -13,7 +13,10 @@ export const tmpAudio: {
   muteModeNoCoins?: () => void;
   playCoinSfx?: () => void;
   toggleMute?: () => void;
-} = {};
+  hasLoadingError: boolean;
+} = {
+  hasLoadingError: false,
+};
 
 type GameOptions = {
   htmlDisplaySelector: string;
@@ -79,6 +82,7 @@ export class Game {
           console.log("ERR");
           console.log("~~~");
           console.error(err);
+          tmpAudio.hasLoadingError = true;
         });
 
       f.drawApi.setFont(g.assets.pico8Font);
@@ -100,9 +104,13 @@ export class Game {
         this.#gameState.draw();
 
         if (f.debug) {
+          if (tmpAudio.hasLoadingError) {
+            // TODO: consider a global handler for any error that would resut with this print
+            f.drawApi.print("err", xy_(1, 1), p8c.red);
+          }
           f.drawApi.print(
             `♪ ${f.audio.audioCtx.state}`,
-            xy_(1, g.screenSize.y + g.cameraOffset.y - 7),
+            g.cameraOffset.add(xy_(1, g.screenSize.y - 7)),
             p8c.darkPurple
           );
         }
@@ -128,11 +136,12 @@ export class Game {
   }
 }
 
+// TODO: enforce WAV, because of Safari decoding issues for OGG
 async function audio(): Promise<void> {
   const musicBaseAudioBuffer: AudioBuffer =
     await f.audio.audioCtx.decodeAudioData(await loadAudio("music_base.wav"));
   const musicMelodyAudioBuffer: AudioBuffer =
-    await f.audio.audioCtx.decodeAudioData(await loadAudio("music_melody.ogg"));
+    await f.audio.audioCtx.decodeAudioData(await loadAudio("music_melody.wav"));
   const musicNoCoinsAudioBuffer: AudioBuffer =
     await f.audio.audioCtx.decodeAudioData(
       await loadAudio("mode_no_coins.wav")
@@ -144,7 +153,7 @@ async function audio(): Promise<void> {
 
   const coinSfxAudioBuffer: AudioBuffer =
     await f.audio.audioCtx.decodeAudioData(
-      await loadAudio("sfx_coin_collected.ogg")
+      await loadAudio("sfx_coin_collected.wav")
     );
 
   const melodyGainNode = f.audio.audioCtx.createGain();
