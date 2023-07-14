@@ -26,7 +26,7 @@ export class Game {
         htmlDisplaySelector: options.htmlDisplaySelector,
         htmlCanvasSelector: options.htmlCanvasSelector,
         htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
-        htmlCanvasBackground: p8c.Black,
+        htmlCanvasBackground: p8c.black,
         gameCanvasSize: g.screenSize,
         desiredFps: g.fps,
         // TODO: consider disabling these logs in the production build
@@ -39,7 +39,14 @@ export class Game {
       },
       {
         images: [{ url: g.assets.spritesheet }],
-        fonts: [{ url: g.assets.pico8Font, font: new Pico8Font() }],
+        fonts: [
+          {
+            font: new Pico8Font(),
+            url: g.assets.pico8Font,
+            imageTextColor: p8c.white,
+            imageBgColor: p8c.black,
+          },
+        ],
       }
     ).then(({ startGame }) => {
       f.drawApi.setFont(g.assets.pico8Font);
@@ -52,7 +59,7 @@ export class Game {
       });
 
       f.setOnDraw(() => {
-        f.drawApi.clear(p8c.Black);
+        f.drawApi.clear(p8c.black);
         f.drawApi.setCameraOffset(g.cameraOffset);
         this.#gameState.draw();
       });

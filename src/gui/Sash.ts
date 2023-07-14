@@ -1,9 +1,10 @@
-import { xy_ } from "@framework";
+import { Xy, xy_ } from "@framework";
 import { f, g, p8c } from "../globals.ts";
 
-type SashOptions = {
+type SashParams = {
   duration: number;
   expand: boolean;
+  drawText: (sashCenter: Xy) => void;
 };
 
 export class Sash {
@@ -11,8 +12,7 @@ export class Sash {
 
   readonly #shouldExpand: boolean;
 
-  // TODO: migrate from Lua
-  // local draw_text = params.draw_text
+  readonly #drawText: (sashCenter: Xy) => void;
 
   readonly #ttlExpansionStart: number;
   readonly #ttlExpansionEnd: number;
@@ -23,11 +23,13 @@ export class Sash {
 
   readonly #hMax = 30;
 
-  constructor(options: SashOptions) {
-    this.#ttlMax = options.duration;
+  constructor(params: SashParams) {
+    this.#ttlMax = params.duration;
     this.#ttl = this.#ttlMax;
 
-    this.#shouldExpand = options.expand;
+    this.#shouldExpand = params.expand;
+
+    this.#drawText = params.drawText;
 
     this.#ttlExpansionStart = this.#shouldExpand
       ? this.#ttlMax - g.musicBeatFrames
@@ -71,16 +73,12 @@ export class Sash {
       f.drawApi.rectFilled(
         xy_(0, this.#center.y - h / 2),
         xy_(g.screenSize.x, this.#center.y + h / 2),
-        p8c.DarkGreen
+        p8c.darkGreen
       );
     }
 
-    // TODO: migrate from Lua
-    /*
-          if h >= h_max then
-              draw_text(center_x, center_y)
-          end
-      end
-     */
+    if (h >= this.#hMax) {
+      this.#drawText(this.#center);
+    }
   }
 }

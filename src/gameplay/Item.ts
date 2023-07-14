@@ -32,9 +32,7 @@ export class Item {
   }
 
   draw(): void {
-    // TODO: still needed to disable black -> transparent mapping the way it was in Lua version?
-    f.drawApi.mapSpriteColor(p8c.Black, p8c.Black);
-    f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
+    f.drawApi.mapSpriteColor(p8c.darkBlue, transparent);
 
     f.drawApi.sprite(
       g.assets.spritesheet,
@@ -43,12 +41,11 @@ export class Item {
     );
 
     // TODO: API to reset all mappings?
-    // TODO: in Lua version it was a reset of all to-transparency mapping (and probably set black as transparent again?)
-    f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
+    f.drawApi.mapSpriteColor(p8c.darkBlue, p8c.darkBlue);
 
     if (f.debug) {
       const cc = this.collisionCircle();
-      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.Red);
+      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.red);
     }
   }
 }

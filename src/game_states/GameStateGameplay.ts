@@ -37,7 +37,7 @@ export class GameStateGameplay implements GameState {
     });
     this.#playerTrail = new Trail({
       origin: this.#player,
-      color: p8c.DarkGreen,
+      color: p8c.darkGreen,
     });
   }
 
@@ -91,7 +91,6 @@ export class GameStateGameplay implements GameState {
       this.#player.directDown();
     }
 
-    // TODO: migrate from Lua
     this.#mode.update({
       onBackToRegularMode: this.#onBackToRegularMode.bind(this),
     });

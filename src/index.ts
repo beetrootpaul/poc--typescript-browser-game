@@ -17,8 +17,6 @@ new Game().start({
 
 // TODO: debug pause to run the game frame by frame
 
-// TODO: a script for checkout main, merge dev, push, checkout dev, reset to main, push
-
 // TODO: pause menu
 
 // TODO: review personal tasks BEFORE re-publishing the framework under a desired name

@@ -17,11 +17,11 @@ export class Topbar {
     this.#mode = params.mode;
   }
 
-  draw() {
+  draw(): void {
     f.drawApi.rectFilled(
       g.cameraOffset,
       g.cameraOffset.add(g.topbarSize),
-      p8c.Black
+      p8c.black
     );
 
     const modeLabel = this.#mode.label();
@@ -35,10 +35,10 @@ export class Topbar {
       const progressX = g.cameraOffset.x + g.screenSize.x - progressW - 1;
       const progressY = textY + modeLabelSize.y + 2;
 
-      f.drawApi.print(modeLabel, xy_(progressX, textY), p8c.LightGrey);
+      f.drawApi.print(modeLabel, xy_(progressX, textY), p8c.lightGrey);
 
       if (progressRemainingW > 0) {
-        // TODO: replace with line drawing, once implemented in DrawApi
+        // TODO: migrate from Lua
         for (
           let x = progressX + progressW - progressRemainingW;
           x <= progressX + progressW - 1;
@@ -59,7 +59,7 @@ export class Topbar {
     f.drawApi.print(
       `score ${this.#score.value()}`,
       g.cameraOffset.add(xy_(1, 4)),
-      p8c.LightGrey
+      p8c.lightGrey
     );
   }
 }

@@ -1,36 +1,34 @@
+import { SolidColor, Xy } from "@framework";
+import { f } from "../globals.ts";
+
+type ParticleParams = {
+  xy: Xy;
+  color: SolidColor;
+};
+
 export class Particle {
-  // TODO: migrate from Lua
-  /*
-    local x = params.x
-    local y = params.y
-    local color = params.color
-   */
+  readonly #xy: Xy;
+  readonly #color: SolidColor;
 
-  // TODO: migrate from Lua
-  /*
-    local r_max = 2
-    local ttl_max = 28
-    local ttl = ttl_max
-   */
+  readonly #rMax = 2;
+  readonly #ttlMax = 14;
+  #ttl = this.#ttlMax;
 
-  age(): void {
-    // TODO: migrate from Lua
-    /*
-          ttl = max(0, ttl - 1)
-     */
+  constructor(params: ParticleParams) {
+    this.#xy = params.xy;
+    this.#color = params.color;
   }
 
-  // TODO: migrate from Lua
-  /*
-    function p.should_disappear()
-        return ttl <= 0
-    end
+  age(): void {
+    this.#ttl = Math.max(0, this.#ttl - 1);
+  }
 
-   */
+  shouldDisappear(): boolean {
+    return this.#ttl <= 0;
+  }
 
-  draw() {
-    // TODO: migrate from Lua
-    //   local r = flr((ttl / ttl_max) * (r_max + 0.9))
-    //   circfill(x, y, r, color)
+  draw(): void {
+    const r = 0.5 + Math.floor((this.#ttl / this.#ttlMax) * (this.#rMax + 0.9));
+    f.drawApi.ellipseFilled(this.#xy.sub(r), this.#xy.add(r), this.#color);
   }
 }

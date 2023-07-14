@@ -1,5 +1,6 @@
+import { xy_ } from "@framework";
 import { Audio } from "../Audio.ts";
-import { f, g } from "../globals.ts";
+import { f, g, p8c, u } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateStart } from "./GameStateStart.ts";
@@ -8,26 +9,23 @@ export class GameStateSplash implements GameState {
   readonly #sash: Sash = new Sash({
     duration: g.__quickStart ? 0 : 10 * g.musicBeatFrames,
     expand: false,
-    // TODO: migrate from Lua
-    // draw_text = function(sash_center_x, sash_center_y)
-    //     local title = "avoid your past"
-    //     local title_w = u.measure_text_width(title)
-    //     local author = "by @beetrootpaul"
-    //     local author_w = u.measure_text_width(author)
-    //     u.print_with_outline(
-    //         title,
-    //         sash_center_x - title_w / 2,
-    //         sash_center_y - u.text_height_px - 3,
-    //         u.colors.pink,
-    //         u.colors.black
-    //     )
-    //     print(
-    //         author,
-    //         sash_center_x - author_w / 2,
-    //         sash_center_y + 2,
-    //         u.colors.white
-    //     )
-    // end,
+    drawText: (sashCenter) => {
+      const title = "Avoid Your Past";
+      const titleSize = u.measureTextSize(title);
+      const author = "by @beetrootpaul";
+      const authorSize = u.measureTextSize(author);
+      u.printWithOutline(
+        title,
+        sashCenter.add(xy_(-titleSize.x / 2, -authorSize.y - 3)),
+        p8c.pink,
+        p8c.black
+      );
+      f.drawApi.print(
+        author,
+        sashCenter.add(xy_(-authorSize.x / 2, 2)),
+        p8c.white
+      );
+    },
   });
 
   constructor() {
