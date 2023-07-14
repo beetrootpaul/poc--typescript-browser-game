@@ -31,16 +31,16 @@ export class GameStateStart implements GameState {
   update(): GameState {
     let hasStarted = false;
     // TODO: make one directional input clear another, like left+right = nothing
-    if (f.gameInputEvents.has("left")) {
+    if (f.continuousInputEvents.has("left")) {
       this.#player.directLeft();
       hasStarted = true;
-    } else if (f.gameInputEvents.has("right")) {
+    } else if (f.continuousInputEvents.has("right")) {
       this.#player.directRight();
       hasStarted = true;
-    } else if (f.gameInputEvents.has("up")) {
+    } else if (f.continuousInputEvents.has("up")) {
       this.#player.directUp();
       hasStarted = true;
-    } else if (f.gameInputEvents.has("down")) {
+    } else if (f.continuousInputEvents.has("down")) {
       this.#player.directDown();
       hasStarted = true;
     }

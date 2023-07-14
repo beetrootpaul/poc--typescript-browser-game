@@ -1,9 +1,11 @@
+import { xy_ } from "@framework";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
 import { f, g, p8c } from "./globals.ts";
 import { Pico8Font } from "./Pico8Font.ts";
 
 export const tmpAudio: {
+  audioCtx?: AudioContext;
   playMusic?: () => void;
   unmuteMelody?: () => void;
   unmuteModeNoMemories?: () => void;
@@ -84,7 +86,7 @@ export class Game {
         f.storageApi.store<GameStoredState>({
           mostRecentFameNumber: f.frameNumber,
         });
-        if (f.gameInputEventsFireOnce.has("debug_toggle")) {
+        if (f.fireOnceInputEvents.has("debug_toggle")) {
           console.log("debug toggle");
           tmpAudio.toggleMute?.();
         }
@@ -95,6 +97,13 @@ export class Game {
         f.drawApi.clear(p8c.black);
         f.drawApi.setCameraOffset(g.cameraOffset);
         this.#gameState.draw();
+        if (tmpAudio.audioCtx) {
+          f.drawApi.print(
+            tmpAudio.audioCtx.state,
+            xy_(1, 1).add(g.cameraOffset).add(xy_(0, g.topbarSize.y)),
+            p8c.red
+          );
+        }
       });
 
       startGame(() => {
@@ -119,6 +128,7 @@ export class Game {
 
 async function audio(): Promise<void> {
   const audioCtx: AudioContext = new AudioContext();
+  tmpAudio.audioCtx = audioCtx;
 
   const musicBaseAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
     await loadAudio("music_base.wav")

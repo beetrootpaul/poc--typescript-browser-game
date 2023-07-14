@@ -56,10 +56,10 @@ export class GameStateOver implements GameState {
 
     if (this.#sash.hasExpanded()) {
       if (
-        f.gameInputEvents.has("left") ||
-        f.gameInputEvents.has("right") ||
-        f.gameInputEvents.has("up") ||
-        f.gameInputEvents.has("down")
+        f.continuousInputEvents.has("left") ||
+        f.continuousInputEvents.has("right") ||
+        f.continuousInputEvents.has("up") ||
+        f.continuousInputEvents.has("down")
       ) {
         this.#sash.collapse();
       }
