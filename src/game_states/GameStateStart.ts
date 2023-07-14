@@ -3,7 +3,7 @@ import { Level } from "../gameplay/Level.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
-import { f, p8c, u } from "../globals.ts";
+import { f, g, p8c, u } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateGameplay } from "./GameStateGameplay.ts";
@@ -92,10 +92,10 @@ export class GameStateStart implements GameState {
       p8c.lavender,
       p8c.darkBlue
     );
-    // TODO: migrate from Lua
-    // local time_dependent_boolean = u.boolean_changing_every_nth_second(a.music_beat_frames / a.fps)
-    // local glyph_color = time_dependent_boolean and u.colors.violet_grey or u.colors.blue
-    const glyphColor = p8c.lavender;
+    const timeDependentBoolean = u.booleanChangingEveryNthFrame(
+      g.musicBeatFrames
+    );
+    const glyphColor = timeDependentBoolean ? p8c.blue : p8c.lavender;
     u.printWithOutline(
       "⬅️",
       xy_(this.#player.xy1().x - margin - 8, this.#player.center().y - 2),

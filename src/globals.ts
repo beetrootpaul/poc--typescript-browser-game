@@ -1,6 +1,5 @@
 import { PocTsBGFramework, Utils, xy_ } from "@framework";
 import { Pico8Colors } from "./Pico8Color.ts";
-import { Pico8Font } from "./Pico8Font.ts";
 
 export const f = PocTsBGFramework;
 
@@ -46,27 +45,5 @@ export const g = {
     sfx_looped_empty_2 = 5,
     sfx_looped_empty_3 = 6,
     sfx_coin = 0,
-   */
-
-  // TODO: migrate from Lua
-  /*
-    colors = {
-        black = 0,
-        dark_blue = 1,
-        purple = 2, --> DarkPurple
-        dark_green = 3,
-        brown = 4,
-        dark_grey = 5,
-        light_grey = 6,
-        white = 7,
-        red = 8,
-        orange = 9,
-        yellow = 10,
-        lime = 11,
-        blue = 12,
-        violet_grey = 13, --> Lavender
-        pink = 14,
-        salmon = 15,
-    },
    */
 };
