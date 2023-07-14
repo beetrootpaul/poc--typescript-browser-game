@@ -1,7 +1,7 @@
 import { xy_ } from "@framework";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
-import { f, g, p8c } from "./globals.ts";
+import { f, g, p8c, u } from "./globals.ts";
 import { Pico8Font } from "./Pico8Font.ts";
 
 export const tmpAudio: {
@@ -108,9 +108,20 @@ export class Game {
             // TODO: consider a global handler for any error that would resut with this print
             f.drawApi.print("err", xy_(1, 1), p8c.red);
           }
+          const fps = f.averageFps.toFixed(0);
+          f.drawApi.print(
+            fps,
+            g.cameraOffset.add(
+              xy_(
+                g.screenSize.x - u.measureTextSize(fps).x - 1,
+                g.screenSize.y - 6
+              )
+            ),
+            p8c.darkGrey
+          );
           f.drawApi.print(
             `♪ ${f.audio.audioCtx.state}`,
-            g.cameraOffset.add(xy_(1, g.screenSize.y - 7)),
+            g.cameraOffset.add(xy_(0, g.screenSize.y - 6)),
             p8c.darkPurple
           );
         }
