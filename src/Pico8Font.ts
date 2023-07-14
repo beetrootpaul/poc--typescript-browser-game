@@ -6,10 +6,12 @@ export class Pico8Font implements Font {
   static #defaultCharSpriteSize = xy_(3, 5);
 
   static #spriteSheetCells: Record<string, Xy> = {
+    // TODO: externalize these emojis to constants for an easier re-use
     ["⬅️"]: xy_(11, 8),
     ["⬆️"]: xy_(4, 9),
     ["➡️"]: xy_(1, 9),
     ["⬇️"]: xy_(3, 8),
+    ["♪"]: xy_(13, 8),
     //
     ["0"]: xy_(0, 3),
     ["1"]: xy_(1, 3),
@@ -53,10 +55,12 @@ export class Pico8Font implements Font {
   };
 
   static #charSpriteSizes: Record<string, Xy> = {
+    // TODO: externalize these emojis to constants for an easier re-use
     ["⬅️"]: xy_(7, 5),
     ["⬆️"]: xy_(7, 5),
     ["➡️"]: xy_(7, 5),
     ["⬇️"]: xy_(7, 5),
+    ["♪"]: xy_(7, 5),
   };
 
   static #spriteFor(char: string): Sprite | null {

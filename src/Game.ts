@@ -5,7 +5,6 @@ import { f, g, p8c } from "./globals.ts";
 import { Pico8Font } from "./Pico8Font.ts";
 
 export const tmpAudio: {
-  audioCtx?: AudioContext;
   playMusic?: () => void;
   unmuteMelody?: () => void;
   unmuteModeNoMemories?: () => void;
@@ -35,24 +34,6 @@ export class Game {
   #gameState: GameState = new GameStateSplash();
 
   start(options: GameOptions): void {
-    console.log("....");
-    console.log("INIT");
-    console.log("....");
-    audio()
-      .then(() => {
-        console.log("====");
-        console.log("DONE");
-        console.log("====");
-
-        tmpAudio.playMusic?.();
-      })
-      .catch((err) => {
-        console.log("~~~");
-        console.log("ERR");
-        console.log("~~~");
-        console.error(err);
-      });
-
     f.init(
       {
         htmlDisplaySelector: options.htmlDisplaySelector,
@@ -82,6 +63,24 @@ export class Game {
         ],
       }
     ).then(({ startGame }) => {
+      console.log("....");
+      console.log("INIT");
+      console.log("....");
+      audio()
+        .then(() => {
+          console.log("====");
+          console.log("DONE");
+          console.log("====");
+
+          tmpAudio.playMusic?.();
+        })
+        .catch((err) => {
+          console.log("~~~");
+          console.log("ERR");
+          console.log("~~~");
+          console.error(err);
+        });
+
       f.drawApi.setFont(g.assets.pico8Font);
 
       f.setOnUpdate(() => {
@@ -99,11 +98,12 @@ export class Game {
         f.drawApi.clear(p8c.black);
         f.drawApi.setCameraOffset(g.cameraOffset);
         this.#gameState.draw();
-        if (tmpAudio.audioCtx) {
+
+        if (f.debug) {
           f.drawApi.print(
-            tmpAudio.audioCtx.state,
-            xy_(1, 1).add(g.cameraOffset).add(xy_(0, g.topbarSize.y)),
-            p8c.red
+            `♪ ${f.audio.audioCtx.state}`,
+            xy_(1, g.screenSize.y + g.cameraOffset.y - 7),
+            p8c.darkPurple
           );
         }
       });
@@ -129,69 +129,58 @@ export class Game {
 }
 
 async function audio(): Promise<void> {
-  const audioCtx: AudioContext = new AudioContext();
-  tmpAudio.audioCtx = audioCtx;
-
-  const musicBaseAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
-    await loadAudio("music_base.wav")
-  );
-  const musicMelodyAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
-    await loadAudio("music_melody.ogg")
-  );
-  const musicNoCoinsAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
-    await loadAudio("mode_no_coins.wav")
-  );
+  const musicBaseAudioBuffer: AudioBuffer =
+    await f.audio.audioCtx.decodeAudioData(await loadAudio("music_base.wav"));
+  const musicMelodyAudioBuffer: AudioBuffer =
+    await f.audio.audioCtx.decodeAudioData(await loadAudio("music_melody.ogg"));
+  const musicNoCoinsAudioBuffer: AudioBuffer =
+    await f.audio.audioCtx.decodeAudioData(
+      await loadAudio("mode_no_coins.wav")
+    );
   const musicNoMemoriesAudioBuffer: AudioBuffer =
-    await audioCtx.decodeAudioData(await loadAudio("mode_no_memories.wav"));
+    await f.audio.audioCtx.decodeAudioData(
+      await loadAudio("mode_no_memories.wav")
+    );
 
-  const coinSfxAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
-    await loadAudio("sfx_coin_collected.ogg")
-  );
+  const coinSfxAudioBuffer: AudioBuffer =
+    await f.audio.audioCtx.decodeAudioData(
+      await loadAudio("sfx_coin_collected.ogg")
+    );
 
-  const mainGainNode = audioCtx.createGain();
-  mainGainNode.gain.value = 1;
-  mainGainNode.connect(audioCtx.destination);
-  tmpAudio.toggleMute = () => {
-    if (mainGainNode.gain.value > 0) {
-      console.log("mute");
-      mainGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    } else {
-      console.log("unmute");
-      mainGainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-    }
-  };
-
-  const melodyGainNode = audioCtx.createGain();
+  const melodyGainNode = f.audio.audioCtx.createGain();
   melodyGainNode.gain.value = 0;
-  melodyGainNode.connect(mainGainNode);
-  const noCoinsGainNode = audioCtx.createGain();
+  melodyGainNode.connect(f.audio.mainGainNode);
+  const noCoinsGainNode = f.audio.audioCtx.createGain();
   noCoinsGainNode.gain.value = 0;
-  noCoinsGainNode.connect(mainGainNode);
-  const noMemoriesGainNode = audioCtx.createGain();
+  noCoinsGainNode.connect(f.audio.mainGainNode);
+  const noMemoriesGainNode = f.audio.audioCtx.createGain();
   noMemoriesGainNode.gain.value = 0;
-  noMemoriesGainNode.connect(mainGainNode);
+  noMemoriesGainNode.connect(f.audio.mainGainNode);
 
   tmpAudio.playMusic = () => {
-    const baseSource: AudioBufferSourceNode = audioCtx.createBufferSource();
+    const baseSource: AudioBufferSourceNode =
+      f.audio.audioCtx.createBufferSource();
     baseSource.buffer = musicBaseAudioBuffer;
     baseSource.loop = true;
-    baseSource.connect(mainGainNode);
+    baseSource.connect(f.audio.mainGainNode);
     baseSource.start();
 
-    const melodySource: AudioBufferSourceNode = audioCtx.createBufferSource();
+    const melodySource: AudioBufferSourceNode =
+      f.audio.audioCtx.createBufferSource();
     melodySource.buffer = musicMelodyAudioBuffer;
     melodySource.loop = true;
     melodySource.connect(melodyGainNode);
     melodySource.start();
 
-    const noCoinsSource: AudioBufferSourceNode = audioCtx.createBufferSource();
+    const noCoinsSource: AudioBufferSourceNode =
+      f.audio.audioCtx.createBufferSource();
     noCoinsSource.buffer = musicNoCoinsAudioBuffer;
     noCoinsSource.loop = true;
     noCoinsSource.connect(noCoinsGainNode);
     noCoinsSource.start();
 
     const noMemoriesSource: AudioBufferSourceNode =
-      audioCtx.createBufferSource();
+      f.audio.audioCtx.createBufferSource();
     noMemoriesSource.buffer = musicNoMemoriesAudioBuffer;
     noMemoriesSource.loop = true;
     noMemoriesSource.connect(noMemoriesGainNode);
@@ -203,7 +192,7 @@ async function audio(): Promise<void> {
   tmpAudio.unmuteMelody = () => {
     melodyGainNode.gain.setTargetAtTime(
       1.0,
-      audioCtx.currentTime,
+      f.audio.audioCtx.currentTime,
       timeConstant
     );
   };
@@ -211,7 +200,7 @@ async function audio(): Promise<void> {
   tmpAudio.unmuteModeNoMemories = () => {
     noMemoriesGainNode.gain.setTargetAtTime(
       1.0,
-      audioCtx.currentTime,
+      f.audio.audioCtx.currentTime,
       timeConstant
     );
   };
@@ -219,7 +208,7 @@ async function audio(): Promise<void> {
   tmpAudio.muteModeNoMemories = () => {
     noMemoriesGainNode.gain.setTargetAtTime(
       0,
-      audioCtx.currentTime,
+      f.audio.audioCtx.currentTime,
       timeConstant
     );
   };
@@ -227,19 +216,23 @@ async function audio(): Promise<void> {
   tmpAudio.unmuteModeNoCoins = () => {
     noCoinsGainNode.gain.setTargetAtTime(
       1.0,
-      audioCtx.currentTime,
+      f.audio.audioCtx.currentTime,
       timeConstant
     );
   };
 
   tmpAudio.muteModeNoCoins = () => {
-    noCoinsGainNode.gain.setTargetAtTime(0, audioCtx.currentTime, timeConstant);
+    noCoinsGainNode.gain.setTargetAtTime(
+      0,
+      f.audio.audioCtx.currentTime,
+      timeConstant
+    );
   };
 
   tmpAudio.playCoinSfx = () => {
-    const source: AudioBufferSourceNode = audioCtx.createBufferSource();
+    const source: AudioBufferSourceNode = f.audio.audioCtx.createBufferSource();
     source.buffer = coinSfxAudioBuffer;
-    source.connect(mainGainNode);
+    source.connect(f.audio.mainGainNode);
     source.start();
   };
 
