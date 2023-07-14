@@ -3,6 +3,17 @@ import { GameStateSplash } from "./game_states/GameStateSplash.ts";
 import { f, g, p8c } from "./globals.ts";
 import { Pico8Font } from "./Pico8Font.ts";
 
+export const tmpAudio: {
+  playMusic?: () => void;
+  unmuteMelody?: () => void;
+  unmuteModeNoMemories?: () => void;
+  muteModeNoMemories?: () => void;
+  unmuteModeNoCoins?: () => void;
+  muteModeNoCoins?: () => void;
+  playCoinSfx?: () => void;
+  toggleMute?: () => void;
+} = {};
+
 type GameOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
@@ -21,6 +32,24 @@ export class Game {
   #gameState: GameState = new GameStateSplash();
 
   start(options: GameOptions): void {
+    console.log("....");
+    console.log("INIT");
+    console.log("....");
+    audio()
+      .then(() => {
+        console.log("====");
+        console.log("DONE");
+        console.log("====");
+
+        tmpAudio.playMusic?.();
+      })
+      .catch((err) => {
+        console.log("~~~");
+        console.log("ERR");
+        console.log("~~~");
+        console.error(err);
+      });
+
     f.init(
       {
         htmlDisplaySelector: options.htmlDisplaySelector,
@@ -55,6 +84,10 @@ export class Game {
         f.storageApi.store<GameStoredState>({
           mostRecentFameNumber: f.frameNumber,
         });
+        if (f.gameInputEventsFireOnce.has("debug_toggle")) {
+          console.log("debug toggle");
+          tmpAudio.toggleMute?.();
+        }
         this.#gameState = this.#gameState.update();
       });
 
@@ -82,4 +115,133 @@ export class Game {
       });
     });
   }
+}
+
+async function audio(): Promise<void> {
+  const audioCtx: AudioContext = new AudioContext();
+
+  const musicBaseAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
+    await loadAudio("music_base.wav")
+  );
+  const musicMelodyAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
+    await loadAudio("music_melody.ogg")
+  );
+  const musicNoCoinsAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
+    await loadAudio("mode_no_coins.wav")
+  );
+  const musicNoMemoriesAudioBuffer: AudioBuffer =
+    await audioCtx.decodeAudioData(await loadAudio("mode_no_memories.wav"));
+
+  const coinSfxAudioBuffer: AudioBuffer = await audioCtx.decodeAudioData(
+    await loadAudio("sfx_coin_collected.ogg")
+  );
+
+  const mainGainNode = audioCtx.createGain();
+  mainGainNode.gain.value = 1;
+  mainGainNode.connect(audioCtx.destination);
+  tmpAudio.toggleMute = () => {
+    if (mainGainNode.gain.value > 0) {
+      console.log("mute");
+      mainGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    } else {
+      console.log("unmute");
+      mainGainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+    }
+  };
+
+  const melodyGainNode = audioCtx.createGain();
+  melodyGainNode.gain.value = 0;
+  melodyGainNode.connect(mainGainNode);
+  const noCoinsGainNode = audioCtx.createGain();
+  noCoinsGainNode.gain.value = 0;
+  noCoinsGainNode.connect(mainGainNode);
+  const noMemoriesGainNode = audioCtx.createGain();
+  noMemoriesGainNode.gain.value = 0;
+  noMemoriesGainNode.connect(mainGainNode);
+
+  tmpAudio.playMusic = () => {
+    const baseSource: AudioBufferSourceNode = audioCtx.createBufferSource();
+    baseSource.buffer = musicBaseAudioBuffer;
+    baseSource.loop = true;
+    baseSource.connect(mainGainNode);
+    baseSource.start();
+
+    const melodySource: AudioBufferSourceNode = audioCtx.createBufferSource();
+    melodySource.buffer = musicMelodyAudioBuffer;
+    melodySource.loop = true;
+    melodySource.connect(melodyGainNode);
+    melodySource.start();
+
+    const noCoinsSource: AudioBufferSourceNode = audioCtx.createBufferSource();
+    noCoinsSource.buffer = musicNoCoinsAudioBuffer;
+    noCoinsSource.loop = true;
+    noCoinsSource.connect(noCoinsGainNode);
+    noCoinsSource.start();
+
+    const noMemoriesSource: AudioBufferSourceNode =
+      audioCtx.createBufferSource();
+    noMemoriesSource.buffer = musicNoMemoriesAudioBuffer;
+    noMemoriesSource.loop = true;
+    noMemoriesSource.connect(noMemoriesGainNode);
+    noMemoriesSource.start();
+  };
+
+  const timeConstant = 0.1;
+
+  tmpAudio.unmuteMelody = () => {
+    melodyGainNode.gain.setTargetAtTime(
+      1.0,
+      audioCtx.currentTime,
+      timeConstant
+    );
+  };
+
+  tmpAudio.unmuteModeNoMemories = () => {
+    noMemoriesGainNode.gain.setTargetAtTime(
+      1.0,
+      audioCtx.currentTime,
+      timeConstant
+    );
+  };
+
+  tmpAudio.muteModeNoMemories = () => {
+    noMemoriesGainNode.gain.setTargetAtTime(
+      0,
+      audioCtx.currentTime,
+      timeConstant
+    );
+  };
+
+  tmpAudio.unmuteModeNoCoins = () => {
+    noCoinsGainNode.gain.setTargetAtTime(
+      1.0,
+      audioCtx.currentTime,
+      timeConstant
+    );
+  };
+
+  tmpAudio.muteModeNoCoins = () => {
+    noCoinsGainNode.gain.setTargetAtTime(0, audioCtx.currentTime, timeConstant);
+  };
+
+  tmpAudio.playCoinSfx = () => {
+    const source: AudioBufferSourceNode = audioCtx.createBufferSource();
+    source.buffer = coinSfxAudioBuffer;
+    source.connect(mainGainNode);
+    source.start();
+  };
+
+  // let offset = 0;
+  // if (offset === 0) {
+  //   console.log("start from 0");
+  //   coinSfx.start();
+  //   offset = audioCtx.currentTime;
+  // } else {
+  //   coinSfx.start(0, audioCtx.currentTime - offset);
+  // }
+}
+
+async function loadAudio(file: string): Promise<ArrayBuffer> {
+  const response: Response = await fetch(file);
+  return await response.arrayBuffer();
 }

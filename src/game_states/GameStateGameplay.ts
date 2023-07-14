@@ -1,3 +1,4 @@
+import { tmpAudio } from "../Game.ts";
 import { Level } from "../gameplay/Level.ts";
 import { Memories } from "../gameplay/Memories.ts";
 import { Mode } from "../gameplay/Mode.ts";
@@ -39,10 +40,16 @@ export class GameStateGameplay implements GameState {
       origin: this.#player,
       color: p8c.darkGreen,
     });
+
+    // TODO: migrate from Lua
+    tmpAudio.unmuteMelody?.();
+    // audio.enable_music_layers { true, false, false }
   }
 
   #onBackToRegularMode(): void {
     // TODO: migrate from Lua
+    tmpAudio.muteModeNoCoins?.();
+    tmpAudio.muteModeNoMemories?.();
     // audio.enable_music_layers { true, false, false }
   }
 
@@ -52,7 +59,9 @@ export class GameStateGameplay implements GameState {
     }
 
     // TODO: migrate from Lua
+    tmpAudio.playCoinSfx?.();
     // audio.play_sfx(a.sfx_coin)
+
     this.#score.add(10);
     if (!this.#mode.isNoMemories()) {
       this.#memories.addMemory();
@@ -63,6 +72,7 @@ export class GameStateGameplay implements GameState {
 
   #onDropletNoCoinsCollision(): void {
     // TODO: migrate from Lua
+    tmpAudio.unmuteModeNoCoins?.();
     // audio.enable_music_layers { true, false, true }
     this.#score.add(3);
     this.#mode.startNoCoins();
@@ -71,14 +81,12 @@ export class GameStateGameplay implements GameState {
 
   #onDropletNoMemoriesCollision(): void {
     // TODO: migrate from Lua
+    tmpAudio.unmuteModeNoMemories?.();
     // audio.enable_music_layers { true, true, false }
     this.#score.add(1);
     this.#mode.startNoMemories();
     this.#level.removeDropletNoMemories();
   }
-
-  // TODO: migrate from Lua
-  // audio.enable_music_layers { true, false, false }
 
   update(): GameState {
     if (f.gameInputEvents.has("left")) {
