@@ -37,7 +37,7 @@ export class GameStateGameplay implements GameState {
     });
     this.#playerTrail = new Trail({
       origin: this.#player,
-      color: p8c.DarkGreen,
+      color: p8c.darkGreen,
     });
   }
 

@@ -17,13 +17,13 @@ export class GameStateSplash implements GameState {
       u.printWithOutline(
         title,
         sashCenter.add(xy_(-titleSize.x / 2, -authorSize.y - 3)),
-        p8c.Pink,
-        p8c.Black
+        p8c.pink,
+        p8c.black
       );
       f.drawApi.print(
         author,
         sashCenter.add(xy_(-authorSize.x / 2, 2)),
-        p8c.White
+        p8c.white
       );
     },
   });

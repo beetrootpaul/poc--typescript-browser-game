@@ -29,13 +29,13 @@ export class GameStateOver implements GameState {
       f.drawApi.print(
         heading,
         sashCenter.add(xy_(-headingSize.x / 2, -headingSize.y - 3)),
-        p8c.White
+        p8c.white
       );
       u.printWithOutline(
         finalScore,
         sashCenter.add(xy_(-finalScoreSize.x / 2, 2)),
-        p8c.Pink,
-        p8c.Black
+        p8c.pink,
+        p8c.black
       );
     },
   });

@@ -27,9 +27,9 @@ export const g = {
   musicBeatFrames: 16,
   //
   colors: {
-    bgColorModeNormal: p8c.DarkBlue,
-    bgColorModeNoCoins: p8c.Orange,
-    bgColorModeNoMemories: p8c.Pink,
+    bgColorModeNormal: p8c.darkBlue,
+    bgColorModeNoCoins: p8c.orange,
+    bgColorModeNoMemories: p8c.pink,
   },
   //
   assets: {

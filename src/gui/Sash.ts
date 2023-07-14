@@ -73,7 +73,7 @@ export class Sash {
       f.drawApi.rectFilled(
         xy_(0, this.#center.y - h / 2),
         xy_(g.screenSize.x, this.#center.y + h / 2),
-        p8c.DarkGreen
+        p8c.darkGreen
       );
     }
 

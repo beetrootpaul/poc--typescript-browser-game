@@ -79,7 +79,7 @@ export class Player extends Origin {
   }
 
   draw(): void {
-    f.drawApi.mapSpriteColor(p8c.DarkBlue, transparent);
+    f.drawApi.mapSpriteColor(p8c.darkBlue, transparent);
 
     const spriteXy1 = this.#spriteXy1ForDirection[this.#direction];
     f.drawApi.sprite(
@@ -89,11 +89,11 @@ export class Player extends Origin {
     );
 
     // TODO: API to reset all mappings?
-    f.drawApi.mapSpriteColor(p8c.DarkBlue, p8c.DarkBlue);
+    f.drawApi.mapSpriteColor(p8c.darkBlue, p8c.darkBlue);
 
     if (f.debug) {
       const cc = this.collisionCircle();
-      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.Red);
+      f.drawApi.ellipse(cc.center.sub(cc.r), cc.center.add(cc.r), p8c.red);
     }
   }
 }

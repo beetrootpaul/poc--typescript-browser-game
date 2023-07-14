@@ -80,8 +80,8 @@ export class GameStateStart implements GameState {
         this.#player.center().x - prompt1Size.x / 2,
         this.#player.xy1().y - margin - 26
       ),
-      p8c.Lavender,
-      p8c.DarkBlue
+      p8c.lavender,
+      p8c.darkBlue
     );
     u.printWithOutline(
       prompt2,
@@ -89,17 +89,36 @@ export class GameStateStart implements GameState {
         this.#player.center().x - prompt2Size.x / 2,
         this.#player.xy1().y - margin - 17
       ),
-      p8c.Lavender,
-      p8c.DarkBlue
+      p8c.lavender,
+      p8c.darkBlue
     );
     // TODO: migrate from Lua
-    /*
-        local time_dependent_boolean = u.boolean_changing_every_nth_second(a.music_beat_frames / a.fps)
-        local glyph_color = time_dependent_boolean and u.colors.violet_grey or u.colors.blue
-        u.print_with_outline("⬅️", player.x1() - margin - 8, player.yc() - 2, glyph_color, u.colors.dark_blue)
-        u.print_with_outline("➡️", player.x2() + margin + 2, player.yc() - 2, glyph_color, u.colors.dark_blue)
-        u.print_with_outline("⬆️", player.xc() - 3, player.y1() - margin - 6, glyph_color, u.colors.dark_blue)
-        u.print_with_outline("⬇️", player.xc() - 3, player.y2() + margin + 2, glyph_color, u.colors.dark_blue)
-     */
+    // local time_dependent_boolean = u.boolean_changing_every_nth_second(a.music_beat_frames / a.fps)
+    // local glyph_color = time_dependent_boolean and u.colors.violet_grey or u.colors.blue
+    const glyphColor = p8c.lavender;
+    u.printWithOutline(
+      "⬅️",
+      xy_(this.#player.xy1().x - margin - 8, this.#player.center().y - 2),
+      glyphColor,
+      p8c.darkBlue
+    );
+    u.printWithOutline(
+      "➡️",
+      xy_(this.#player.xy2().x + margin + 2, this.#player.center().y - 2),
+      glyphColor,
+      p8c.darkBlue
+    );
+    u.printWithOutline(
+      "⬆️",
+      xy_(this.#player.center().x - 3, this.#player.xy1().y - margin - 6),
+      glyphColor,
+      p8c.darkBlue
+    );
+    u.printWithOutline(
+      "⬇️",
+      xy_(this.#player.center().x - 3, this.#player.xy2().y + margin + 2),
+      glyphColor,
+      p8c.darkBlue
+    );
   }
 }

@@ -201,7 +201,7 @@ export class Level {
         ) {
           f.drawApi.pixel(
             xy_(tileX, tileY).sub(1).mul(g.tileSize),
-            p8c.Lavender
+            p8c.lavender
           );
           if (tilesCloseToPlayer[`${tileX}_${tileY}`]) {
             f.drawApi.rectFilled(
@@ -209,7 +209,7 @@ export class Level {
                 .mul(g.tileSize)
                 .add(1),
               xy_(tileX, tileY).mul(g.tileSize),
-              p8c.DarkPurple
+              p8c.darkPurple
             );
           }
         }

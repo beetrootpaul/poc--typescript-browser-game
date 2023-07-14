@@ -33,7 +33,7 @@ export class Memories {
     this.#trails.push(
       new Trail({
         origin: memory,
-        color: p8c.DarkPurple,
+        color: p8c.darkPurple,
       })
     );
   }
