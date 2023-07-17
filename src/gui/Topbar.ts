@@ -1,7 +1,7 @@
-import { Utils, xy_ } from "@framework";
-import { Mode } from "../gameplay/Mode.ts";
-import { Score } from "../gameplay/Score.ts";
-import { f, g, p8c } from "../globals.ts";
+import { Utils, xy_ } from "beetpx";
+import { Mode } from "../gameplay/Mode";
+import { Score } from "../gameplay/Score";
+import { f, g, p8c } from "../globals";
 
 type TopbarParams = {
   score: Score;

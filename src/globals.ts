@@ -1,5 +1,5 @@
-import { PocTsBGFramework, Utils, xy_ } from "@framework";
-import { Pico8Colors } from "./Pico8Color.ts";
+import { PocTsBGFramework, Utils, xy_ } from "beetpx";
+import { Pico8Colors } from "./Pico8Color";
 
 export const f = PocTsBGFramework;
 

@@ -1,6 +1,6 @@
-import { SolidColor } from "@framework";
-import { Origin } from "./Origin.ts";
-import { Particle } from "./Particle.ts";
+import { SolidColor } from "beetpx";
+import { Origin } from "./Origin";
+import { Particle } from "./Particle";
 
 type TrailParams = {
   origin: Origin;

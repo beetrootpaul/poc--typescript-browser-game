@@ -4,7 +4,6 @@
   "author": "Beetroot Paul",
   "license": "MIT",
   "private": true,
-  "type": "module",
   "description": "A PoC of a simple low-res game written in TypeScript, meant to be played in web browsers.",
   "homepage": "https://github.com/beetrootpaul/poc--typescript-browser-game#readme",
   "repository": {
@@ -16,18 +15,15 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "test": "vitest run",
-    "start": "npm-run-all --print-label --parallel dev compile:watch",
-    "dev": "vite dev --open itch_io_simulation.html",
-    "prod": "npm run prod:build && npm run prod:preview",
-    "prod:build": "npm run compile && vite build",
-    "prod:preview": "vite preview --open",
-    "dist": "npm run dist:build && npm run dist:zip",
-    "dist:build": "npm run prod:build",
-    "dist:zip": "rimraf ./dist/ && mkdirp ./dist/ && cd ./build/ && cross-zip ./ ../dist/poc__typescript_browser_game__itch_io.zip",
-    "compile": "tsc --build",
-    "compile:watch": "tsc --build --watch",
-    "format": "prettier --ignore-path .gitignore --write src/"
+    "test": "jest",
+    "start": "npm run cleanup && npm-run-all --parallel dev typecheck:watch",
+    "dev": "beetpx dev",
+    "prod": "npm run cleanup && npm run typecheck && beetpx build && beetpx preview",
+    "itch": "npm run cleanup && npm run typecheck && beetpx build && beetpx zip",
+    "typecheck": "tsc",
+    "typecheck:watch": "tsc --watch",
+    "format": "prettier --ignore-path .gitignore --write src/",
+    "cleanup": "rimraf ./.beetpx/ ./index.html ./itch_io_simulation.html"
   },
   "lint-staged": {
     "src/**/*": [
@@ -37,16 +33,16 @@
   "dependencies": {
   },
   "devDependencies": {
+    "@jest/globals": "29.5.0",
+    "beetpx": "file://../poc--typescript-browser-game-framework/",
     "cross-zip-cli": "1.0.0",
     "husky": "8.0.3",
-    "jquery": "3.6.4",
     "lint-staged": "13.2.1",
     "mkdirp": "3.0.1",
     "npm-run-all": "4.1.5",
     "prettier": "2.8.8",
     "rimraf": "5.0.0",
-    "typescript": "5.0.4",
-    "vite": "4.3.2",
-    "vitest": "0.30.1"
+    "ts-jest": "29.1.1",
+    "typescript": "5.0.4"
   }
 }

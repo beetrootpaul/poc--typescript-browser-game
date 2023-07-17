@@ -1,10 +1,10 @@
-import { FillPattern, Xy, xy_ } from "@framework";
-import { Collisions } from "../Collisions.ts";
-import { f, g, p8c } from "../globals.ts";
-import { AnimatedSprite } from "./AnimatedSprite.ts";
-import { Item } from "./Item.ts";
-import { Mode } from "./Mode.ts";
-import { Player } from "./Player.ts";
+import { FillPattern, Xy, xy_ } from "beetpx";
+import { Collisions } from "../Collisions";
+import { f, g, p8c } from "../globals";
+import { AnimatedSprite } from "./AnimatedSprite";
+import { Item } from "./Item";
+import { Mode } from "./Mode";
+import { Player } from "./Player";
 
 type LevelParams = {
   mode: Mode;

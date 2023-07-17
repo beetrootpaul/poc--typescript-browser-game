@@ -1,13 +1,13 @@
-import { Level } from "../gameplay/Level.ts";
-import { Memories } from "../gameplay/Memories.ts";
-import { Mode } from "../gameplay/Mode.ts";
-import { Player } from "../gameplay/Player.ts";
-import { Score } from "../gameplay/Score.ts";
-import { Trail } from "../gameplay/Trail.ts";
-import { f, g, p8c } from "../globals.ts";
-import { Topbar } from "../gui/Topbar.ts";
-import { GameState } from "./GameState.ts";
-import { GameStateOver } from "./GameStateOver.ts";
+import { Level } from "../gameplay/Level";
+import { Memories } from "../gameplay/Memories";
+import { Mode } from "../gameplay/Mode";
+import { Player } from "../gameplay/Player";
+import { Score } from "../gameplay/Score";
+import { Trail } from "../gameplay/Trail";
+import { f, g, p8c } from "../globals";
+import { Topbar } from "../gui/Topbar";
+import { GameState } from "./GameState";
+import { GameStateOver } from "./GameStateOver";
 
 type GameStateGameplayParams = {
   mode: Mode;

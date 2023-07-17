@@ -1,12 +1,6 @@
-import { Game } from "./Game.ts";
-import "./style.css";
+import { Game } from "./Game";
 
-new Game().start({
-  htmlDisplaySelector: "#display",
-  htmlCanvasSelector: "#canvas",
-  htmlControlsFullscreenSelector: ".controls_fullscreen_toggle",
-  htmlControlsMuteSelector: ".controls_mute_toggle",
-});
+new Game().start();
 
 // TODO: polished "loading…" screen
 

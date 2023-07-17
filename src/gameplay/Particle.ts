@@ -1,5 +1,5 @@
-import { SolidColor, Xy } from "@framework";
-import { f } from "../globals.ts";
+import { SolidColor, Xy } from "beetpx";
+import { f } from "../globals";
 
 type ParticleParams = {
   xy: Xy;

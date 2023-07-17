@@ -1,4 +1,4 @@
-import { Xy, xy_ } from "@framework";
+import { Xy } from "beetpx";
 
 export type CollisionCircle = {
   center: Xy;
@@ -14,26 +14,4 @@ export class Collisions {
     const distance = l1Distance.magnitude();
     return distance < circle1.r + circle2.r;
   }
-}
-
-if (import.meta.vitest) {
-  const { describe, test, expect } = import.meta.vitest;
-
-  describe("Collisions", () => {
-    // TODO: more test cases
-    test("#haveCirclesCollided", () => {
-      expect(
-        Collisions.haveCirclesCollided(
-          { center: xy_(0, 0), r: 50 },
-          { center: xy_(100, 100), r: 50 }
-        )
-      ).toEqual(false);
-      expect(
-        Collisions.haveCirclesCollided(
-          { center: xy_(25, 25), r: 100 },
-          { center: xy_(75, 75), r: 100 }
-        )
-      ).toEqual(true);
-    });
-  });
 }

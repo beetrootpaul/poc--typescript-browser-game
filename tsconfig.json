@@ -1,45 +1,12 @@
 {
   "compilerOptions": {
-    "types": [
-      // Required by Vite (see: https://vitejs.dev/guide/features.html#client-types)
-      "vite/client",
-      // Required by Vitests (see: https://vitest.dev/guide/in-source.html#typescript)
-      "vitest/importMeta"
-    ],
-    //
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    //
-    "module": "ES2020",
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    // Required by Vite (see: https://vitejs.dev/guide/features.html#isolatedmodules)
-    "isolatedModules": true,
-    //
+    "moduleResolution": "node16",
     "target": "ES2020",
-    //
     "noEmit": true,
-    //
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    // Required by Vite (see: https://vitejs.dev/guide/features.html#usedefineforclassfields)
-    "useDefineForClassFields": true,
-    "noFallthroughCasesInSwitch": true,
-    // Keep these in sync with "resolve.alias" in vite.config.ts
-    "paths": {
-      "@framework": ["../poc--typescript-browser-game-framework/src"]
-    }
+    "noUncheckedIndexedAccess": true
   },
   "include": [
     "./src"
-  ],
-  "references": [
-    {
-      "path": "../poc--typescript-browser-game-framework/"
-    }
-  ],
+  ]
 }
