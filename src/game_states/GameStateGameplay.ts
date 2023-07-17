@@ -1,11 +1,10 @@
-import { tmpAudio } from "../Game.ts";
 import { Level } from "../gameplay/Level.ts";
 import { Memories } from "../gameplay/Memories.ts";
 import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
 import { Trail } from "../gameplay/Trail.ts";
-import { f, p8c } from "../globals.ts";
+import { f, g, p8c } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateOver } from "./GameStateOver.ts";
@@ -41,16 +40,12 @@ export class GameStateGameplay implements GameState {
       color: p8c.darkGreen,
     });
 
-    // TODO: migrate from Lua
-    tmpAudio.unmuteMelody?.();
-    // audio.enable_music_layers { true, false, false }
+    f.audio.unmuteSound(g.assets.musicMelody);
   }
 
   #onBackToRegularMode(): void {
-    // TODO: migrate from Lua
-    tmpAudio.muteModeNoCoins?.();
-    tmpAudio.muteModeNoMemories?.();
-    // audio.enable_music_layers { true, false, false }
+    f.audio.muteSound(g.assets.musicModeNoCoins);
+    f.audio.muteSound(g.assets.musicModeNoMemories);
   }
 
   #onCoinCollision(): void {
@@ -58,11 +53,10 @@ export class GameStateGameplay implements GameState {
       return;
     }
 
-    // TODO: migrate from Lua
-    tmpAudio.playCoinSfx?.();
-    // audio.play_sfx(a.sfx_coin)
+    f.audio.playSoundOnce(g.assets.coinSfx);
 
     this.#score.add(10);
+
     if (!this.#mode.isNoMemories()) {
       this.#memories.addMemory();
     }
@@ -71,18 +65,14 @@ export class GameStateGameplay implements GameState {
   }
 
   #onDropletNoCoinsCollision(): void {
-    // TODO: migrate from Lua
-    tmpAudio.unmuteModeNoCoins?.();
-    // audio.enable_music_layers { true, false, true }
+    f.audio.unmuteSound(g.assets.musicModeNoCoins);
     this.#score.add(3);
     this.#mode.startNoCoins();
     this.#level.removeDropletNoCoins();
   }
 
   #onDropletNoMemoriesCollision(): void {
-    // TODO: migrate from Lua
-    tmpAudio.unmuteModeNoMemories?.();
-    // audio.enable_music_layers { true, true, false }
+    f.audio.unmuteSound(g.assets.musicModeNoMemories);
     this.#score.add(1);
     this.#mode.startNoMemories();
     this.#level.removeDropletNoMemories();

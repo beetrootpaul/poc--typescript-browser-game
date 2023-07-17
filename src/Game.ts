@@ -4,20 +4,6 @@ import { GameStateSplash } from "./game_states/GameStateSplash.ts";
 import { f, g, p8c, u } from "./globals.ts";
 import { Pico8Font } from "./Pico8Font.ts";
 
-export const tmpAudio: {
-  playMusic?: () => void;
-  unmuteMelody?: () => void;
-  unmuteModeNoMemories?: () => void;
-  muteModeNoMemories?: () => void;
-  unmuteModeNoCoins?: () => void;
-  muteModeNoCoins?: () => void;
-  playCoinSfx?: () => void;
-  toggleMute?: () => void;
-  hasLoadingError: boolean;
-} = {
-  hasLoadingError: false,
-};
-
 type GameOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
@@ -34,7 +20,7 @@ type GameStoredState = {
 };
 
 export class Game {
-  #gameState: GameState = new GameStateSplash();
+  #gameState: GameState | undefined;
 
   start(options: GameOptions): void {
     f.init(
@@ -64,26 +50,16 @@ export class Game {
             imageBgColor: p8c.black,
           },
         ],
+        sounds: [
+          { url: g.assets.coinSfx },
+          { url: g.assets.musicBase },
+          { url: g.assets.musicMelody },
+          { url: g.assets.musicModeNoCoins },
+          { url: g.assets.musicModeNoMemories },
+        ],
       }
     ).then(({ startGame }) => {
-      console.log("....");
-      console.log("INIT");
-      console.log("....");
-      audio()
-        .then(() => {
-          console.log("====");
-          console.log("DONE");
-          console.log("====");
-
-          tmpAudio.playMusic?.();
-        })
-        .catch((err) => {
-          console.log("~~~");
-          console.log("ERR");
-          console.log("~~~");
-          console.error(err);
-          tmpAudio.hasLoadingError = true;
-        });
+      this.#gameState = new GameStateSplash();
 
       f.drawApi.setFont(g.assets.pico8Font);
 
@@ -91,23 +67,15 @@ export class Game {
         f.storageApi.store<GameStoredState>({
           mostRecentFameNumber: f.frameNumber,
         });
-        if (f.fireOnceInputEvents.has("debug_toggle")) {
-          console.log("debug toggle");
-          tmpAudio.toggleMute?.();
-        }
-        this.#gameState = this.#gameState.update();
+        this.#gameState = this.#gameState?.update();
       });
 
       f.setOnDraw(() => {
         f.drawApi.clear(p8c.black);
         f.drawApi.setCameraOffset(g.cameraOffset);
-        this.#gameState.draw();
+        this.#gameState?.draw();
 
         if (f.debug) {
-          if (tmpAudio.hasLoadingError) {
-            // TODO: consider a global handler for any error that would resut with this print
-            f.drawApi.print("err", xy_(1, 1), p8c.red);
-          }
           const fps = f.averageFps.toFixed(0);
           f.drawApi.print(
             fps,
@@ -120,7 +88,7 @@ export class Game {
             p8c.darkGrey
           );
           f.drawApi.print(
-            `♪ ${f.audio.audioCtx.state}`,
+            `♪ ${f.audio.audioContext.state}`,
             g.cameraOffset.add(xy_(0, g.screenSize.y - 6)),
             p8c.darkPurple
           );
@@ -145,128 +113,4 @@ export class Game {
       });
     });
   }
-}
-
-// TODO: enforce WAV, because of Safari decoding issues for OGG
-async function audio(): Promise<void> {
-  const musicBaseAudioBuffer: AudioBuffer =
-    await f.audio.audioCtx.decodeAudioData(await loadAudio("music_base.wav"));
-  const musicMelodyAudioBuffer: AudioBuffer =
-    await f.audio.audioCtx.decodeAudioData(await loadAudio("music_melody.wav"));
-  const musicNoCoinsAudioBuffer: AudioBuffer =
-    await f.audio.audioCtx.decodeAudioData(
-      await loadAudio("mode_no_coins.wav")
-    );
-  const musicNoMemoriesAudioBuffer: AudioBuffer =
-    await f.audio.audioCtx.decodeAudioData(
-      await loadAudio("mode_no_memories.wav")
-    );
-
-  const coinSfxAudioBuffer: AudioBuffer =
-    await f.audio.audioCtx.decodeAudioData(
-      await loadAudio("sfx_coin_collected.wav")
-    );
-
-  const melodyGainNode = f.audio.audioCtx.createGain();
-  melodyGainNode.gain.value = 0;
-  melodyGainNode.connect(f.audio.mainGainNode);
-  const noCoinsGainNode = f.audio.audioCtx.createGain();
-  noCoinsGainNode.gain.value = 0;
-  noCoinsGainNode.connect(f.audio.mainGainNode);
-  const noMemoriesGainNode = f.audio.audioCtx.createGain();
-  noMemoriesGainNode.gain.value = 0;
-  noMemoriesGainNode.connect(f.audio.mainGainNode);
-
-  tmpAudio.playMusic = () => {
-    const baseSource: AudioBufferSourceNode =
-      f.audio.audioCtx.createBufferSource();
-    baseSource.buffer = musicBaseAudioBuffer;
-    baseSource.loop = true;
-    baseSource.connect(f.audio.mainGainNode);
-    baseSource.start();
-
-    const melodySource: AudioBufferSourceNode =
-      f.audio.audioCtx.createBufferSource();
-    melodySource.buffer = musicMelodyAudioBuffer;
-    melodySource.loop = true;
-    melodySource.connect(melodyGainNode);
-    melodySource.start();
-
-    const noCoinsSource: AudioBufferSourceNode =
-      f.audio.audioCtx.createBufferSource();
-    noCoinsSource.buffer = musicNoCoinsAudioBuffer;
-    noCoinsSource.loop = true;
-    noCoinsSource.connect(noCoinsGainNode);
-    noCoinsSource.start();
-
-    const noMemoriesSource: AudioBufferSourceNode =
-      f.audio.audioCtx.createBufferSource();
-    noMemoriesSource.buffer = musicNoMemoriesAudioBuffer;
-    noMemoriesSource.loop = true;
-    noMemoriesSource.connect(noMemoriesGainNode);
-    noMemoriesSource.start();
-  };
-
-  const timeConstant = 0.1;
-
-  tmpAudio.unmuteMelody = () => {
-    melodyGainNode.gain.setTargetAtTime(
-      1.0,
-      f.audio.audioCtx.currentTime,
-      timeConstant
-    );
-  };
-
-  tmpAudio.unmuteModeNoMemories = () => {
-    noMemoriesGainNode.gain.setTargetAtTime(
-      1.0,
-      f.audio.audioCtx.currentTime,
-      timeConstant
-    );
-  };
-
-  tmpAudio.muteModeNoMemories = () => {
-    noMemoriesGainNode.gain.setTargetAtTime(
-      0,
-      f.audio.audioCtx.currentTime,
-      timeConstant
-    );
-  };
-
-  tmpAudio.unmuteModeNoCoins = () => {
-    noCoinsGainNode.gain.setTargetAtTime(
-      1.0,
-      f.audio.audioCtx.currentTime,
-      timeConstant
-    );
-  };
-
-  tmpAudio.muteModeNoCoins = () => {
-    noCoinsGainNode.gain.setTargetAtTime(
-      0,
-      f.audio.audioCtx.currentTime,
-      timeConstant
-    );
-  };
-
-  tmpAudio.playCoinSfx = () => {
-    const source: AudioBufferSourceNode = f.audio.audioCtx.createBufferSource();
-    source.buffer = coinSfxAudioBuffer;
-    source.connect(f.audio.mainGainNode);
-    source.start();
-  };
-
-  // let offset = 0;
-  // if (offset === 0) {
-  //   console.log("start from 0");
-  //   coinSfx.start();
-  //   offset = audioCtx.currentTime;
-  // } else {
-  //   coinSfx.start(0, audioCtx.currentTime - offset);
-  // }
-}
-
-async function loadAudio(file: string): Promise<ArrayBuffer> {
-  const response: Response = await fetch(file);
-  return await response.arrayBuffer();
 }

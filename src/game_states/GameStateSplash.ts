@@ -1,5 +1,4 @@
 import { xy_ } from "@framework";
-import { Audio } from "../Audio.ts";
 import { f, g, p8c, u } from "../globals.ts";
 import { Sash } from "../gui/Sash.ts";
 import { GameState } from "./GameState.ts";
@@ -29,9 +28,10 @@ export class GameStateSplash implements GameState {
   });
 
   constructor() {
-    Audio.play_music();
-    // TODO: migrate from Lua
-    // audio.enable_music_layers { false, false, false }
+    f.audio.playSoundLooped(g.assets.musicBase);
+    f.audio.playSoundLooped(g.assets.musicMelody, true);
+    f.audio.playSoundLooped(g.assets.musicModeNoCoins, true);
+    f.audio.playSoundLooped(g.assets.musicModeNoMemories, true);
   }
 
   update(): GameState {
