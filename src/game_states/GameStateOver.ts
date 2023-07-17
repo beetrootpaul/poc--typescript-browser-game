@@ -40,13 +40,14 @@ export class GameStateOver implements GameState {
     },
   });
 
-  // TODO: migrate from Lua
-  // audio.enable_music_layers { false, false, false }
-
   constructor(params: GameStateOverParams) {
     this.#score = params.score;
     this.#level = params.level;
     this.#player = params.player;
+
+    f.audio.muteSound(g.assets.musicMelody);
+    f.audio.muteSound(g.assets.musicModeNoCoins);
+    f.audio.muteSound(g.assets.musicModeNoMemories);
   }
 
   update(): GameState {
@@ -56,10 +57,10 @@ export class GameStateOver implements GameState {
 
     if (this.#sash.hasExpanded()) {
       if (
-        f.gameInputEvents.has("left") ||
-        f.gameInputEvents.has("right") ||
-        f.gameInputEvents.has("up") ||
-        f.gameInputEvents.has("down")
+        f.continuousInputEvents.has("left") ||
+        f.continuousInputEvents.has("right") ||
+        f.continuousInputEvents.has("up") ||
+        f.continuousInputEvents.has("down")
       ) {
         this.#sash.collapse();
       }

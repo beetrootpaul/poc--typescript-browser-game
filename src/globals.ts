@@ -9,7 +9,7 @@ export const u = Utils;
 
 export const g = {
   // TODO: make it always false for prod build
-  __debug: false,
+  __debug: true,
   __quickStart: false,
   //
   fps: 30,
@@ -34,16 +34,10 @@ export const g = {
   assets: {
     spritesheet: "spritesheet.png",
     pico8Font: "pico-8-font.png",
+    coinSfx: "sfx_coin_collected.wav",
+    musicBase: "music_base.wav",
+    musicMelody: "music_melody.wav",
+    musicModeNoCoins: "mode_no_coins.wav",
+    musicModeNoMemories: "mode_no_memories.wav",
   } as const,
-  //
-
-  // TODO: migrate from Lua
-  /*
-    music = 1,
-
-    sfx_looped_empty_1 = 4,
-    sfx_looped_empty_2 = 5,
-    sfx_looped_empty_3 = 6,
-    sfx_coin = 0,
-   */
 };

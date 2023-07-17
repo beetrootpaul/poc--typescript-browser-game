@@ -1,12 +1,14 @@
+import { xy_ } from "@framework";
 import { GameState } from "./game_states/GameState.ts";
 import { GameStateSplash } from "./game_states/GameStateSplash.ts";
-import { f, g, p8c } from "./globals.ts";
+import { f, g, p8c, u } from "./globals.ts";
 import { Pico8Font } from "./Pico8Font.ts";
 
 type GameOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlControlsFullscreenSelector: string;
+  htmlControlsMuteSelector: string;
 };
 
 type GameStoredState = {
@@ -18,7 +20,7 @@ type GameStoredState = {
 };
 
 export class Game {
-  #gameState: GameState = new GameStateSplash();
+  #gameState: GameState | undefined;
 
   start(options: GameOptions): void {
     f.init(
@@ -26,6 +28,7 @@ export class Game {
         htmlDisplaySelector: options.htmlDisplaySelector,
         htmlCanvasSelector: options.htmlCanvasSelector,
         htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
+        htmlControlsMuteSelector: options.htmlControlsMuteSelector,
         htmlCanvasBackground: p8c.black,
         gameCanvasSize: g.screenSize,
         desiredFps: g.fps,
@@ -47,21 +50,49 @@ export class Game {
             imageBgColor: p8c.black,
           },
         ],
+        sounds: [
+          { url: g.assets.coinSfx },
+          { url: g.assets.musicBase },
+          { url: g.assets.musicMelody },
+          { url: g.assets.musicModeNoCoins },
+          { url: g.assets.musicModeNoMemories },
+        ],
       }
     ).then(({ startGame }) => {
+      this.#gameState = new GameStateSplash();
+
       f.drawApi.setFont(g.assets.pico8Font);
 
       f.setOnUpdate(() => {
         f.storageApi.store<GameStoredState>({
           mostRecentFameNumber: f.frameNumber,
         });
-        this.#gameState = this.#gameState.update();
+        this.#gameState = this.#gameState?.update();
       });
 
       f.setOnDraw(() => {
         f.drawApi.clear(p8c.black);
         f.drawApi.setCameraOffset(g.cameraOffset);
-        this.#gameState.draw();
+        this.#gameState?.draw();
+
+        if (f.debug) {
+          const fps = f.averageFps.toFixed(0);
+          f.drawApi.print(
+            fps,
+            g.cameraOffset.add(
+              xy_(
+                g.screenSize.x - u.measureTextSize(fps).x - 1,
+                g.screenSize.y - 6
+              )
+            ),
+            p8c.darkGrey
+          );
+          f.drawApi.print(
+            `♪ ${f.audio.audioContext.state}`,
+            g.cameraOffset.add(xy_(0, g.screenSize.y - 6)),
+            p8c.darkPurple
+          );
+        }
       });
 
       startGame(() => {

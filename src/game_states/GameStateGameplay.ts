@@ -4,7 +4,7 @@ import { Mode } from "../gameplay/Mode.ts";
 import { Player } from "../gameplay/Player.ts";
 import { Score } from "../gameplay/Score.ts";
 import { Trail } from "../gameplay/Trail.ts";
-import { f, p8c } from "../globals.ts";
+import { f, g, p8c } from "../globals.ts";
 import { Topbar } from "../gui/Topbar.ts";
 import { GameState } from "./GameState.ts";
 import { GameStateOver } from "./GameStateOver.ts";
@@ -39,11 +39,13 @@ export class GameStateGameplay implements GameState {
       origin: this.#player,
       color: p8c.darkGreen,
     });
+
+    f.audio.unmuteSound(g.assets.musicMelody);
   }
 
   #onBackToRegularMode(): void {
-    // TODO: migrate from Lua
-    // audio.enable_music_layers { true, false, false }
+    f.audio.muteSound(g.assets.musicModeNoCoins);
+    f.audio.muteSound(g.assets.musicModeNoMemories);
   }
 
   #onCoinCollision(): void {
@@ -51,9 +53,10 @@ export class GameStateGameplay implements GameState {
       return;
     }
 
-    // TODO: migrate from Lua
-    // audio.play_sfx(a.sfx_coin)
+    f.audio.playSoundOnce(g.assets.coinSfx);
+
     this.#score.add(10);
+
     if (!this.#mode.isNoMemories()) {
       this.#memories.addMemory();
     }
@@ -62,32 +65,27 @@ export class GameStateGameplay implements GameState {
   }
 
   #onDropletNoCoinsCollision(): void {
-    // TODO: migrate from Lua
-    // audio.enable_music_layers { true, false, true }
+    f.audio.unmuteSound(g.assets.musicModeNoCoins);
     this.#score.add(3);
     this.#mode.startNoCoins();
     this.#level.removeDropletNoCoins();
   }
 
   #onDropletNoMemoriesCollision(): void {
-    // TODO: migrate from Lua
-    // audio.enable_music_layers { true, true, false }
+    f.audio.unmuteSound(g.assets.musicModeNoMemories);
     this.#score.add(1);
     this.#mode.startNoMemories();
     this.#level.removeDropletNoMemories();
   }
 
-  // TODO: migrate from Lua
-  // audio.enable_music_layers { true, false, false }
-
   update(): GameState {
-    if (f.gameInputEvents.has("left")) {
+    if (f.continuousInputEvents.has("left")) {
       this.#player.directLeft();
-    } else if (f.gameInputEvents.has("right")) {
+    } else if (f.continuousInputEvents.has("right")) {
       this.#player.directRight();
-    } else if (f.gameInputEvents.has("up")) {
+    } else if (f.continuousInputEvents.has("up")) {
       this.#player.directUp();
-    } else if (f.gameInputEvents.has("down")) {
+    } else if (f.continuousInputEvents.has("down")) {
       this.#player.directDown();
     }
 
