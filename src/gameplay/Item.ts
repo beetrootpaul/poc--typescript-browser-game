@@ -1,7 +1,7 @@
-import { transparent, Xy } from "@framework";
-import { type CollisionCircle } from "../Collisions.ts";
-import { f, g, p8c } from "../globals.ts";
-import { AnimatedSprite } from "./AnimatedSprite.ts";
+import { transparent, Xy } from "beetpx";
+import { type CollisionCircle } from "../Collisions";
+import { f, g, p8c } from "../globals";
+import { AnimatedSprite } from "./AnimatedSprite";
 
 type ItemParams = {
   tile: Xy;

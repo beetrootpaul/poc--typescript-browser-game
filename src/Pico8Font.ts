@@ -1,4 +1,4 @@
-import { CharSprite, type Font, Sprite, Xy, xy_ } from "@framework";
+import { CharSprite, type Font, Sprite, Xy, xy_ } from "beetpx";
 
 export class Pico8Font implements Font {
   static #letterSpacingW = 1;

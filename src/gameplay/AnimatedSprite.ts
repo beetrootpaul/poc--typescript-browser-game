@@ -1,5 +1,5 @@
-import { Sprite, xy_ } from "@framework";
-import { g } from "../globals.ts";
+import { Sprite, xy_ } from "beetpx";
+import { g } from "../globals";
 
 type AnimatedSpriteParams = {
   firstSpriteSheetCell: number;

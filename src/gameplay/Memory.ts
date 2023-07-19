@@ -1,8 +1,8 @@
-import { Sprite, transparent, Xy, xy_ } from "@framework";
-import { CollisionCircle } from "../Collisions.ts";
-import { f, g, p8c } from "../globals.ts";
-import { Direction } from "./Direction.ts";
-import { Origin, OriginSnapshot } from "./Origin.ts";
+import { Sprite, transparent, Xy, xy_ } from "beetpx";
+import { CollisionCircle } from "../Collisions";
+import { f, g, p8c } from "../globals";
+import { Direction } from "./Direction";
+import { Origin, OriginSnapshot } from "./Origin";
 
 type MemoryParams = {
   origin: Origin;

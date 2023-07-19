@@ -1,8 +1,8 @@
-import { Collisions } from "../Collisions.ts";
-import { p8c } from "../globals.ts";
-import { Memory } from "./Memory.ts";
-import { Player } from "./Player.ts";
-import { Trail } from "./Trail.ts";
+import { Collisions } from "../Collisions";
+import { p8c } from "../globals";
+import { Memory } from "./Memory";
+import { Player } from "./Player";
+import { Trail } from "./Trail";
 
 type MemoriesParams = {
   player: Player;

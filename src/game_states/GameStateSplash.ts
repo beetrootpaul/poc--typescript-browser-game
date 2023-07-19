@@ -1,8 +1,8 @@
-import { xy_ } from "@framework";
-import { f, g, p8c, u } from "../globals.ts";
-import { Sash } from "../gui/Sash.ts";
-import { GameState } from "./GameState.ts";
-import { GameStateStart } from "./GameStateStart.ts";
+import { xy_ } from "beetpx";
+import { f, g, p8c, u } from "../globals";
+import { Sash } from "../gui/Sash";
+import { GameState } from "./GameState";
+import { GameStateStart } from "./GameStateStart";
 
 export class GameStateSplash implements GameState {
   readonly #sash: Sash = new Sash({

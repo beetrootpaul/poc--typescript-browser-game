@@ -1,12 +1,12 @@
-import { xy_ } from "@framework";
-import { Level } from "../gameplay/Level.ts";
-import { Mode } from "../gameplay/Mode.ts";
-import { Player } from "../gameplay/Player.ts";
-import { Score } from "../gameplay/Score.ts";
-import { f, g, p8c, u } from "../globals.ts";
-import { Topbar } from "../gui/Topbar.ts";
-import { GameState } from "./GameState.ts";
-import { GameStateGameplay } from "./GameStateGameplay.ts";
+import { xy_ } from "beetpx";
+import { Level } from "../gameplay/Level";
+import { Mode } from "../gameplay/Mode";
+import { Player } from "../gameplay/Player";
+import { Score } from "../gameplay/Score";
+import { f, g, p8c, u } from "../globals";
+import { Topbar } from "../gui/Topbar";
+import { GameState } from "./GameState";
+import { GameStateGameplay } from "./GameStateGameplay";
 
 export class GameStateStart implements GameState {
   readonly #score = new Score();

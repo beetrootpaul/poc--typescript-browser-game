@@ -1,5 +1,5 @@
-import { CompositeColor, FillPattern, SolidColor } from "@framework";
-import { g } from "../globals.ts";
+import { CompositeColor, FillPattern, SolidColor } from "beetpx";
+import { g } from "../globals";
 
 export class Mode {
   #current: "regular" | "no_coins" | "no_memories" = "regular";

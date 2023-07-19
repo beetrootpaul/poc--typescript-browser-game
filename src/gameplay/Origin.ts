@@ -1,5 +1,5 @@
-import { Xy } from "@framework";
-import { Direction } from "./Direction.ts";
+import { Xy } from "beetpx";
+import { Direction } from "./Direction";
 
 export abstract class Origin {
   abstract center(): Xy;

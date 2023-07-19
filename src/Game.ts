@@ -1,15 +1,8 @@
-import { xy_ } from "@framework";
-import { GameState } from "./game_states/GameState.ts";
-import { GameStateSplash } from "./game_states/GameStateSplash.ts";
-import { f, g, p8c, u } from "./globals.ts";
-import { Pico8Font } from "./Pico8Font.ts";
-
-type GameOptions = {
-  htmlDisplaySelector: string;
-  htmlCanvasSelector: string;
-  htmlControlsFullscreenSelector: string;
-  htmlControlsMuteSelector: string;
-};
+import { xy_ } from "beetpx";
+import { GameState } from "./game_states/GameState";
+import { GameStateSplash } from "./game_states/GameStateSplash";
+import { f, g, p8c, u } from "./globals";
+import { Pico8Font } from "./Pico8Font";
 
 type GameStoredState = {
   // TODO: Is it possible to enforce optionality of every field in the framework itself?
@@ -22,13 +15,9 @@ type GameStoredState = {
 export class Game {
   #gameState: GameState | undefined;
 
-  start(options: GameOptions): void {
+  start(): void {
     f.init(
       {
-        htmlDisplaySelector: options.htmlDisplaySelector,
-        htmlCanvasSelector: options.htmlCanvasSelector,
-        htmlControlsFullscreenSelector: options.htmlControlsFullscreenSelector,
-        htmlControlsMuteSelector: options.htmlControlsMuteSelector,
         htmlCanvasBackground: p8c.black,
         gameCanvasSize: g.screenSize,
         desiredFps: g.fps,

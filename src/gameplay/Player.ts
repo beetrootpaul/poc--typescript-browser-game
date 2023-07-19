@@ -1,8 +1,8 @@
-import { Sprite, transparent, Xy, xy_ } from "@framework";
-import { type CollisionCircle } from "../Collisions.ts";
-import { f, g, p8c } from "../globals.ts";
-import { Direction } from "./Direction.ts";
-import { Origin } from "./Origin.ts";
+import { Sprite, transparent, Xy, xy_ } from "beetpx";
+import { type CollisionCircle } from "../Collisions";
+import { f, g, p8c } from "../globals";
+import { Direction } from "./Direction";
+import { Origin } from "./Origin";
 
 export class Player extends Origin {
   readonly #r = 3;

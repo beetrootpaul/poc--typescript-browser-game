@@ -1,5 +1,5 @@
-import { Xy, xy_ } from "@framework";
-import { f, g, p8c } from "../globals.ts";
+import { Xy, xy_ } from "beetpx";
+import { f, g, p8c } from "../globals";
 
 type SashParams = {
   duration: number;

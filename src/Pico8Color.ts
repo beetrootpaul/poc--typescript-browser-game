@@ -1,4 +1,4 @@
-import { SolidColor } from "@framework";
+import { SolidColor } from "beetpx";
 
 // noinspection JSUnusedGlobalSymbols
 export class Pico8Colors {
