@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@jest/globals": "29.5.0",
-    "beetpx": "file://../poc--typescript-browser-game-framework/",
+    "beetpx": "git+ssh://git@github.com:beetrootpaul/poc--typescript-browser-game-framework#semver:0.0.5",
     "cross-zip-cli": "1.0.0",
     "husky": "8.0.3",
     "lint-staged": "13.2.1",
